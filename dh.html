@@ -79,6 +79,75 @@
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Dynamic Scroll & Click Keyframe Animations */
+        @keyframes scrollFadeUp {
+            0% { opacity: 0; transform: translateY(35px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes scrollZoomIn {
+            0% { opacity: 0; transform: scale(0.88); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes scrollFlipX {
+            0% { opacity: 0; transform: perspective(800px) rotateX(25deg) translateY(20px); }
+            100% { opacity: 1; transform: perspective(800px) rotateX(0deg) translateY(0); }
+        }
+        @keyframes scrollSlideLeft {
+            0% { opacity: 0; transform: translateX(-35px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scrollSlideRight {
+            0% { opacity: 0; transform: translateX(35px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Dynamic Modal Entrance Animations */
+        @keyframes modalZoomBounce {
+            0% { opacity: 0; transform: scale(0.82) translateY(25px); }
+            70% { opacity: 1; transform: scale(1.025) translateY(-3px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes modalFlip3D {
+            0% { opacity: 0; transform: perspective(1000px) rotateX(25deg) scale(0.9); }
+            100% { opacity: 1; transform: perspective(1000px) rotateX(0) scale(1); }
+        }
+        @keyframes modalSlideDrop {
+            0% { opacity: 0; transform: translateY(-45px) scale(0.95); }
+            75% { opacity: 1; transform: translateY(4px) scale(1.01); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes modalCyberExpand {
+            0% { opacity: 0; transform: scale(0.86) rotate(1.5deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        /* Click Spring Feedback */
+        .click-pop {
+            animation: clickSpring 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        }
+        @keyframes clickSpring {
+            0% { transform: scale(1); }
+            35% { transform: scale(0.93); }
+            100% { transform: scale(1); }
+        }
+
+        /* Target Section Glowing Aura */
+        .anim-target-pulse {
+            animation: targetPulse 1.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        @keyframes targetPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7); }
+            40% { box-shadow: 0 0 45px 12px rgba(0, 242, 254, 0.45); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+        }
+
+        /* Scroll Reveal Utility Classes */
+        .anim-scroll-fade-up { animation: scrollFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .anim-scroll-zoom-in { animation: scrollZoomIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .anim-scroll-flip-x { animation: scrollFlipX 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .anim-scroll-slide-left { animation: scrollSlideLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .anim-scroll-slide-right { animation: scrollSlideRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body class="text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -1980,8 +2049,55 @@ let state = {
 };
 
 // ==================== 6. APP INITIALIZATION ====================
+// ==================== SCROLL REVEAL OBSERVER ====================
+function initScrollObserver() {
+    if (!('IntersectionObserver' in window)) return;
+
+    const animClasses = ['anim-scroll-fade-up', 'anim-scroll-zoom-in', 'anim-scroll-flip-x', 'anim-scroll-slide-left', 'anim-scroll-slide-right'];
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                if (!el.dataset.animated) {
+                    const idx = parseInt(el.dataset.animIndex || Math.floor(Math.random() * animClasses.length), 10);
+                    const chosen = animClasses[idx % animClasses.length];
+                    el.classList.add(chosen);
+                    el.dataset.animated = "true";
+                }
+            } else {
+                if (entry.boundingClientRect.top > window.innerHeight) {
+                    entry.target.classList.remove('anim-scroll-fade-up', 'anim-scroll-zoom-in', 'anim-scroll-flip-x', 'anim-scroll-slide-left', 'anim-scroll-slide-right');
+                    delete entry.target.dataset.animated;
+                }
+            }
+        });
+    }, {
+        threshold: 0.08,
+        rootMargin: "0px 0px -30px 0px"
+    });
+
+    // Observe categories, tools, and pricing cards
+    const elements = document.querySelectorAll('#categories > div > div, #toolsGrid > div, #packagesGrid > div, section > div.glass-card');
+    elements.forEach((el, i) => {
+        el.dataset.animIndex = i;
+        observer.observe(el);
+    });
+}
+
+// Global Click Feedback on all interactive elements
+document.addEventListener("click", (e) => {
+    const clickable = e.target.closest("button, a, .glass-card, select");
+    if (clickable) {
+        clickable.classList.remove("click-pop");
+        void clickable.offsetWidth;
+        clickable.classList.add("click-pop");
+    }
+});
+
 window.onload = function () {
     init3DAmbient();
+    initScrollObserver();
     renderBrands();
     renderFiles();
     renderTools();
@@ -2067,9 +2183,42 @@ function updateUserUI() {
     }
 }
 
+// Dynamic Modal Entrance Animation Dispatcher
+let modalAnimIndex = 0;
+const MODAL_ANIMATIONS = [
+    'modalZoomBounce 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+    'modalFlip3D 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+    'modalSlideDrop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+    'modalCyberExpand 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+];
+
+function openModalWithAnim(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.remove("hidden");
+    const innerCard = modal.querySelector(".glass-card") || modal.firstElementChild;
+    if (innerCard) {
+        const chosen = MODAL_ANIMATIONS[modalAnimIndex % MODAL_ANIMATIONS.length];
+        modalAnimIndex++;
+        innerCard.style.animation = "none";
+        void innerCard.offsetWidth; // trigger reflow
+        innerCard.style.animation = chosen;
+    }
+}
+
+function navigateToSection(targetId) {
+    const target = document.getElementById(targetId);
+    if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        target.classList.remove("anim-target-pulse");
+        void target.offsetWidth;
+        target.classList.add("anim-target-pulse");
+    }
+}
+
 function openAuthModal() {
     switchAuthTab('login');
-    document.getElementById("authModal").classList.remove("hidden");
+    openModalWithAnim("authModal");
 }
 
 function switchAuthTab(tab) {
@@ -2227,7 +2376,7 @@ function openUserDashboardModal() {
     renderUserDownloads();
     renderUserBookmarks();
     switchUserTab('overview');
-    document.getElementById("userDashboardModal").classList.remove("hidden");
+    openModalWithAnim("userDashboardModal");
 }
 
 function switchUserTab(tab) {
@@ -2237,7 +2386,10 @@ function switchUserTab(tab) {
         const panel = document.getElementById(`userPanel-${t}`);
         if (t === tab) {
             if (btn) btn.className = "px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-black transition whitespace-nowrap";
-            if (panel) panel.classList.remove("hidden");
+            if (panel) {
+                panel.classList.remove("hidden");
+                panel.style.animation = "scrollFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards";
+            }
         } else {
             if (btn) btn.className = "px-3 py-1.5 rounded-xl text-slate-300 hover:text-white font-bold transition whitespace-nowrap";
             if (panel) panel.classList.add("hidden");
@@ -2432,8 +2584,11 @@ function renderBrands() {
         const count = FLASH_FILES.filter(f => f.brand.toLowerCase() === b.name.toLowerCase()).length;
         const logo = getBrandLogoSvg(b.name);
 
+        const delay = (BRANDS.indexOf(b) % 6) * 0.04;
+        const animChoices = ['scrollZoomIn', 'scrollFlipX', 'scrollFadeUp'];
+        const chosenAnim = animChoices[BRANDS.indexOf(b) % animChoices.length];
         return `
-            <div onclick="selectBrand('${b.name}')" class="glass-card p-3 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.03] transition flex items-center gap-2.5 sm:gap-3 group">
+            <div style="animation: ${chosenAnim} 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s both;" onclick="selectBrand('${b.name}')" class="glass-card p-3 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.03] transition flex items-center gap-2.5 sm:gap-3 group">
                 <div class="shrink-0 group-hover:scale-105 transition">
                     ${logo}
                 </div>
@@ -2498,8 +2653,11 @@ function renderFiles() {
         const badgeClass = isVip ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : (isFree ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40");
         const accessLabel = isVip ? "👑 VIP ONLY" : (isFree ? "🔓 FREE" : "⚡ FEATURED");
 
+        const delay = (list.indexOf(f) % 6) * 0.05;
+        const animChoices = ['scrollFadeUp', 'scrollZoomIn', 'scrollFlipX'];
+        const chosenAnim = animChoices[list.indexOf(f) % animChoices.length];
         return `
-            <div class="glass-card rounded-2xl p-3.5 sm:p-4 border border-white/10 hover:border-cyan-400/60 transition flex flex-col justify-between group">
+            <div style="animation: ${chosenAnim} 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s both;" class="glass-card rounded-2xl p-3.5 sm:p-4 border border-white/10 hover:border-cyan-400/60 transition flex flex-col justify-between group">
                 <div>
                     <div class="flex items-center justify-between gap-2 mb-2">
                         <span class="text-[9px] px-2 py-0.5 rounded-full font-black border ${badgeClass}">${accessLabel}</span>
@@ -2604,7 +2762,7 @@ function openFileModal(fileId) {
     document.getElementById("modalFileDesc").textContent = file.desc || "100% Tested verified flash file.";
     document.getElementById("modalReadLog").textContent = file.readLog || "Log: Tested Working 100%";
 
-    document.getElementById("fileModal").classList.remove("hidden");
+    openModalWithAnim("fileModal");
 }
 
 function executeFileDownload() {
@@ -2660,13 +2818,13 @@ function executeFileDownload() {
 function selectBrand(brandName) {
     state.brand = brandName;
     renderFiles();
-    location.href = "#files";
+    navigateToSection("files");
 }
 
 function selectCategory(catName) {
     state.category = catName;
     renderFiles();
-    location.href = "#files";
+    navigateToSection("files");
 }
 
 function filterByAccess(acc) {
@@ -2746,7 +2904,7 @@ function openCheckoutModal(name, price, period) {
     document.getElementById("checkoutPkgPrice").textContent = `${price} / ${period}`;
     document.getElementById("checkoutBkashNum").textContent = PAYMENT_SETTINGS.bkash;
     document.getElementById("checkoutNagadNum").textContent = PAYMENT_SETTINGS.nagad;
-    document.getElementById("checkoutModal").classList.remove("hidden");
+    openModalWithAnim("checkoutModal");
 }
 
 function submitPackageOrder(e) {
@@ -2774,7 +2932,7 @@ function submitPackageOrder(e) {
 }
 
 function openRequestModal() {
-    document.getElementById("requestModal").classList.remove("hidden");
+    openModalWithAnim("requestModal");
 }
 
 function submitFileRequest(e) {
@@ -2819,7 +2977,7 @@ function handleSecretAdminClick() {
 
 function openAdminLogin() {
     document.getElementById("adminLoginError").classList.add("hidden");
-    document.getElementById("adminLoginModal").classList.remove("hidden");
+    openModalWithAnim("adminLoginModal");
 }
 
 function handleAdminLogin(e) {
@@ -2843,7 +3001,7 @@ function handleAdminLogin(e) {
 function openAdminDashboard() {
     refreshAllAdminViews();
     switchAdminTab("overview");
-    document.getElementById("adminDashboardModal").classList.remove("hidden");
+    openModalWithAnim("adminDashboardModal");
 }
 
 function closeAdminDashboard() {
@@ -2864,7 +3022,10 @@ function switchAdminTab(tabName) {
         const panel = document.getElementById(`adminTab-${t}`);
         if (t === tabName) {
             if (btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition whitespace-nowrap";
-            if (panel) panel.classList.remove("hidden");
+            if (panel) {
+                panel.classList.remove("hidden");
+                panel.style.animation = "scrollFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards";
+            }
         } else {
             if (btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap";
             if (panel) panel.classList.add("hidden");
@@ -3010,7 +3171,7 @@ function openAdminAddUserModal(userId = null) {
         document.getElementById("adminUserExpiryInput").value = "2027-12-31";
     }
 
-    document.getElementById("adminUserEditorModal").classList.remove("hidden");
+    openModalWithAnim("adminUserEditorModal");
 }
 
 function saveAdminUser(e) {
@@ -3078,7 +3239,7 @@ function openMakeVipModal(userId) {
 
     document.getElementById("makeVipTargetUserId").value = user.id;
     document.getElementById("makeVipTargetUserInfo").textContent = `ইউজার: ${user.name} (${user.phone}) | বর্তমান প্ল্যান: ${user.plan}`;
-    document.getElementById("adminMakeVipModal").classList.remove("hidden");
+    openModalWithAnim("adminMakeVipModal");
 }
 
 function handleConfirmMakeVip(e) {
@@ -3297,7 +3458,7 @@ function openFileEditorModal(fileId = null) {
         document.getElementById("editFileReadLog").value = "Phone found! Sync Ok\nStatus: 100% Tested OK";
     }
 
-    document.getElementById("fileEditorModal").classList.remove("hidden");
+    openModalWithAnim("fileEditorModal");
 }
 
 function saveFlashFile(e) {
@@ -3390,7 +3551,7 @@ function renderAdminBrands() {
 
 function openBrandEditorModal() {
     document.getElementById("brandEditName").value = "";
-    document.getElementById("brandEditorModal").classList.remove("hidden");
+    openModalWithAnim("brandEditorModal");
 }
 
 function saveBrand(e) {
