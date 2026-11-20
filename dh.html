@@ -190,6 +190,7 @@
                 <div class="flex items-center justify-between gap-2 pt-1">
                     <button onclick="toggleCurrency()" class="flex-1 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-emerald-300">Currency: <span id="islandCurrencyText">৳ BDT</span></button>
                     <button onclick="closeIslandMenu(); openAuthModal();" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-extrabold shadow-lg">Member Login</button>
+                    <button onclick="closeIslandMenu(); openAdminLogin();" class="flex-1 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-extrabold shadow-lg transition flex items-center justify-center gap-1"><span>👑</span> Admin Panel</button>
                 </div>
             </div>
         </div>
@@ -478,6 +479,7 @@
                         <li><a href="#tools" class="hover:text-cyan-400 transition">Free USB Drivers</a></li>
                         <li><button onclick="openDashboardModal()" class="hover:text-cyan-400 transition">Bookmarks & History</button></li>
                         <li><a href="#pricing" class="hover:text-cyan-400 transition">VIP Packages</a></li>
+                        <li><button onclick="openAdminLogin()" class="hover:text-amber-400 transition text-amber-300 font-bold flex items-center gap-1"><span>👑</span> Admin Control Portal</button></li>
                     </ul>
                 </div>
                 <div>
@@ -488,7 +490,7 @@
                         <span class="px-2.5 py-1 rounded-lg bg-purple-500/15 text-purple-300 border border-purple-500/30 text-xs font-bold">Rocket</span>
                         <span class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold">Binance</span>
                     </div>
-                    <p class="text-xs text-slate-400">WhatsApp Support: <span class="text-white font-bold">+880 1700-000000</span></p>
+                    <p class="text-xs text-slate-400">WhatsApp Support: <span id="footerWhatsappText" class="text-white font-bold">+880 1700-000000</span></p>
                 </div>
             </div>
             <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
@@ -500,10 +502,10 @@
 
     <!-- ==================== 10. FLOATING WHATSAPP & TELEGRAM ==================== -->
     <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2.5">
-        <a href="https://wa.me/8801700000000" target="_blank" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.45)] hover:scale-105 transition">
+        <a id="floatingWhatsappBtn" href="https://wa.me/8801700000000" target="_blank" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.45)] hover:scale-105 transition">
             <span class="text-xs">WhatsApp</span>
         </a>
-        <a href="https://t.me/" target="_blank" class="flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-full shadow-[0_0_25px_rgba(14,165,233,0.45)] hover:scale-105 transition">
+        <a id="floatingTelegramBtn" href="https://t.me/" target="_blank" class="flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-full shadow-[0_0_25px_rgba(14,165,233,0.45)] hover:scale-105 transition">
             <span class="text-xs">Telegram</span>
         </a>
     </div>
@@ -576,12 +578,12 @@
                 <div class="p-3.5 rounded-2xl bg-black/50 border border-white/10 text-xs space-y-2">
                     <div class="font-bold text-slate-300">Send Money (Personal) & Submit TrxID:</div>
                     <div class="flex items-center justify-between bg-white/5 px-3 py-2 rounded-xl">
-                        <span><strong class="text-pink-400">bKash / Nagad:</strong> 01700-000000</span>
-                        <button type="button" onclick="copyText('01700000000', 'bKash/Nagad Copied')" class="text-cyan-400 font-bold hover:underline">Copy</button>
+                        <span><strong class="text-pink-400">bKash / Nagad:</strong> <span id="checkoutBkashNagadText">01700-000000</span></span>
+                        <button type="button" onclick="copyText(PAYMENT_SETTINGS.bkash, 'bKash/Nagad Copied')" class="text-cyan-400 font-bold hover:underline">Copy</button>
                     </div>
                     <div class="flex items-center justify-between bg-white/5 px-3 py-2 rounded-xl">
-                        <span><strong class="text-amber-400">Binance Pay ID:</strong> 123456789</span>
-                        <button type="button" onclick="copyText('123456789', 'Binance ID Copied')" class="text-cyan-400 font-bold hover:underline">Copy</button>
+                        <span><strong class="text-amber-400">Binance Pay ID:</strong> <span id="checkoutBinanceText">123456789</span></span>
+                        <button type="button" onclick="copyText(PAYMENT_SETTINGS.binance, 'Binance ID Copied')" class="text-cyan-400 font-bold hover:underline">Copy</button>
                     </div>
                 </div>
 
@@ -663,6 +665,508 @@
                 <input type="email" required placeholder="technician@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-sm text-white focus:outline-none focus:border-cyan-400">
                 <input type="password" required placeholder="Password" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-sm text-white focus:outline-none focus:border-cyan-400">
                 <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-extrabold text-sm">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <!-- ==================== ADMIN PANEL MODALS ==================== -->
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-[28px] max-w-sm w-full border border-amber-500/30 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.2)]">
+            <div class="p-5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-amber-500/10 to-transparent">
+                <div class="flex items-center gap-2">
+                    <span class="p-2 rounded-xl bg-amber-500/20 text-amber-300 text-lg">👑</span>
+                    <div>
+                        <h3 class="text-base font-extrabold text-white">Admin Master Access</h3>
+                        <p class="text-[11px] text-amber-300/80">Site Control Dashboard</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('adminLoginModal')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="p-5 space-y-4">
+                <div class="p-3 rounded-xl bg-black/40 border border-white/5 text-xs text-slate-300">
+                    <span class="text-amber-400 font-bold">Default Credentials:</span><br>
+                    Username: <code class="text-cyan-300">admin</code> | Password: <code class="text-cyan-300">admin786</code>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Admin Username</label>
+                    <input id="adminLoginUser" type="text" required placeholder="admin" value="admin"
+                           class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-sm text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Admin Password</label>
+                    <input id="adminLoginPass" type="password" required placeholder="••••••••"
+                           class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-sm text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div id="adminLoginError" class="hidden text-xs text-rose-400 font-semibold p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
+                    Invalid username or password!
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm shadow-[0_0_20px_rgba(245,158,11,0.3)] transition">
+                    Unlock Admin Control Panel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Fullscreen Admin Dashboard Modal -->
+    <div id="adminDashboardModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex flex-col overflow-hidden">
+        <!-- Admin Top Navigation Bar -->
+        <header class="bg-slate-950/80 border-b border-white/10 px-4 sm:px-6 py-3.5 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-lg font-black text-slate-950 shadow-lg">👑</div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-sm sm:text-base font-black text-white tracking-tight">GSM FlashHub BD <span class="text-amber-400">Admin Control</span></h2>
+                        <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">MASTER ACCESS</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">A to Z Complete Website Management Portal</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="exportSiteData()" title="Backup site data" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 transition hidden sm:inline-flex items-center gap-1">
+                    <span>💾</span> Export Backup
+                </button>
+                <button onclick="closeAdminDashboard()" class="px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-extrabold transition">
+                    View Website ↗
+                </button>
+                <button onclick="logoutAdmin()" class="px-3.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-extrabold transition">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Admin Workspace Body (Sidebar + Content Area) -->
+        <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <!-- Sidebar Navigation -->
+            <aside class="w-full md:w-64 bg-slate-950/60 border-r border-white/10 p-3 sm:p-4 shrink-0 overflow-x-auto md:overflow-y-auto flex md:flex-col gap-1.5 no-scrollbar">
+                <button onclick="switchAdminTab('overview')" id="adminTabBtn-overview" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-extrabold flex items-center gap-2.5 transition bg-amber-500 text-slate-950 shadow-lg shrink-0">
+                    <span>📊</span> Overview & Stats
+                </button>
+                <button onclick="switchAdminTab('files')" id="adminTabBtn-files" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>⚡</span> Flash Files Manager
+                    <span id="adminFilesCountBadge" class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300">0</span>
+                </button>
+                <button onclick="switchAdminTab('brands')" id="adminTabBtn-brands" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>📱</span> Brands Manager
+                    <span id="adminBrandsCountBadge" class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-slate-300">0</span>
+                </button>
+                <button onclick="switchAdminTab('packages')" id="adminTabBtn-packages" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>💎</span> VIP Pricing & Plans
+                </button>
+                <button onclick="switchAdminTab('payments')" id="adminTabBtn-payments" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>💳</span> Payment & Support
+                </button>
+                <button onclick="switchAdminTab('orders')" id="adminTabBtn-orders" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>📩</span> Orders & Requests
+                    <span id="adminPendingOrdersBadge" class="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-extrabold">0</span>
+                </button>
+                <button onclick="switchAdminTab('settings')" id="adminTabBtn-settings" class="admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0">
+                    <span>⚙️</span> Settings & Backup
+                </button>
+            </aside>
+
+            <!-- Main Tab Views Container -->
+            <main class="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6">
+
+                <!-- 1. TAB: OVERVIEW & STATS -->
+                <div id="adminTab-overview" class="space-y-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="glass-card p-4 rounded-2xl border border-white/10">
+                            <span class="text-xs text-slate-400 font-semibold">Total Flash Files</span>
+                            <div id="statTotalFiles" class="text-2xl sm:text-3xl font-black text-white mt-1">0</div>
+                            <span class="text-[10px] text-cyan-400">Stock ROM, Button, FRP, Dump</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl border border-white/10">
+                            <span class="text-xs text-slate-400 font-semibold">Supported Brands</span>
+                            <div id="statTotalBrands" class="text-2xl sm:text-3xl font-black text-cyan-400 mt-1">0</div>
+                            <span class="text-[10px] text-emerald-400">BD Local & International</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl border border-white/10">
+                            <span class="text-xs text-slate-400 font-semibold">VIP Plans Active</span>
+                            <div id="statTotalPackages" class="text-2xl sm:text-3xl font-black text-amber-400 mt-1">6</div>
+                            <span class="text-[10px] text-amber-300">bKash, Nagad, Rocket, Binance</span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl border border-white/10">
+                            <span class="text-xs text-slate-400 font-semibold">Submitted Orders</span>
+                            <div id="statTotalOrders" class="text-2xl sm:text-3xl font-black text-rose-400 mt-1">0</div>
+                            <span class="text-[10px] text-rose-300">Customer TrxIDs & Requests</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-black text-white text-base">Quick Site Actions</h3>
+                            <p class="text-xs text-slate-400">Instantly update and publish content to live users.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2.5">
+                            <button onclick="openFileEditorModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-1.5">
+                                <span>➕</span> Add New Flash File
+                            </button>
+                            <button onclick="openBrandEditorModal()" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center gap-1.5">
+                                <span>➕</span> Add New Brand
+                            </button>
+                            <button onclick="switchAdminTab('payments')" class="px-4 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition flex items-center gap-1.5">
+                                <span>💳</span> Edit Payment Numbers
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Stream -->
+                    <div class="glass-card p-5 rounded-2xl border border-white/10 space-y-3">
+                        <h4 class="font-bold text-sm text-white">System Status & Environment</h4>
+                        <div class="text-xs text-slate-300 space-y-2">
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/40">
+                                <span>Live Host: <strong class="text-emerald-400">GitHub Pages (Global CDN)</strong></span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold">ONLINE 24/7</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/40">
+                                <span>Storage Engine: <strong class="text-cyan-400">Reactive Browser LocalStorage + Export Sync</strong></span>
+                                <span class="text-[10px] text-slate-400">Instant DOM Re-render</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/40">
+                                <span>3D Engine: <strong class="text-purple-400">Three.js WebGL Interactive Core</strong></span>
+                                <span class="text-[10px] text-slate-400">Hardware Accelerated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TAB: FLASH FILES MANAGER -->
+                <div id="adminTab-files" class="hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-black text-white">Flash Files Repository (<span id="adminFilesCountHeader">0</span>)</h3>
+                            <p class="text-xs text-slate-400">Add, edit, change download links, or remove ROM files.</p>
+                        </div>
+                        <button onclick="openFileEditorModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-1.5 shrink-0">
+                            <span>➕</span> Add New Flash File
+                        </button>
+                    </div>
+
+                    <!-- Filter & Search Bar -->
+                    <div class="glass-card p-3 rounded-2xl border border-white/10 flex flex-col sm:flex-row gap-2">
+                        <input id="adminFileSearch" oninput="renderAdminFilesTable()" type="text" placeholder="Search by model, brand, or chipset..."
+                               class="flex-1 px-3.5 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                        <select id="adminFileBrandFilter" onchange="renderAdminFilesTable()" class="px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-xs text-slate-200 focus:outline-none">
+                            <option value="all">All Brands</option>
+                        </select>
+                        <select id="adminFileAccessFilter" onchange="renderAdminFilesTable()" class="px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-xs text-slate-200 focus:outline-none">
+                            <option value="all">All Access</option>
+                            <option value="FREE">FREE</option>
+                            <option value="VIP">VIP</option>
+                            <option value="FEATURED">FEATURED</option>
+                        </select>
+                    </div>
+
+                    <!-- Files Table -->
+                    <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-white/5 border-b border-white/10 text-slate-400 uppercase text-[10px] font-extrabold tracking-wider">
+                                    <tr>
+                                        <th class="p-3.5">File Name & Info</th>
+                                        <th class="p-3.5">Brand & Category</th>
+                                        <th class="p-3.5">Chipset</th>
+                                        <th class="p-3.5">Access</th>
+                                        <th class="p-3.5">Size</th>
+                                        <th class="p-3.5 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminFilesTableBody" class="divide-y divide-white/5 text-slate-200"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: BRANDS MANAGER -->
+                <div id="adminTab-brands" class="hidden space-y-4">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-lg font-black text-white">Supported Brands (<span id="adminBrandsCountHeader">0</span>)</h3>
+                            <p class="text-xs text-slate-400">Manage Bangladeshi local button phone and global smartphone brands.</p>
+                        </div>
+                        <button onclick="openBrandEditorModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-1.5 shrink-0">
+                            <span>➕</span> Add New Brand
+                        </button>
+                    </div>
+
+                    <div id="adminBrandsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                </div>
+
+                <!-- 4. TAB: VIP PACKAGES & PRICING -->
+                <div id="adminTab-packages" class="hidden space-y-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white">VIP Membership Packages & Pricing</h3>
+                        <p class="text-xs text-slate-400">Edit package rates (৳ BDT & $ USD), bandwidth, and limits.</p>
+                    </div>
+                    <form onsubmit="saveAdminPackages(event)" class="space-y-4">
+                        <div id="adminPackagesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        <div class="pt-2 flex justify-end">
+                            <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-lg transition">
+                                💾 Save All Pricing Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 5. TAB: PAYMENT & CONTACT SETTINGS -->
+                <div id="adminTab-payments" class="hidden space-y-4">
+                    <div>
+                        <h3 class="text-lg font-black text-white">Payment Accounts & Contact Info</h3>
+                        <p class="text-xs text-slate-400">These numbers are automatically displayed in the Checkout Modal, Footer, and Floating Support Buttons.</p>
+                    </div>
+                    <form onsubmit="saveAdminPayments(event)" class="glass-card p-5 sm:p-6 rounded-2xl border border-white/10 space-y-4 max-w-2xl">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">bKash Personal Number</label>
+                                <input id="adminPayBkash" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Nagad Personal Number</label>
+                                <input id="adminPayNagad" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Rocket Personal Number</label>
+                                <input id="adminPayRocket" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Binance Pay ID</label>
+                                <input id="adminPayBinance" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-white/10 space-y-4">
+                            <h4 class="text-xs font-black uppercase tracking-wider text-cyan-400">Support & Chat Channels</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp Number (e.g. 8801700000000)</label>
+                                    <input id="adminPayWhatsapp" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp Display Text</label>
+                                    <input id="adminPayWhatsappDisplay" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Telegram Link (Channel or Username URL)</label>
+                                <input id="adminPayTelegram" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                            </div>
+                        </div>
+
+                        <div class="pt-3 flex justify-end">
+                            <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-black text-xs shadow-lg transition">
+                                💾 Save Payment & Support Info
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 6. TAB: ORDERS & FILE REQUESTS -->
+                <div id="adminTab-orders" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-black text-white">Technician Orders & File Requests</h3>
+                            <p class="text-xs text-slate-400">Real-time submissions from technicians purchasing VIP plans or requesting ROMs.</p>
+                        </div>
+                        <button onclick="clearAllOrders()" class="text-xs text-rose-400 font-bold hover:underline">Clear All History</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- VIP Orders -->
+                        <div class="glass-card p-4 rounded-2xl border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-extrabold text-sm text-cyan-300 flex items-center gap-1.5">
+                                    <span>👑</span> VIP Subscription TrxIDs (<span id="adminOrdersCount">0</span>)
+                                </h4>
+                            </div>
+                            <div id="adminOrdersList" class="space-y-2 text-xs max-h-[60vh] overflow-y-auto"></div>
+                        </div>
+
+                        <!-- Missing File Requests -->
+                        <div class="glass-card p-4 rounded-2xl border border-white/10 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h4 class="font-extrabold text-sm text-emerald-300 flex items-center gap-1.5">
+                                    <span>📩</span> File Requests (<span id="adminRequestsCount">0</span>)
+                                </h4>
+                            </div>
+                            <div id="adminRequestsList" class="space-y-2 text-xs max-h-[60vh] overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. TAB: SETTINGS & BACKUP -->
+                <div id="adminTab-settings" class="hidden space-y-6">
+                    <div>
+                        <h3 class="text-lg font-black text-white">System Settings & Data Backup</h3>
+                        <p class="text-xs text-slate-400">Manage admin credentials, announcements, and site data backups.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Change Admin Password Form -->
+                        <form onsubmit="saveAdminCredentials(event)" class="glass-card p-5 rounded-2xl border border-white/10 space-y-4">
+                            <h4 class="font-bold text-sm text-white">Admin Security Credentials</h4>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">Admin Username</label>
+                                <input id="adminSetUser" type="text" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-amber-400">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">New Password</label>
+                                <input id="adminSetPass" type="password" required class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-amber-400">
+                            </div>
+                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition">
+                                🔐 Update Password
+                            </button>
+                        </form>
+
+                        <!-- Backup & Restore -->
+                        <div class="glass-card p-5 rounded-2xl border border-white/10 space-y-4">
+                            <h4 class="font-bold text-sm text-white">Backup & Restore Site Data</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Download all your files, custom brands, pricing, and orders as a single JSON backup file. You can restore it anytime or migrate to another device.
+                            </p>
+                            <div class="flex flex-wrap gap-2.5 pt-2">
+                                <button onclick="exportSiteData()" class="px-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold text-xs transition flex items-center gap-1.5">
+                                    <span>📥</span> Export Site Data (JSON)
+                                </button>
+                                <label class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer">
+                                    <span>📤</span> Import Backup
+                                    <input type="file" accept=".json" onchange="importSiteData(event)" class="hidden">
+                                </label>
+                            </div>
+                            <div class="pt-4 border-t border-white/10">
+                                <button onclick="resetSiteDefaults()" class="text-xs text-rose-400 hover:text-rose-300 font-bold underline">
+                                    ⚠️ Reset Site to Factory Defaults
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Sub-Modal: Add / Edit Flash File -->
+    <div id="fileEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card rounded-[28px] max-w-2xl w-full border border-white/15 overflow-hidden my-auto">
+            <div class="p-5 border-b border-white/10 flex items-center justify-between">
+                <h3 id="fileEditorTitle" class="text-base font-extrabold text-white">Add New Flash File</h3>
+                <button onclick="closeModal('fileEditorModal')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
+            </div>
+            <form onsubmit="saveFlashFile(event)" class="p-5 space-y-3.5 max-h-[75vh] overflow-y-auto text-xs">
+                <input type="hidden" id="editFileId">
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">File Name (Exact ROM filename)</label>
+                    <input id="editFileName" type="text" required placeholder="e.g. Symphony_L46_HW6_MT6261_100%_Tested.zip" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Brand</label>
+                        <select id="editFileBrand" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none"></select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Category</label>
+                        <select id="editFileCategory" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none">
+                            <option value="Stock ROM">Stock ROM</option>
+                            <option value="Button Phone">Button Phone</option>
+                            <option value="FRP / MDM">FRP & MDM</option>
+                            <option value="EMMC Dump">EMMC Dump</option>
+                            <option value="Root">Root / Boot</option>
+                            <option value="Schematics">Schematics</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">CPU / Chipset Family</label>
+                        <select id="editFileCpu" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none">
+                            <option value="MediaTek">MediaTek (MTK)</option>
+                            <option value="SPD">SPD / Unisoc</option>
+                            <option value="Qualcomm">Qualcomm Snapdragon</option>
+                            <option value="Exynos">Samsung Exynos</option>
+                            <option value="Universal">Universal / Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Chipset Detail</label>
+                        <input id="editFileChipDetail" type="text" required placeholder="e.g. MT6261 or Unisoc T606" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">File Size</label>
+                        <input id="editFileSize" type="text" required placeholder="e.g. 4.2 MB or 3.8 GB" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Access Type</label>
+                        <select id="editFileAccess" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none">
+                            <option value="FREE">FREE (No Password)</option>
+                            <option value="VIP">VIP (Paid Pass)</option>
+                            <option value="FEATURED">FEATURED</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-300 mb-1">Password Status</label>
+                        <select id="editFilePassword" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none">
+                            <option value="No Password">No Password</option>
+                            <option value="Paid Password">Paid Password</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Direct Download URL (Google Drive / Mega / Mediafire)</label>
+                    <input id="editFileDownloadUrl" type="text" required placeholder="https://..." class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Flashing Instructions / Notes</label>
+                    <textarea id="editFileDesc" rows="2" placeholder="Flash with CM2, SP Flash Tool, or UnlockTool..." class="w-full px-3.5 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Verified CM2 / UnlockTool Read Log</label>
+                    <textarea id="editFileReadLog" rows="3" placeholder="Phone found! [ 3 ] Sync Ok&#10;BB_CPU_ID : 6261..." class="w-full px-3.5 py-2 rounded-xl bg-black/50 border border-white/15 text-xs text-emerald-400 font-mono focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('fileEditorModal')" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-slate-300 font-semibold">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black shadow-lg">Save File</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sub-Modal: Add / Edit Brand -->
+    <div id="brandEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-[28px] max-w-sm w-full border border-white/15 overflow-hidden">
+            <div class="p-5 border-b border-white/10 flex items-center justify-between">
+                <h3 id="brandEditorTitle" class="text-base font-extrabold text-white">Add New Brand</h3>
+                <button onclick="closeModal('brandEditorModal')" class="p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300">✕</button>
+            </div>
+            <form onsubmit="saveBrand(event)" class="p-5 space-y-3.5 text-xs">
+                <input type="hidden" id="editOriginalBrandName">
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Brand Name</label>
+                    <input id="editBrandName" type="text" required placeholder="e.g. Symphony, Maximus, Walton" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Brand Group</label>
+                    <select id="editBrandGroup" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-xs text-white focus:outline-none">
+                        <option value="bd">Bangladeshi Local & Button Phone (BD)</option>
+                        <option value="global">International Smartphone</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Files Count Label</label>
+                    <input id="editBrandCount" type="text" required placeholder="e.g. 5,200 Files" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-300 mb-1">Brand Icon Text (1-3 chars or emoji)</label>
+                    <input id="editBrandIcon" type="text" required placeholder="e.g. Sy, 5★, W" class="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('brandEditorModal')" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-slate-300 font-semibold">Cancel</button>
+                    <button type="submit" class="px-6 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black shadow-lg">Save Brand</button>
+                </div>
             </form>
         </div>
     </div>
@@ -916,7 +1420,7 @@
          * 3. MASTER PORTAL DATA (BD LOCAL + GLOBAL FLASH FILES & PACKAGES)
          * ============================================================================
          */
-        const BRANDS = [
+        const DEFAULT_BRANDS = [
             { name: "Samsung", group: "global", count: "28,450 Files", color: "from-blue-600 to-blue-800", icon: "S" },
             { name: "Xiaomi", group: "global", count: "19,210 Files", color: "from-orange-500 to-amber-600", icon: "Mi" },
             { name: "Oppo", group: "global", count: "14,800 Files", color: "from-emerald-500 to-green-700", icon: "Op" },
@@ -931,7 +1435,7 @@
             { name: "Infinix", group: "bd", count: "7,450 Files", color: "from-lime-500 to-emerald-600", icon: "Ix" }
         ];
 
-        const FLASH_FILES = [
+        const DEFAULT_FLASH_FILES = [
             {
                 id: 201,
                 name: "Symphony_L46_HW6_MT6261_100%_Tested_Button_Flash_File.zip",
@@ -1031,7 +1535,7 @@
             { name: "Android Utility Pro Tool (Latest Free)", size: "96.5 MB", tag: "GSM Utility", downloads: "112K+" }
         ];
 
-        const PACKAGES = [
+        const DEFAULT_PACKAGES = [
             { name: "Free Starter", badge: "No Password Files", priceBDT: "FREE", priceUSD: "FREE", period: "Lifetime", bandwidth: "5 GB / 5 Files Daily", usage: "All Free Files & Drivers", ipLimit: "Unlimited IPs", popular: false },
             { name: "Daily Express", badge: "Includes Featured", priceBDT: "৳150", priceUSD: "$1.50", period: "24 Hours", bandwidth: "20 GB / 5 Files", usage: "Free + Featured Files", ipLimit: "2 Devices", popular: false },
             { name: "Monthly Bronze", badge: "No Password Files", priceBDT: "৳600", priceUSD: "$5.99", period: "1 Month", bandwidth: "100 GB / 40 Files", usage: "All Standard + Button Files", ipLimit: "5 IPs / Month", popular: false },
@@ -1059,7 +1563,34 @@
             }
         };
 
-        let state = {
+        
+        const DEFAULT_PAYMENTS = {
+            bkash: "01700-000000",
+            nagad: "01700-000000",
+            rocket: "01700-000000",
+            binance: "123456789",
+            whatsapp: "8801700000000",
+            whatsappDisplay: "+880 1700-000000",
+            telegram: "https://t.me/"
+        };
+
+        const DEFAULT_SETTINGS = {
+            adminUser: "admin",
+            adminPass: "admin786",
+            siteNotice: "Bangladesh's #1 3D Dynamic Firmware Server • 100% Tested"
+        };
+
+        // Master Live Data (Loads from LocalStorage if customized via Admin Panel)
+        let BRANDS = JSON.parse(localStorage.getItem("gsm_admin_brands")) || DEFAULT_BRANDS;
+        let FLASH_FILES = JSON.parse(localStorage.getItem("gsm_admin_files")) || DEFAULT_FLASH_FILES;
+        let PACKAGES = JSON.parse(localStorage.getItem("gsm_admin_packages")) || DEFAULT_PACKAGES;
+        let PAYMENT_SETTINGS = JSON.parse(localStorage.getItem("gsm_admin_payments")) || DEFAULT_PAYMENTS;
+        let ADMIN_SETTINGS = JSON.parse(localStorage.getItem("gsm_admin_settings")) || DEFAULT_SETTINGS;
+        let CUSTOMER_ORDERS = JSON.parse(localStorage.getItem("gsm_customer_orders")) || [];
+        let CUSTOMER_REQUESTS = JSON.parse(localStorage.getItem("gsm_customer_requests")) || [];
+        let isAdminLoggedIn = sessionStorage.getItem("gsm_admin_logged") === "true";
+
+    let state = {
             lang: localStorage.getItem("gsm_lang") || "en",
             currency: localStorage.getItem("gsm_currency") || "BDT",
             brandGroup: "all", brand: "all", category: "all", access: "all", cpu: "all", sort: "latest", search: "",
@@ -1072,6 +1603,7 @@
             document.getElementById("currentYear").textContent = new Date().getFullYear();
             init3DHero();
             applyLanguage();
+            applyPaymentSettings();
             updateCurrencyUI();
             updateBookmarkBadge();
             renderTickers();
@@ -1079,6 +1611,10 @@
             renderFiles();
             renderTools();
             renderPackages();
+
+            if (window.location.hash === "#admin") {
+                openAdminLogin();
+            }
 
             document.getElementById("heroSearchInput").addEventListener("input", (e) => {
                 state.search = e.target.value.trim().toLowerCase();
@@ -1457,13 +1993,42 @@
             const method = document.getElementById("orderMethod").value;
             const trx = document.getElementById("orderTrx").value;
             e.target.reset(); closeModal("checkoutModal");
+
+            // Save order for Admin Panel
+            CUSTOMER_ORDERS.unshift({
+                date: new Date().toLocaleString(),
+                plan: plan,
+                price: price,
+                email: email,
+                method: method,
+                trx: trx,
+                status: "Pending"
+            });
+            localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+            renderAdminOrders();
+
             triggerDynamicIsland("Order Submitted!", `TrxID: ${trx} • Opening WhatsApp...`, "VIP", 4500);
             const msg = encodeURIComponent(`Hello GSM FlashHub BD! I paid ${price} for ${plan} via ${method}. TrxID: ${trx}. Email: ${email}`);
-            setTimeout(() => window.open(`https://wa.me/8801700000000?text=${msg}`, "_blank"), 900);
+            const waUrl = `https://wa.me/${PAYMENT_SETTINGS.whatsapp}?text=${msg}`;
+            setTimeout(() => window.open(waUrl, "_blank"), 900);
         }
         function openRequestModal() { document.getElementById("requestModal").classList.remove("hidden"); }
         function submitFileRequest(e) {
-            e.preventDefault(); e.target.reset(); closeModal("requestModal");
+            e.preventDefault();
+            const form = e.target;
+            const inputs = form.querySelectorAll("input, select");
+            CUSTOMER_REQUESTS.unshift({
+                date: new Date().toLocaleString(),
+                model: inputs[0].value,
+                cpu: inputs[1].value,
+                category: inputs[2].value,
+                contact: inputs[3].value,
+                status: "Pending"
+            });
+            localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS));
+            renderAdminOrders();
+
+            form.reset(); closeModal("requestModal");
             triggerDynamicIsland("File Request Received", "আমাদের টিম দ্রুত ফাইলটি আপলোড করবে", "SENT");
         }
         function openAuthModal() { document.getElementById("authModal").classList.remove("hidden"); }
@@ -1484,9 +2049,580 @@
         document.addEventListener("keydown", (e) => {
             if (e.key === "Escape") {
                 closeIslandMenu();
-                ["fileModal", "requestModal", "checkoutModal", "dashboardModal", "authModal"].forEach(closeModal);
+                ["fileModal", "requestModal", "checkoutModal", "dashboardModal", "authModal", "adminLoginModal", "fileEditorModal", "brandEditorModal"].forEach(closeModal);
+            }
+            // Secret Shortcut: Ctrl + Shift + A opens Admin Panel!
+            if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+                e.preventDefault();
+                openAdminLogin();
             }
         });
+
+        /**
+         * ============================================================================
+         * 13. MASTER ADMIN CONTROL PANEL ENGINE (A TO Z WEBSITE CONTROL)
+         * ============================================================================
+         */
+
+        function applyPaymentSettings() {
+            // Update Checkout modal numbers
+            const chkBkash = document.getElementById("checkoutBkashNagadText");
+            if (chkBkash) chkBkash.textContent = PAYMENT_SETTINGS.bkash;
+            const chkBinance = document.getElementById("checkoutBinanceText");
+            if (chkBinance) chkBinance.textContent = PAYMENT_SETTINGS.binance;
+
+            // Update Footer WhatsApp
+            const footerWa = document.getElementById("footerWhatsappText");
+            if (footerWa) footerWa.textContent = PAYMENT_SETTINGS.whatsappDisplay || PAYMENT_SETTINGS.whatsapp;
+
+            // Update Floating Action Buttons
+            const flWa = document.getElementById("floatingWhatsappBtn");
+            if (flWa) flWa.href = `https://wa.me/${PAYMENT_SETTINGS.whatsapp}`;
+            const flTg = document.getElementById("floatingTelegramBtn");
+            if (flTg) flTg.href = PAYMENT_SETTINGS.telegram;
+        }
+
+        // ==================== AUTH & MODAL CONTROLLERS ====================
+        function openAdminLogin() {
+            if (isAdminLoggedIn) {
+                openAdminDashboard();
+                return;
+            }
+            document.getElementById("adminLoginError").classList.add("hidden");
+            document.getElementById("adminLoginModal").classList.remove("hidden");
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById("adminLoginUser").value.trim();
+            const p = document.getElementById("adminLoginPass").value.trim();
+            if (u === ADMIN_SETTINGS.adminUser && p === ADMIN_SETTINGS.adminPass) {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem("gsm_admin_logged", "true");
+                closeModal("adminLoginModal");
+                openAdminDashboard();
+                triggerDynamicIsland("Admin Authenticated", "Welcome Master Admin • Full Control Granted", "ADMIN", 4000);
+            } else {
+                document.getElementById("adminLoginError").classList.remove("hidden");
+            }
+        }
+
+        function openAdminDashboard() {
+            document.getElementById("adminDashboardModal").classList.remove("hidden");
+            switchAdminTab("overview");
+            refreshAllAdminViews();
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById("adminDashboardModal").classList.add("hidden");
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            sessionStorage.removeItem("gsm_admin_logged");
+            closeAdminDashboard();
+            triggerDynamicIsland("Logged Out", "Admin session ended successfully", "LOCK");
+        }
+
+        function switchAdminTab(tabName) {
+            const tabs = ["overview", "files", "brands", "packages", "payments", "orders", "settings"];
+            tabs.forEach(t => {
+                const tabEl = document.getElementById(`adminTab-${t}`);
+                const btnEl = document.getElementById(`adminTabBtn-${t}`);
+                if (tabEl) tabEl.classList.add("hidden");
+                if (btnEl) {
+                    btnEl.className = "admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-bold flex items-center gap-2.5 transition text-slate-300 hover:bg-white/5 shrink-0";
+                }
+            });
+
+            const activeTab = document.getElementById(`adminTab-${tabName}`);
+            const activeBtn = document.getElementById(`adminTabBtn-${tabName}`);
+            if (activeTab) activeTab.classList.remove("hidden");
+            if (activeBtn) {
+                activeBtn.className = "admin-nav-btn w-full px-3.5 py-2.5 rounded-xl text-left text-xs font-extrabold flex items-center gap-2.5 transition bg-amber-500 text-slate-950 shadow-lg shrink-0";
+            }
+
+            if (tabName === "files") renderAdminFilesTable();
+            if (tabName === "brands") renderAdminBrands();
+            if (tabName === "packages") renderAdminPackages();
+            if (tabName === "payments") renderAdminPayments();
+            if (tabName === "orders") renderAdminOrders();
+            if (tabName === "settings") renderAdminSettings();
+            if (tabName === "overview") renderAdminOverview();
+        }
+
+        function refreshAllAdminViews() {
+            renderAdminOverview();
+            renderAdminFilesTable();
+            renderAdminBrands();
+            renderAdminPackages();
+            renderAdminPayments();
+            renderAdminOrders();
+        }
+
+        // ==================== 1. OVERVIEW & STATS ====================
+        function renderAdminOverview() {
+            document.getElementById("statTotalFiles").textContent = FLASH_FILES.length.toLocaleString();
+            document.getElementById("statTotalBrands").textContent = BRANDS.length;
+            document.getElementById("statTotalPackages").textContent = PACKAGES.length;
+            const totalOrders = CUSTOMER_ORDERS.length + CUSTOMER_REQUESTS.length;
+            document.getElementById("statTotalOrders").textContent = totalOrders;
+
+            document.getElementById("adminFilesCountBadge").textContent = FLASH_FILES.length;
+            document.getElementById("adminBrandsCountBadge").textContent = BRANDS.length;
+            document.getElementById("adminPendingOrdersBadge").textContent = totalOrders;
+        }
+
+        // ==================== 2. FLASH FILES MANAGER ====================
+        function renderAdminFilesTable() {
+            const tbody = document.getElementById("adminFilesTableBody");
+            const q = (document.getElementById("adminFileSearch")?.value || "").toLowerCase().trim();
+            const bFilter = document.getElementById("adminFileBrandFilter")?.value || "all";
+            const aFilter = document.getElementById("adminFileAccessFilter")?.value || "all";
+
+            // Update Brand filter dropdown
+            const brandSelect = document.getElementById("adminFileBrandFilter");
+            if (brandSelect && brandSelect.options.length <= 1) {
+                BRANDS.forEach(b => {
+                    const opt = document.createElement("option");
+                    opt.value = b.name; opt.textContent = b.name;
+                    brandSelect.appendChild(opt);
+                });
+            }
+
+            let filtered = FLASH_FILES.filter(f => {
+                const matchQ = !q || f.name.toLowerCase().includes(q) || f.brand.toLowerCase().includes(q) || f.chipsetDetail.toLowerCase().includes(q);
+                const matchB = bFilter === "all" || f.brand === bFilter;
+                const matchA = aFilter === "all" || f.access === aFilter;
+                return matchQ && matchB && matchA;
+            });
+
+            document.getElementById("adminFilesCountHeader").textContent = `${filtered.length} of ${FLASH_FILES.length}`;
+
+            tbody.innerHTML = filtered.length ? filtered.map(f => {
+                const accessBadge = f.access === "FREE" ? "bg-emerald-500/20 text-emerald-300" : (f.access === "VIP" ? "bg-amber-500/20 text-amber-300" : "bg-purple-500/20 text-purple-300");
+                return `
+                    <tr class="hover:bg-white/5 transition">
+                        <td class="p-3.5">
+                            <div class="font-bold text-white max-w-xs sm:max-w-md truncate" title="${f.name}">${f.name}</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5 truncate">${f.desc ? f.desc.slice(0, 75) + '...' : ''}</div>
+                        </td>
+                        <td class="p-3.5 whitespace-nowrap">
+                            <span class="font-semibold text-white">${f.brand}</span>
+                            <div class="text-[10px] text-slate-400">${f.category}</div>
+                        </td>
+                        <td class="p-3.5 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 font-mono text-[10px] font-bold">${f.cpu}</span>
+                            <div class="text-[10px] text-slate-400 mt-0.5">${f.chipsetDetail}</div>
+                        </td>
+                        <td class="p-3.5 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${accessBadge}">${f.access}</span>
+                        </td>
+                        <td class="p-3.5 whitespace-nowrap font-medium text-slate-300">${f.size}</td>
+                        <td class="p-3.5 text-right whitespace-nowrap space-x-1">
+                            <button onclick="openFileEditorModal(${f.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 font-bold transition">Edit</button>
+                            <button onclick="deleteFlashFile(${f.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold transition">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }).join("") : `<tr><td colspan="6" class="p-8 text-center text-slate-400">No flash files match your search criteria.</td></tr>`;
+        }
+
+        function openFileEditorModal(fileId = null) {
+            const modal = document.getElementById("fileEditorModal");
+            const brandSelect = document.getElementById("editFileBrand");
+            brandSelect.innerHTML = BRANDS.map(b => `<option value="${b.name}">${b.name}</option>`).join("");
+
+            if (fileId) {
+                const f = FLASH_FILES.find(item => item.id === fileId);
+                if (!f) return;
+                document.getElementById("fileEditorTitle").textContent = "Edit Flash File";
+                document.getElementById("editFileId").value = f.id;
+                document.getElementById("editFileName").value = f.name;
+                document.getElementById("editFileBrand").value = f.brand;
+                document.getElementById("editFileCategory").value = f.category;
+                document.getElementById("editFileCpu").value = f.cpu;
+                document.getElementById("editFileChipDetail").value = f.chipsetDetail;
+                document.getElementById("editFileSize").value = f.size;
+                document.getElementById("editFileAccess").value = f.access;
+                document.getElementById("editFilePassword").value = f.password || "No Password";
+                document.getElementById("editFileDownloadUrl").value = f.downloadUrl || "#";
+                document.getElementById("editFileDesc").value = f.desc || "";
+                document.getElementById("editFileReadLog").value = f.readLog || "";
+            } else {
+                document.getElementById("fileEditorTitle").textContent = "Add New Flash File";
+                document.getElementById("editFileId").value = "";
+                document.getElementById("editFileName").value = "";
+                document.getElementById("editFileCategory").value = "Stock ROM";
+                document.getElementById("editFileCpu").value = "MediaTek";
+                document.getElementById("editFileChipDetail").value = "";
+                document.getElementById("editFileSize").value = "";
+                document.getElementById("editFileAccess").value = "FREE";
+                document.getElementById("editFilePassword").value = "No Password";
+                document.getElementById("editFileDownloadUrl").value = "https://";
+                document.getElementById("editFileDesc").value = "100% CM2 / UnlockTool verified flash file. Solves hang on logo and dead recovery.";
+                document.getElementById("editFileReadLog").value = "Phone found! Sync Ok\nTool: Verified Tested Working 100%";
+            }
+            modal.classList.remove("hidden");
+        }
+
+        function saveFlashFile(e) {
+            e.preventDefault();
+            const idVal = document.getElementById("editFileId").value;
+            const fileData = {
+                id: idVal ? parseInt(idVal) : Date.now(),
+                name: document.getElementById("editFileName").value.trim(),
+                brand: document.getElementById("editFileBrand").value,
+                category: document.getElementById("editFileCategory").value,
+                cpu: document.getElementById("editFileCpu").value,
+                chipsetDetail: document.getElementById("editFileChipDetail").value.trim(),
+                size: document.getElementById("editFileSize").value.trim(),
+                access: document.getElementById("editFileAccess").value,
+                password: document.getElementById("editFilePassword").value,
+                downloadUrl: document.getElementById("editFileDownloadUrl").value.trim(),
+                desc: document.getElementById("editFileDesc").value.trim(),
+                readLog: document.getElementById("editFileReadLog").value.trim(),
+                date: new Date().toISOString().split("T")[0],
+                downloads: idVal ? (FLASH_FILES.find(f => f.id === parseInt(idVal))?.downloads || 0) : 0
+            };
+
+            if (idVal) {
+                const idx = FLASH_FILES.findIndex(f => f.id === parseInt(idVal));
+                if (idx !== -1) FLASH_FILES[idx] = fileData;
+            } else {
+                FLASH_FILES.unshift(fileData);
+            }
+
+            localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+            closeModal("fileEditorModal");
+            renderAdminFilesTable();
+            renderAdminOverview();
+            renderFiles();
+            renderTickers();
+            triggerDynamicIsland("File Saved Successfully", `${fileData.name} updated on live site!`, "SAVED");
+        }
+
+        function deleteFlashFile(fileId) {
+            const f = FLASH_FILES.find(item => item.id === fileId);
+            if (!f) return;
+            if (confirm(`Are you sure you want to delete "${f.name}"?`)) {
+                FLASH_FILES = FLASH_FILES.filter(item => item.id !== fileId);
+                localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+                renderAdminFilesTable();
+                renderAdminOverview();
+                renderFiles();
+                renderTickers();
+                triggerDynamicIsland("File Removed", `${f.name} deleted`, "DEL");
+            }
+        }
+
+        // ==================== 3. BRANDS MANAGER ====================
+        function renderAdminBrands() {
+            const grid = document.getElementById("adminBrandsGrid");
+            document.getElementById("adminBrandsCountHeader").textContent = BRANDS.length;
+            grid.innerHTML = BRANDS.map(b => `
+                <div class="glass-card p-4 rounded-2xl border border-white/10 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${b.color || 'from-blue-600 to-cyan-600'} text-white font-black text-sm flex items-center justify-center shadow">
+                            ${b.icon || b.name[0]}
+                        </div>
+                        <div>
+                            <div class="font-bold text-white text-sm flex items-center gap-1.5">
+                                ${b.name}
+                                ${b.group === 'bd' ? '<span class="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">BD</span>' : ''}
+                            </div>
+                            <div class="text-[11px] text-slate-400">${b.count}</div>
+                        </div>
+                    </div>
+                    <div class="space-x-1">
+                        <button onclick="openBrandEditorModal('${b.name}')" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-xs font-bold transition">Edit</button>
+                        <button onclick="deleteBrand('${b.name}')" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-bold transition">Delete</button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function openBrandEditorModal(brandName = null) {
+            const modal = document.getElementById("brandEditorModal");
+            if (brandName) {
+                const b = BRANDS.find(item => item.name === brandName);
+                if (!b) return;
+                document.getElementById("brandEditorTitle").textContent = "Edit Brand";
+                document.getElementById("editOriginalBrandName").value = b.name;
+                document.getElementById("editBrandName").value = b.name;
+                document.getElementById("editBrandGroup").value = b.group;
+                document.getElementById("editBrandCount").value = b.count;
+                document.getElementById("editBrandIcon").value = b.icon || b.name.slice(0, 2);
+            } else {
+                document.getElementById("brandEditorTitle").textContent = "Add New Brand";
+                document.getElementById("editOriginalBrandName").value = "";
+                document.getElementById("editBrandName").value = "";
+                document.getElementById("editBrandGroup").value = "bd";
+                document.getElementById("editBrandCount").value = "1,000+ Files";
+                document.getElementById("editBrandIcon").value = "BD";
+            }
+            modal.classList.remove("hidden");
+        }
+
+        function saveBrand(e) {
+            e.preventDefault();
+            const originalName = document.getElementById("editOriginalBrandName").value;
+            const brandData = {
+                name: document.getElementById("editBrandName").value.trim(),
+                group: document.getElementById("editBrandGroup").value,
+                count: document.getElementById("editBrandCount").value.trim(),
+                icon: document.getElementById("editBrandIcon").value.trim(),
+                color: originalName ? (BRANDS.find(b => b.name === originalName)?.color || "from-blue-600 to-cyan-500") : "from-emerald-600 to-teal-500"
+            };
+
+            if (originalName) {
+                const idx = BRANDS.findIndex(b => b.name === originalName);
+                if (idx !== -1) BRANDS[idx] = brandData;
+            } else {
+                BRANDS.push(brandData);
+            }
+
+            localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS));
+            closeModal("brandEditorModal");
+            renderAdminBrands();
+            renderBrands();
+            triggerDynamicIsland("Brand Updated", `${brandData.name} brand saved!`, "BRAND");
+        }
+
+        function deleteBrand(brandName) {
+            if (confirm(`Delete brand "${brandName}"?`)) {
+                BRANDS = BRANDS.filter(b => b.name !== brandName);
+                localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS));
+                renderAdminBrands();
+                renderBrands();
+                triggerDynamicIsland("Brand Removed", `${brandName} deleted`, "DEL");
+            }
+        }
+
+        // ==================== 4. VIP PACKAGES & PRICING ====================
+        function renderAdminPackages() {
+            const container = document.getElementById("adminPackagesList");
+            container.innerHTML = PACKAGES.map((p, idx) => `
+                <div class="glass-card p-4 rounded-2xl border border-white/10 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-sm text-white">${p.name}</span>
+                        ${p.popular ? '<span class="px-2 py-0.5 rounded-full bg-cyan-500 text-slate-950 font-black text-[9px]">POPULAR</span>' : ''}
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <label class="block text-[10px] text-slate-400">BDT Price (৳)</label>
+                            <input type="text" data-idx="${idx}" data-field="priceBDT" value="${p.priceBDT}" class="pkg-input w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/15 text-emerald-300 font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400">USD Price ($)</label>
+                            <input type="text" data-idx="${idx}" data-field="priceUSD" value="${p.priceUSD}" class="pkg-input w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/15 text-cyan-300 font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400">Duration</label>
+                            <input type="text" data-idx="${idx}" data-field="period" value="${p.period}" class="pkg-input w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/15 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-400">Bandwidth / Limit</label>
+                            <input type="text" data-idx="${idx}" data-field="bandwidth" value="${p.bandwidth}" class="pkg-input w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/15 text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-slate-400">Badge Note</label>
+                        <input type="text" data-idx="${idx}" data-field="badge" value="${p.badge}" class="pkg-input w-full px-2.5 py-1.5 rounded-lg bg-black/50 border border-white/15 text-slate-300 text-xs">
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function saveAdminPackages(e) {
+            e.preventDefault();
+            document.querySelectorAll(".pkg-input").forEach(input => {
+                const idx = parseInt(input.getAttribute("data-idx"));
+                const field = input.getAttribute("data-field");
+                if (PACKAGES[idx] && field) {
+                    PACKAGES[idx][field] = input.value.trim();
+                }
+            });
+            localStorage.setItem("gsm_admin_packages", JSON.stringify(PACKAGES));
+            renderPackages();
+            triggerDynamicIsland("Packages Saved", "All VIP membership prices updated live!", "VIP");
+        }
+
+        // ==================== 5. PAYMENT & SUPPORT ====================
+        function renderAdminPayments() {
+            document.getElementById("adminPayBkash").value = PAYMENT_SETTINGS.bkash;
+            document.getElementById("adminPayNagad").value = PAYMENT_SETTINGS.nagad;
+            document.getElementById("adminPayRocket").value = PAYMENT_SETTINGS.rocket;
+            document.getElementById("adminPayBinance").value = PAYMENT_SETTINGS.binance;
+            document.getElementById("adminPayWhatsapp").value = PAYMENT_SETTINGS.whatsapp;
+            document.getElementById("adminPayWhatsappDisplay").value = PAYMENT_SETTINGS.whatsappDisplay || PAYMENT_SETTINGS.whatsapp;
+            document.getElementById("adminPayTelegram").value = PAYMENT_SETTINGS.telegram;
+        }
+
+        function saveAdminPayments(e) {
+            e.preventDefault();
+            PAYMENT_SETTINGS = {
+                bkash: document.getElementById("adminPayBkash").value.trim(),
+                nagad: document.getElementById("adminPayNagad").value.trim(),
+                rocket: document.getElementById("adminPayRocket").value.trim(),
+                binance: document.getElementById("adminPayBinance").value.trim(),
+                whatsapp: document.getElementById("adminPayWhatsapp").value.trim(),
+                whatsappDisplay: document.getElementById("adminPayWhatsappDisplay").value.trim(),
+                telegram: document.getElementById("adminPayTelegram").value.trim()
+            };
+            localStorage.setItem("gsm_admin_payments", JSON.stringify(PAYMENT_SETTINGS));
+            applyPaymentSettings();
+            triggerDynamicIsland("Payment Info Updated", "bKash, Nagad & WhatsApp numbers updated live!", "PAY");
+        }
+
+        // ==================== 6. ORDERS & REQUESTS ====================
+        function renderAdminOrders() {
+            const ordersList = document.getElementById("adminOrdersList");
+            const reqList = document.getElementById("adminRequestsList");
+            document.getElementById("adminOrdersCount").textContent = CUSTOMER_ORDERS.length;
+            document.getElementById("adminRequestsCount").textContent = CUSTOMER_REQUESTS.length;
+
+            ordersList.innerHTML = CUSTOMER_ORDERS.length ? CUSTOMER_ORDERS.map((o, idx) => `
+                <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-white text-xs">${o.plan} (${o.price})</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${o.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${o.status}</span>
+                    </div>
+                    <div class="text-slate-300">Method: <strong class="text-pink-400">${o.method}</strong> • TrxID: <strong class="text-cyan-300 font-mono">${o.trx}</strong></div>
+                    <div class="text-slate-400 text-[11px]">Email: ${o.email} • Time: ${o.date}</div>
+                    <div class="pt-1 flex items-center gap-2">
+                        <button onclick="updateOrderStatus(${idx}, 'Approved')" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">Approve</button>
+                        <button onclick="deleteOrder(${idx})" class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold">Delete</button>
+                    </div>
+                </div>
+            `).join("") : `<p class="p-4 text-center text-slate-500">No VIP orders submitted yet.</p>`;
+
+            reqList.innerHTML = CUSTOMER_REQUESTS.length ? CUSTOMER_REQUESTS.map((r, idx) => `
+                <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-white text-xs">${r.model}</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.status === 'Uploaded' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'}">${r.status}</span>
+                    </div>
+                    <div class="text-slate-300">CPU: ${r.cpu || 'N/A'} • Category: ${r.category}</div>
+                    <div class="text-slate-400 text-[11px]">Contact: ${r.contact} • Time: ${r.date}</div>
+                    <div class="pt-1 flex items-center gap-2">
+                        <button onclick="updateRequestStatus(${idx}, 'Uploaded')" class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-bold">Mark Uploaded</button>
+                        <button onclick="deleteRequest(${idx})" class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-bold">Delete</button>
+                    </div>
+                </div>
+            `).join("") : `<p class="p-4 text-center text-slate-500">No missing file requests yet.</p>`;
+        }
+
+        function updateOrderStatus(idx, status) {
+            if (CUSTOMER_ORDERS[idx]) {
+                CUSTOMER_ORDERS[idx].status = status;
+                localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+                renderAdminOrders();
+            }
+        }
+        function deleteOrder(idx) {
+            CUSTOMER_ORDERS.splice(idx, 1);
+            localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+            renderAdminOrders();
+        }
+        function updateRequestStatus(idx, status) {
+            if (CUSTOMER_REQUESTS[idx]) {
+                CUSTOMER_REQUESTS[idx].status = status;
+                localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS));
+                renderAdminOrders();
+            }
+        }
+        function deleteRequest(idx) {
+            CUSTOMER_REQUESTS.splice(idx, 1);
+            localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS));
+            renderAdminOrders();
+        }
+        function clearAllOrders() {
+            if (confirm("Clear all orders and requests history?")) {
+                CUSTOMER_ORDERS = []; CUSTOMER_REQUESTS = [];
+                localStorage.setItem("gsm_customer_orders", "[]");
+                localStorage.setItem("gsm_customer_requests", "[]");
+                renderAdminOrders();
+                renderAdminOverview();
+            }
+        }
+
+        // ==================== 7. SETTINGS & BACKUP ====================
+        function renderAdminSettings() {
+            document.getElementById("adminSetUser").value = ADMIN_SETTINGS.adminUser;
+            document.getElementById("adminSetPass").value = ADMIN_SETTINGS.adminPass;
+        }
+
+        function saveAdminCredentials(e) {
+            e.preventDefault();
+            ADMIN_SETTINGS.adminUser = document.getElementById("adminSetUser").value.trim();
+            ADMIN_SETTINGS.adminPass = document.getElementById("adminSetPass").value.trim();
+            localStorage.setItem("gsm_admin_settings", JSON.stringify(ADMIN_SETTINGS));
+            triggerDynamicIsland("Security Updated", "Admin username & password changed!", "KEY");
+        }
+
+        function exportSiteData() {
+            const data = {
+                exportedAt: new Date().toISOString(),
+                brands: BRANDS,
+                files: FLASH_FILES,
+                packages: PACKAGES,
+                payments: PAYMENT_SETTINGS,
+                settings: ADMIN_SETTINGS,
+                orders: CUSTOMER_ORDERS,
+                requests: CUSTOMER_REQUESTS
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url; a.download = `gsm_flashhub_backup_${new Date().toISOString().split("T")[0]}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            triggerDynamicIsland("Backup Downloaded", "All site data exported as JSON", "BACKUP");
+        }
+
+        function importSiteData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (parsed.brands) { BRANDS = parsed.brands; localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS)); }
+                    if (parsed.files) { FLASH_FILES = parsed.files; localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES)); }
+                    if (parsed.packages) { PACKAGES = parsed.packages; localStorage.setItem("gsm_admin_packages", JSON.stringify(PACKAGES)); }
+                    if (parsed.payments) { PAYMENT_SETTINGS = parsed.payments; localStorage.setItem("gsm_admin_payments", JSON.stringify(PAYMENT_SETTINGS)); }
+                    if (parsed.settings) { ADMIN_SETTINGS = parsed.settings; localStorage.setItem("gsm_admin_settings", JSON.stringify(ADMIN_SETTINGS)); }
+                    if (parsed.orders) { CUSTOMER_ORDERS = parsed.orders; localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS)); }
+                    if (parsed.requests) { CUSTOMER_REQUESTS = parsed.requests; localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS)); }
+
+                    applyPaymentSettings();
+                    renderBrands();
+                    renderFiles();
+                    renderTickers();
+                    renderPackages();
+                    refreshAllAdminViews();
+                    triggerDynamicIsland("Backup Restored", "All website data successfully imported!", "RESTORE");
+                } catch(err) {
+                    alert("Invalid JSON backup file format!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetSiteDefaults() {
+            if (confirm("Reset everything to factory defaults? All custom changes will be reset.")) {
+                localStorage.removeItem("gsm_admin_brands");
+                localStorage.removeItem("gsm_admin_files");
+                localStorage.removeItem("gsm_admin_packages");
+                localStorage.removeItem("gsm_admin_payments");
+                localStorage.removeItem("gsm_admin_settings");
+                localStorage.removeItem("gsm_customer_orders");
+                localStorage.removeItem("gsm_customer_requests");
+                location.reload();
+            }
+        }
+    
     </script>
 </body>
 </html>
