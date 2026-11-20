@@ -1,0 +1,3689 @@
+# -*- coding: utf-8 -*-
+"""
+GSMRM.BD - Master 3D Mobile Firmware & ROM Portal Generator (V3)
+Features:
+1. Dynamic 0-based file counters for each brand (recalculates live as Admin adds files)
+2. Real vector SVG brand logos for all 12 mobile companies (Samsung, Xiaomi, Vivo, Oppo, Realme, Apple, Symphony, Walton, 5Star, Itel, Tecno, Infinix)
+3. 5GB - 10GB Large File Upload Engine with auto-size calculation, ZIP password generator & Google Drive link converter
+4. Sweet female voice welcome message ("Welcome to GSMRM.BD") on first visit
+5. 100% Mobile Auto-Fit Responsive layout for all screen sizes
+6. Complete Technician User Dashboard & A to Z Admin User Control
+"""
+
+import os
+import sys
+
+def build_portal_html():
+    html = '''<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>GSMRM.BD | Bangladesh's #1 Master 3D Mobile Firmware & ROM Hub</title>
+    <meta name="description" content="GSMRM.BD - 100% CM2, UnlockTool & DFT Pro tested button phone flash files, Android official stock ROMs, FRP bypass, eMMC dump files and USB drivers for BD technicians.">
+    <meta name="keywords" content="GSMRM.BD, GSMRM, Symphony flash file, Walton button phone rom, 5Star MT6261, FRP bypass, eMMC dump, bKash VIP ROM, BD mobile firmware">
+
+    <!-- Google Fonts: Inter & Hind Siliguri for Bangla -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Hind Siliguri"', 'Inter', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    },
+                    screens: {
+                        'xs': '360px',
+                    },
+                    colors: {
+                        cyber: {
+                            950: '#030712',
+                            900: '#060d1d',
+                            800: '#0c1933',
+                            700: '#142954',
+                            cyan: '#00f2fe',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <!-- Three.js CDN for Ambient 3D Engine -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Custom CSS Styles -->
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            background-color: #030712;
+            color: #f1f5f9;
+            touch-action: pan-y;
+        }
+        /* Custom Cyber Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #060d1d; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid rgba(0, 242, 254, 0.2); }
+        ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+
+        /* Glassmorphism & UI Accents */
+        .glass-card {
+            background: rgba(12, 25, 51, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.35);
+        }
+        .glass-header {
+            background: rgba(3, 7, 18, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="text-slate-100 font-sans antialiased overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
+
+    <!-- ==================== AMBIENT 3D WEBGL CANVAS (NON-BLOCKING) ==================== -->
+    <canvas id="bg3dCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.65;"></canvas>
+
+    <!-- ==================== TOP PROFESSIONAL RESPONSIVE NAVIGATION BAR ==================== -->
+    <header class="glass-header fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-2.5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+            
+            <!-- Logo & Brand Badge -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="#home" class="flex items-center gap-2 group">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.4)] group-hover:scale-105 transition shrink-0">
+                        <span class="text-xs sm:text-base font-black text-white">RM</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1">
+                            <span class="font-extrabold text-sm sm:text-lg tracking-tight text-white whitespace-nowrap">GSMRM<span class="text-cyan-400">.BD</span></span>
+                            <span class="text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-black border border-cyan-500/30 whitespace-nowrap">3D MASTER</span>
+                        </div>
+                        <p class="text-[9px] sm:text-[10px] text-slate-400 hidden sm:block">BD Technician Firmware Hub</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <nav class="hidden lg:flex items-center gap-1 bg-white/5 border border-white/10 rounded-full px-3 py-1">
+                <a href="#home" data-i18n="nav_home" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition">হোম</a>
+                <a href="#categories" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition" onclick="selectCategory('Button Phone')">বাটন ফোন</a>
+                <a href="#categories" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition" onclick="selectCategory('Stock ROM')">স্টক রম</a>
+                <a href="#categories" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition" onclick="selectCategory('FRP / MDM')">এফআরপি আনলক</a>
+                <a href="#categories" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition" onclick="selectCategory('EMMC Dump')">ডাম্প ফাইল</a>
+                <a href="#tools" data-i18n="nav_tools" class="px-3 py-1 rounded-full text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition">ড্রাইভার ও টুলস</a>
+                <a href="#pricing" data-i18n="nav_pricing" class="px-3 py-1 rounded-full text-xs font-extrabold text-amber-300 hover:text-amber-200 hover:bg-amber-500/10 transition">💎 ভিআইপি প্ল্যান</a>
+            </nav>
+
+            <!-- Right Controls & User Account Center -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                
+                <!-- Voice Welcome Trigger Button -->
+                <button onclick="playWelcomeVoice(true)" title="Welcome Voice" class="p-1.5 sm:p-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs transition flex items-center gap-1">
+                    <span>🎙️</span>
+                    <span class="hidden md:inline text-[10px] font-bold">Voice</span>
+                </button>
+
+                <!-- Click Sound Toggle -->
+                <button id="soundToggleBtn" onclick="SoundFX.toggle()" title="Toggle Click Sound" class="p-1.5 sm:p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs transition">
+                    🔊
+                </button>
+
+                <!-- Language Toggle -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] sm:text-xs font-bold text-slate-300 transition">
+                    বাংলা
+                </button>
+
+                <!-- Technician User Account Button (Dynamic State) -->
+                <div id="navUserArea">
+                    <button onclick="openAuthModal()" class="px-2.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-[11px] sm:text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1 transition whitespace-nowrap">
+                        <span>👤</span>
+                        <span class="hidden sm:inline">টেকনিশিয়ান লগইন</span>
+                        <span class="sm:hidden">লগইন</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-1.5 sm:p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-white/10 mt-2.5 pt-3 pb-2 space-y-2">
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <a href="#home" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🏠 হোম (Home)</a>
+                <a href="#categories" onclick="selectCategory('Button Phone'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">📱 বাটন ফোন ফাইল</a>
+                <a href="#categories" onclick="selectCategory('Stock ROM'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">⚡ অফিসিয়াল স্টক রম</a>
+                <a href="#categories" onclick="selectCategory('FRP / MDM'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🔓 এফআরপি আনলক</a>
+                <a href="#categories" onclick="selectCategory('EMMC Dump'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">💾 ইএমএমসি ডাম্প</a>
+                <a href="#tools" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🛠️ ড্রাইভার ও টুলস</a>
+            </div>
+            <div class="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                <a href="#pricing" onclick="toggleMobileMenu()" class="flex-1 py-2.5 rounded-xl bg-amber-500/20 text-amber-300 text-center text-xs font-black border border-amber-500/30">
+                    💎 ভিআইপি প্যাকেজ
+                </a>
+                <button onclick="openRequestModal(); toggleMobileMenu()" class="flex-1 py-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 text-center text-xs font-black border border-cyan-500/30">
+                    📩 ফাইল রিকোয়েস্ট
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+    <main class="relative z-10 pt-20 sm:pt-24 pb-16">
+
+        <!-- ==================== HERO SECTION & SEARCH ==================== -->
+        <section id="home" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-8 pb-8">
+            
+            <!-- Verified Server Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold tracking-wide mb-4 shadow-[0_0_20px_rgba(0,242,254,0.25)]">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span data-i18n="hero_badge">GSMRM.BD • বাংলাদেশের #১ মোবাইল ফার্মওয়্যার ও রম পোর্টাল • ১০০% টেস্টেড</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight mb-3 sm:mb-4" data-i18n="hero_title">
+                GSMRM<span class="text-cyan-400">.BD</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">3D Master ROM</span> Hub
+            </h1>
+
+            <p class="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto mb-5 sm:mb-6 leading-relaxed" data-i18n="hero_subtitle">
+                সিম্ফনি, ওয়ালটন, ৫স্টার বাটন ফোনের টেস্টেড ফাইল (MT6261, SC6531E), স্যামসাং, শাওমি অফিসিয়াল রম, এফআরপি বাইপাস ও ইএমএমসি ডাম্প — ৫GB থেকে ১০GB বড় ফাইল নিমেষেই ডাউনলোড করুন।
+            </p>
+
+            <!-- Master Instant Search Bar -->
+            <form onsubmit="handleHeroSearch(event)" class="glass-card p-2 sm:p-3 rounded-2xl sm:rounded-3xl flex flex-col sm:flex-row gap-2 max-w-3xl mx-auto border border-white/20 focus-within:border-cyan-400/80 shadow-[0_15px_40px_rgba(0,0,0,0.6)] transition">
+                <div class="relative flex-1 flex items-center">
+                    <svg class="w-5 h-5 text-cyan-400 absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <input id="heroSearchInput" type="text" placeholder="মডেল বা ফাইলের নাম লিখুন (যেমন: Symphony L46, 5Star MT6261, Redmi Note 12)..."
+                           class="w-full pl-11 pr-3 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-transparent text-white placeholder-slate-400 focus:outline-none text-xs sm:text-sm font-medium">
+                </div>
+                <select id="heroCategorySelect" class="sm:w-44 px-3 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-slate-900 text-slate-200 text-xs font-bold focus:outline-none border border-white/10">
+                    <option value="all">সকল ক্যাটাগরি</option>
+                    <option value="Button Phone">বাটন ফোন (Button)</option>
+                    <option value="Stock ROM">অফিসিয়াল স্টক রম</option>
+                    <option value="FRP / MDM">এফআরপি ও এমডিএম</option>
+                    <option value="EMMC Dump">ইএমএমসি ও ডাম্প</option>
+                    <option value="Root">রুট / বুট ফাইল</option>
+                </select>
+                <button type="submit" class="px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(0,242,254,0.4)] transition shrink-0 flex items-center justify-center gap-1.5">
+                    <span>🔍</span>
+                    <span>ফাইল খুঁজুন</span>
+                </button>
+            </form>
+
+            <!-- Popular Search Chips -->
+            <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-4 text-xs">
+                <span class="text-slate-400 font-semibold text-[11px] sm:text-xs">জনপ্রিয় মডেল:</span>
+                <button onclick="quickSearch('Symphony')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Symphony L46</button>
+                <button onclick="quickSearch('5Star')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">5Star MT6261</button>
+                <button onclick="quickSearch('Walton')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Walton Olvio</button>
+                <button onclick="quickSearch('SC6531E')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">SPD SC6531E</button>
+                <button onclick="quickSearch('Redmi')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Redmi Note 12</button>
+            </div>
+
+            <!-- Bento Stats (Dynamic Real-Time Counts) -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 max-w-lg mx-auto">
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div id="statTotalRomCount" class="text-base sm:text-2xl font-black text-white">0</div>
+                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">টেস্টেড রম ফাইল</div>
+                </div>
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div id="statButtonRomCount" class="text-base sm:text-2xl font-black text-cyan-400">0</div>
+                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">বাটন ফোন ফাইল</div>
+                </div>
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div class="text-base sm:text-2xl font-black text-emerald-400">৫-১০ GB</div>
+                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">লার্জ ফাইল সাপোর্ট</div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== LIVE TICKER BAR ==================== -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+            <div class="glass-card rounded-2xl p-2.5 sm:p-3 space-y-2 border border-white/10">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                    <span class="shrink-0 px-2 py-0.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[10px] sm:text-[11px] font-extrabold">🕒 নতুন ফাইল</span>
+                    <div class="overflow-x-auto no-scrollbar flex items-center gap-3 text-xs whitespace-nowrap text-slate-300" id="recentTicker"></div>
+                </div>
+                <div class="flex items-center gap-2.5 overflow-hidden border-t border-white/5 pt-2">
+                    <span class="shrink-0 px-2 py-0.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] sm:text-[11px] font-extrabold">⚡ সেরা ডাউনলোড</span>
+                    <div class="overflow-x-auto no-scrollbar flex items-center gap-3 text-xs whitespace-nowrap text-slate-300" id="topTicker"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CLEAR & INTUITIVE 6 CATEGORIES ==================== -->
+        <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
+                        <span>📂</span>
+                        <span>ক্যাটাগরি সমূহ (Firmware Categories)</span>
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400">প্রয়োজনীয় ফাইল এক ক্লিকে সিলেক্ট করুন</p>
+                </div>
+                <button onclick="resetFilters()" class="text-xs text-cyan-400 hover:underline font-bold">সব ফাইল দেখুন →</button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+                
+                <!-- Category 1: Button Phone -->
+                <div onclick="selectCategory('Button Phone')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        📱
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">বাটন ফোন ফাইল</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Symphony, Walton, 5Star</p>
+                    <span id="catBadgeButtonPhone" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">০ টি ফাইল</span>
+                </div>
+
+                <!-- Category 2: Stock ROM -->
+                <div onclick="selectCategory('Stock ROM')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        ⚡
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">অফিসিয়াল স্টক রম</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Samsung, Xiaomi, Vivo</p>
+                    <span id="catBadgeStockRom" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-extrabold">০ টি ফাইল</span>
+                </div>
+
+                <!-- Category 3: FRP / MDM -->
+                <div onclick="selectCategory('FRP / MDM')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        🔓
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">এফআরপি ও ক্লাউড</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Mi Cloud, MDM, Knox</p>
+                    <span id="catBadgeFrp" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-extrabold">০ টি ফাইল</span>
+                </div>
+
+                <!-- Category 4: EMMC Dump -->
+                <div onclick="selectCategory('EMMC Dump')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        💾
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">ইএমএমসি ডাম্প</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Dead Boot Repair File</p>
+                    <span id="catBadgeEmmc" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">০ টি ফাইল</span>
+                </div>
+
+                <!-- Category 5: Tools & Drivers -->
+                <a href="#tools" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        🛠️
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">ইউএসবি ড্রাইভার</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">MTK, SPD, Qualcomm</p>
+                    <span class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-extrabold">১০০% ফ্রি</span>
+                </a>
+
+                <!-- Category 6: VIP Membership -->
+                <a href="#pricing" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-amber-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block border-amber-500/30">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
+                        👑
+                    </div>
+                    <h3 class="font-bold text-xs sm:text-sm text-amber-300 group-hover:text-amber-200 transition">ভিআইপি মেম্বার</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">আনলিমিটেড গুগল ড্রাইভ</p>
+                    <span class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">বিকাশ / নগদ</span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ==================== BRANDS SECTION WITH REAL SVG LOGOS ==================== -->
+        <section id="brands" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
+                        <span>🏷️</span>
+                        <span>মোবাইল ব্র্যান্ড সমূহ (Company Logos & Real Counts)</span>
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400">এডমিনে যে ব্র্যান্ডে যত ফাইল যোগ করবেন, এখানে রিয়েল-টাইম সেই সংখ্যা দেখাবে</p>
+                </div>
+                <!-- Brand Filter Tabs -->
+                <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-xl p-1 self-start sm:self-auto">
+                    <button id="brandTab-all" onclick="setBrandGroup('all')" class="px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500 text-slate-950 transition">সকল (All)</button>
+                    <button id="brandTab-bd" onclick="setBrandGroup('bd')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">দেশি বাটন (BD)</button>
+                    <button id="brandTab-global" onclick="setBrandGroup('global')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">গ্লোবাল (Global)</button>
+                </div>
+            </div>
+
+            <!-- Dynamic Brands Grid with Authentic Company Logos -->
+            <div id="brandsGrid" class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3"></div>
+        </section>
+
+        <!-- ==================== FLASH FILES SECTION ==================== -->
+        <section id="files" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+            
+            <!-- Section Header & Filter Toolbar -->
+            <div class="glass-card rounded-2xl p-3.5 sm:p-5 border border-white/10 mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 mb-4">
+                    <div>
+                        <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
+                            <span>⚡</span>
+                            <span>ফ্ল্যাশ ফাইল ও রম তালিকা (Tested Firmwares)</span>
+                        </h2>
+                        <p class="text-[11px] sm:text-xs text-slate-400">প্রতিটি ফাইল CM2, UnlockTool অথবা DFT Pro দিয়ে ১০০% টেস্ট করা</p>
+                    </div>
+
+                    <!-- Search within Files -->
+                    <div class="relative w-full lg:w-72">
+                        <input id="fileSearchInput" oninput="state.search = this.value; renderFiles();" type="text" placeholder="মডেল দিয়ে ফিল্টার করুন..."
+                               class="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 font-medium">
+                        <span class="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
+                    </div>
+                </div>
+
+                <!-- Chips Filter Bar -->
+                <div class="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-white/10">
+                    
+                    <!-- Access Filter Pills -->
+                    <div class="flex flex-wrap items-center gap-1.5 text-xs font-bold">
+                        <button onclick="filterByAccess('all')" id="accessPill-all" class="px-2.5 sm:px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 transition text-xs">সকল ফাইল</button>
+                        <button onclick="filterByAccess('FREE')" id="accessPill-FREE" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs">ফ্রি (FREE)</button>
+                        <button onclick="filterByAccess('VIP')" id="accessPill-VIP" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-amber-300 hover:bg-white/10 transition text-xs">👑 ভিআইপি (VIP)</button>
+                        <button onclick="filterByAccess('FEATURED')" id="accessPill-FEATURED" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs">ফিচার্ড</button>
+                    </div>
+
+                    <!-- Dropdowns: CPU & Sort -->
+                    <div class="flex items-center gap-2 text-xs">
+                        <select onchange="handleCpuFilter(this.value)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none text-xs">
+                            <option value="all">সব চিপসেট (CPU)</option>
+                            <option value="MediaTek">MediaTek (MTK)</option>
+                            <option value="SPD">Spreadtrum (SPD)</option>
+                            <option value="Qualcomm">Qualcomm</option>
+                            <option value="Exynos">Exynos</option>
+                        </select>
+                        <select onchange="handleSort(this.value)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none text-xs">
+                            <option value="newest">নতুন ফাইল (Newest)</option>
+                            <option value="popular">জনপ্রিয় (Popular)</option>
+                            <option value="name">নাম (A-Z)</option>
+                        </select>
+                        <button onclick="resetFilters()" title="Reset All Filters" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-300 transition">
+                            🔄
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Files Grid Container -->
+            <div id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4"></div>
+
+            <!-- Empty State -->
+            <div id="filesEmpty" class="hidden glass-card rounded-2xl p-8 sm:p-10 text-center border border-white/10">
+                <div class="text-4xl mb-3">🔍</div>
+                <h3 class="text-base font-bold text-white mb-1">কোনো ফাইল পাওয়া যায়নি!</h3>
+                <p class="text-xs text-slate-400 mb-4">অনুগ্রহ করে বানান চেক করুন অথবা আমাদের কাছে ফাইল রিকোয়েস্ট পাঠান।</p>
+                <div class="flex items-center justify-center gap-3">
+                    <button onclick="resetFilters()" class="px-4 py-2 rounded-xl bg-white/10 text-xs font-bold text-slate-200">ফিল্টার মুছুন</button>
+                    <button onclick="openRequestModal()" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-black">📩 ফাইল রিকোয়েস্ট করুন</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== FREE DRIVERS & GSM UTILITIES ==================== -->
+        <section id="tools" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
+                        <span>🛠️</span>
+                        <span>ফ্রি ড্রাইভার ও ফ্ল্যাশ টুলস (USB Drivers & Tools)</span>
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400">সকল টেকনিশিয়ানদের জন্য আনলিমিটেড হাই-স্পিড ফ্রি ডাউনলোড</p>
+                </div>
+            </div>
+
+            <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4"></div>
+        </section>
+
+        <!-- ==================== VIP PRICING & MEMBERSHIP PLANS ==================== -->
+        <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
+            <div class="text-center max-w-2xl mx-auto mb-8">
+                <span class="text-xs font-black px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">👑 VIP MEMBERSHIP PACKAGES</span>
+                <h2 class="text-xl sm:text-3xl font-black text-white mt-2">ভিআইপি প্যাকেজ বেছে নিন</h2>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1">বিকাশ ও নগদে টাকা পাঠিয়ে মুহূর্তেই আনলিমিটেড ডাউনলোড ও আনজিপ পাসওয়ার্ডের সুবিধা নিন</p>
+            </div>
+
+            <div id="packagesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="border-t border-white/10 bg-slate-950/90 py-10 relative z-10 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-7 h-7 rounded-lg bg-cyan-500 flex items-center justify-center font-black text-slate-950 text-xs">RM</div>
+                        <span class="font-extrabold text-base text-white">GSMRM<span class="text-cyan-400">.BD</span></span>
+                    </div>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        বাংলাদেশের মোবাইল টেকনিশিয়ানদের জন্য বিশ্বস্ত ফার্মওয়্যার প্ল্যাটফর্ম। ১০০% টেস্টেড বাটন ফোন রম, স্টক রম ও ইএমএমসি ফাইল।
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-2">কুইক লিংক</h4>
+                    <ul class="space-y-1.5 text-slate-400">
+                        <li><a href="#home" class="hover:text-cyan-400 transition">হোম পেইজ</a></li>
+                        <li><a href="#categories" onclick="selectCategory('Button Phone')" class="hover:text-cyan-400 transition">বাটন ফোন ফাইল</a></li>
+                        <li><a href="#categories" onclick="selectCategory('Stock ROM')" class="hover:text-cyan-400 transition">অফিসিয়াল স্টক রম</a></li>
+                        <li><a href="#tools" class="hover:text-cyan-400 transition">ইউএসবি ড্রাইভার</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-2">হেল্প ও সাপোর্ট</h4>
+                    <ul class="space-y-1.5 text-slate-400">
+                        <li><button onclick="openRequestModal()" class="hover:text-cyan-400 transition">ফাইল রিকোয়েস্ট পাঠান</button></li>
+                        <li><a id="footerWhatsappLink" href="https://wa.me/8801700000000" target="_blank" class="hover:text-emerald-400 transition">হোয়াটসঅ্যাপ সাপোর্ট</a></li>
+                        <li><a id="footerTelegramLink" href="https://t.me/" target="_blank" class="hover:text-cyan-400 transition">টেলিগ্রাম চ্যানেল</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-2">পেমেন্ট মেথড</h4>
+                    <p class="text-slate-400 text-xs mb-2">তাৎক্ষণিক অটোমেটিক ভেরিফিকেশন সহ:</p>
+                    <div class="flex flex-wrap gap-2 text-[11px] font-bold">
+                        <span class="px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30">bKash Personal</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">Nagad Personal</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">Rocket</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-400">
+                <p id="secretAdminTrigger" onclick="handleSecretAdminClick()" class="cursor-pointer select-none">
+                    © 2026 GSMRM.BD — All Rights Reserved. Built for BD Technicians.
+                </p>
+                <div class="flex items-center gap-3">
+                    <span class="text-[11px] text-slate-400">Server Status: <span class="text-emerald-400 font-bold">● Online 100%</span></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- ==================== 1. VISITOR FILE DOWNLOAD & PASSWORD MODAL ==================== -->
+    <div id="fileModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-lg w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 sm:p-5 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <div class="flex items-center gap-2">
+                    <span id="modalFileBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">FREE</span>
+                    <span id="modalFileBrand" class="text-xs font-bold text-slate-300">Symphony</span>
+                </div>
+                <button onclick="closeModal('fileModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+            
+            <div class="p-4 sm:p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                <div>
+                    <h3 id="modalFileName" class="text-base sm:text-lg font-black text-white break-words">File Name</h3>
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-2">
+                        <span>CPU: <strong id="modalFileCpu" class="text-slate-200">MT6261</strong></span>
+                        <span>•</span>
+                        <span>Size: <strong id="modalFileSize" class="text-slate-200">4.2 MB</strong></span>
+                        <span>•</span>
+                        <span>Downloads: <strong id="modalFileDownloads" class="text-slate-200">14K</strong></span>
+                    </div>
+                </div>
+
+                <!-- ZIP Password Showcase Box -->
+                <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-amber-300 flex items-center gap-1.5">
+                            <span>🔑</span>
+                            <span>ফাইল আনজিপ পাসওয়ার্ড (ZIP Password)</span>
+                        </span>
+                        <span id="modalPassBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">PASS</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input id="modalFilePasswordVal" type="text" readonly value="GSMRM-L46-FREE" class="flex-1 px-3 py-2 rounded-xl bg-black/60 border border-amber-500/40 text-xs font-mono font-bold text-amber-200 focus:outline-none">
+                        <button onclick="copyText(document.getElementById('modalFilePasswordVal').value, 'পাসওয়ার্ড')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition">কপি</button>
+                    </div>
+                    <p class="text-[11px] text-slate-400">এই পাসওয়ার্ড দিয়ে WinRAR অথবা 7-Zip দিয়ে ফাইল আনজিপ করুন।</p>
+                </div>
+
+                <!-- Description & Read Log -->
+                <div>
+                    <h4 class="text-xs font-extrabold text-slate-300 mb-1">ফাইলের বিবরণ ও ফ্ল্যাশিং তথ্য:</h4>
+                    <p id="modalFileDesc" class="text-xs text-slate-400 leading-relaxed bg-black/40 p-3 rounded-xl border border-white/5"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-extrabold text-slate-300 mb-1">CM2 / Box Test Read Log:</h4>
+                    <pre id="modalReadLog" class="text-[11px] font-mono text-emerald-300 bg-slate-950 p-3 rounded-xl border border-emerald-500/20 overflow-x-auto whitespace-pre-wrap"></pre>
+                </div>
+
+                <!-- Download Action Button -->
+                <div class="pt-2">
+                    <button id="modalDownloadBtn" onclick="executeFileDownload()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 hover:from-blue-500 hover:to-emerald-400 text-white font-black text-sm shadow-[0_0_25px_rgba(0,242,254,0.4)] transition flex items-center justify-center gap-2">
+                        <span>📥</span>
+                        <span id="modalDownloadBtnText">হাই-স্পিড গুগল ড্রাইভ ডাউনলোড</span>
+                    </button>
+                    <p class="text-center text-[10px] text-slate-400 mt-2">ফাইল ডাউনলোড করার সাথে সাথে এটি আপনার ইউজার হিস্ট্রিতে সেভ হয়ে যাবে।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 2. TECHNICIAN AUTH MODAL (LOGIN & SIGNUP) ==================== -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-md w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            
+            <!-- Auth Header with Tabs -->
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <div class="flex items-center gap-2">
+                    <button id="authTabBtn-login" onclick="switchAuthTab('login')" class="px-3.5 py-1.5 rounded-xl text-xs font-black bg-cyan-500 text-slate-950 transition">লগইন (Sign In)</button>
+                    <button id="authTabBtn-signup" onclick="switchAuthTab('signup')" class="px-3.5 py-1.5 rounded-xl text-xs font-black text-slate-300 hover:text-white transition">নতুন একাউন্ট (Register)</button>
+                </div>
+                <button onclick="closeModal('authModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+
+            <!-- Login Tab View -->
+            <div id="authView-login" class="p-5 sm:p-6 space-y-4">
+                <div class="text-center">
+                    <h3 class="text-base font-black text-white">টেকনিশিয়ান মেম্বার লগইন</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">আপনার মোবাইল নম্বর ও পাসওয়ার্ড দিয়ে লগইন করুন</p>
+                </div>
+
+                <form onsubmit="handleUserLogin(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">মোবাইল নম্বর / ইউজার আইডি:</label>
+                        <input id="loginPhoneInput" type="text" required placeholder="017xxxxxxxx বা 018xxxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">পাসওয়ার্ড:</label>
+                        <input id="loginPassInput" type="password" required placeholder="আপনার পাসওয়ার্ড লিখুন" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <div id="loginErrorMsg" class="hidden p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold text-center"></div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs shadow-lg transition">
+                        লগইন করুন
+                    </button>
+                </form>
+
+                <!-- 1-Click Demo Accounts -->
+                <div class="pt-3 border-t border-white/10 text-center">
+                    <p class="text-[11px] text-slate-400 mb-2">১-ক্লিকে ডেমো একাউন্ট দিয়ে ট্রাই করুন:</p>
+                    <div class="flex items-center gap-2">
+                        <button onclick="demoLogin('vip')" class="flex-1 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold transition">
+                            👑 ডেমো ভিআইপি
+                        </button>
+                        <button onclick="demoLogin('free')" class="flex-1 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 border border-white/15 text-xs font-bold transition">
+                            👤 ডেমো ফ্রি মেম্বার
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Signup Tab View -->
+            <div id="authView-signup" class="hidden p-5 sm:p-6 space-y-4">
+                <div class="text-center">
+                    <h3 class="text-base font-black text-white">নতুন টেকনিশিয়ান একাউন্ট তৈরি করুন</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">রেজিস্ট্রেশন সম্পূর্ণ ফ্রি এবং মাত্র ২০ সেকেন্ড সময় লাগবে</p>
+                </div>
+
+                <form onsubmit="handleUserSignup(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">আপনার নাম (Full Name):</label>
+                        <input id="regNameInput" type="text" required placeholder="যেমন: মোঃ করিম" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">দোকানের নাম (Shop Name):</label>
+                        <input id="regShopInput" type="text" required placeholder="যেমন: করিম টেলিকম" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">মোবাইল নম্বর (Login Phone):</label>
+                        <input id="regPhoneInput" type="tel" required placeholder="017xxxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">পাসওয়ার্ড তৈরি করুন:</label>
+                        <input id="regPassInput" type="password" required placeholder="কমপক্ষে ৪ অক্ষরের পাসওয়ার্ড" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+
+                    <div id="signupErrorMsg" class="hidden p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-bold text-center"></div>
+
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black text-xs shadow-lg transition">
+                        একাউন্ট রেজিস্টার করুন
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== 3. TECHNICIAN USER DASHBOARD MODAL ==================== -->
+    <div id="userDashboardModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-2xl w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            
+            <!-- Dashboard Profile Header -->
+            <div class="p-4 sm:p-5 border-b border-white/10 bg-slate-900/80 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="userProfileAvatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-xl font-black text-white shadow-lg">
+                        👤
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="userProfileName" class="text-base font-black text-white">মোঃ করিম</h3>
+                            <span id="userProfileBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">VIP Platinum</span>
+                        </div>
+                        <p id="userProfileShop" class="text-xs text-slate-400">করিম টেলিকম • 01711000000</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('userDashboardModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+
+            <!-- Dashboard Nav Tabs -->
+            <div class="flex items-center overflow-x-auto no-scrollbar border-b border-white/10 bg-white/5 px-4 py-2 gap-2 text-xs font-bold">
+                <button id="userTabBtn-overview" onclick="switchUserTab('overview')" class="px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 transition whitespace-nowrap">📊 ওভারভিউ ও কোটা</button>
+                <button id="userTabBtn-history" onclick="switchUserTab('history')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition whitespace-nowrap">📥 ডাউনলোড হিস্ট্রি ও পাসওয়ার্ড</button>
+                <button id="userTabBtn-bookmarks" onclick="switchUserTab('bookmarks')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition whitespace-nowrap">⭐ সেভ করা ফাইল</button>
+                <button id="userTabBtn-upgrade" onclick="switchUserTab('upgrade')" class="px-3 py-1.5 rounded-xl text-amber-300 hover:text-amber-200 transition whitespace-nowrap">💎 ভিআইপি আপগ্রেড</button>
+                <button id="userTabBtn-request" onclick="switchUserTab('request')" class="px-3 py-1.5 rounded-xl text-slate-300 hover:text-white transition whitespace-nowrap">📩 ফাইল রিকোয়েস্ট</button>
+            </div>
+
+            <!-- Dashboard Content Panels -->
+            <div class="p-5 max-h-[70vh] overflow-y-auto space-y-4">
+                
+                <!-- Panel 1: Overview & Quota -->
+                <div id="userPanel-overview" class="space-y-4">
+                    <!-- Daily Quota Card -->
+                    <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-xs font-bold text-cyan-300">দৈনিক ডাউনলোড কোটা ও লিমিট</span>
+                            <h4 id="userQuotaText" class="text-xl font-black text-white mt-1">৪ / ৫ টি ডাউনলোড বাকি</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">প্রতিদিন রাত ১২টায় ফ্রি ডাউনলোড কোটা নবায়ন হয়।</p>
+                        </div>
+                        <div id="userUpgradeActionContainer">
+                            <button onclick="switchUserTab('upgrade')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-lg transition">
+                                👑 আনলিমিটেড ভিআইপি নিন
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Account Details Grid -->
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                            <span class="text-slate-400">মেম্বার আইডি:</span>
+                            <div id="userMetaId" class="text-sm font-bold text-white mt-0.5">USR-001</div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                            <span class="text-slate-400">মেম্বারশিপ মেয়াদ:</span>
+                            <div id="userMetaExpiry" class="text-sm font-bold text-emerald-400 mt-0.5">31 Dec 2027</div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                            <span class="text-slate-400">একাউন্ট স্ট্যাটাস:</span>
+                            <div id="userMetaStatus" class="text-sm font-bold text-emerald-400 mt-0.5">🟢 সচল (Active)</div>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                            <span class="text-slate-400">মোট ডাউনলোড সংখ্যা:</span>
+                            <div id="userMetaDownloads" class="text-sm font-bold text-cyan-400 mt-0.5">১২ টি ফাইল</div>
+                        </div>
+                    </div>
+
+                    <!-- Change Password & Logout -->
+                    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                        <button onclick="promptUserChangePass()" class="text-xs text-cyan-400 hover:underline font-bold">🔒 পাসওয়ার্ড পরিবর্তন করুন</button>
+                        <button onclick="handleUserLogout()" class="px-3.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition">
+                            🚪 একাউন্ট লগআউট
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Downloads & Passwords History -->
+                <div id="userPanel-history" class="hidden space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-black text-cyan-400 uppercase tracking-wider">আমার ডাউনলোডকৃত ফাইল ও পাসওয়ার্ড</h4>
+                        <button onclick="clearUserHistory()" class="text-xs text-rose-400 hover:underline">হিস্ট্রি মুছুন</button>
+                    </div>
+                    <div id="userDownloadsList" class="space-y-2 text-xs"></div>
+                </div>
+
+                <!-- Panel 3: Bookmarks -->
+                <div id="userPanel-bookmarks" class="hidden space-y-3">
+                    <h4 class="text-xs font-black text-emerald-400 uppercase tracking-wider">আমার সেভ করা ফাইল</h4>
+                    <div id="userBookmarksList" class="space-y-2 text-xs"></div>
+                </div>
+
+                <!-- Panel 4: Buy / Upgrade VIP -->
+                <div id="userPanel-upgrade" class="hidden space-y-4">
+                    <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+                        <h4 class="text-sm font-black text-amber-300">👑 সরাসরি বিকাশ / নগদে ভিআইপি মেম্বারশিপ কিনুন</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            ১. নিচের বিকাশ বা নগদ নম্বরে সেন্ড মানি করুন।<br>
+                            ২. প্যাকেজ নির্বাচন করে প্রেরকের মোবাইল নম্বর ও TrxID লিখে সাবমিট করুন। এডমিন অনুমোদন দিলে সাথে সাথে ভিআইপি সচল হবে।
+                        </p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="p-2.5 rounded-xl bg-black/60 border border-pink-500/40">
+                                <span class="text-pink-400 font-bold">bKash Personal:</span>
+                                <div id="userUpgradeBkash" class="font-mono font-black text-white text-sm">01700-000000</div>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-black/60 border border-amber-500/40">
+                                <span class="text-amber-400 font-bold">Nagad Personal:</span>
+                                <div id="userUpgradeNagad" class="font-mono font-black text-white text-sm">01700-000000</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form onsubmit="handleUserVipOrder(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">প্যাকেজ নির্বাচন করুন:</label>
+                            <select id="userOrderPkgSelect" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none">
+                                <option value="Monthly Bronze (৳600)">Monthly Bronze - ৳৬০০ (১ মাস)</option>
+                                <option value="3-Month Silver (৳1500)">3-Month Silver - ৳১,৫০০ (৩ মাস)</option>
+                                <option value="Yearly Platinum VIP (৳3500)" selected>Yearly Platinum VIP - ৳৩,৫০০ (১ বছর / আনলিমিটেড)</option>
+                                <option value="Ultra Shop Master (৳6000)">Ultra Shop Master - ৳৬,০০০ (আজীবন / প্রায়োরিটি)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">যে নম্বর থেকে টাকা পাঠিয়েছেন:</label>
+                                <input id="userOrderSenderPhone" type="tel" required placeholder="017xxxxxxxx" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-300 mb-1">bKash/Nagad TrxID:</label>
+                                <input id="userOrderTrxId" type="text" required placeholder="যেমন: 8N2K91PZ" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white uppercase focus:outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-lg transition">
+                            অর্ডার সাবমিট করুন (Submit VIP Order)
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Panel 5: File Requests -->
+                <div id="userPanel-request" class="hidden space-y-3">
+                    <h4 class="text-xs font-black text-cyan-400 uppercase tracking-wider">কাঙ্খিত ফাইল রিকোয়েস্ট পাঠান</h4>
+                    <p class="text-xs text-slate-400">ওয়েবসাইটে কোনো মডেলের ফাইল না পেলে রিকোয়েস্ট করুন, আমাদের টেকনিশিয়ান টিম আপলোড করে দেবে।</p>
+                    <form onsubmit="handleUserFileRequest(event)" class="space-y-2.5">
+                        <input id="userReqBrandInput" type="text" required placeholder="ব্র্যান্ড ও মডেল (যেমন: Symphony Z33)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        <input id="userReqCpuInput" type="text" placeholder="চিপসেট / প্রসেসর (যেমন: Unisoc T610)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        <textarea id="userReqDescInput" rows="2" placeholder="সমস্যার বিবরণ (যেমন: Dead recovery, Hang on logo)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white"></textarea>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs">রিকোয়েস্ট সাবমিট করুন</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 4. VIP CHECKOUT MODAL ==================== -->
+    <div id="checkoutModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-md w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <h3 class="text-sm font-black text-white">ভিআইপি প্যাকেজ পেমেন্ট (bKash / Nagad)</h3>
+                <button onclick="closeModal('checkoutModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+            <form onsubmit="submitPackageOrder(event)" class="p-5 space-y-3.5">
+                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs">
+                    <span class="text-slate-400">নির্বাচিত প্যাকেজ:</span>
+                    <div id="checkoutPkgTitle" class="text-sm font-black text-amber-300">Yearly Platinum VIP</div>
+                    <div id="checkoutPkgPrice" class="text-xs font-bold text-white mt-0.5">৳৩,৫০০ / ১ বছর</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="p-2.5 rounded-xl bg-black/60 border border-pink-500/40">
+                        <span class="text-pink-400 font-bold">bKash Send Money:</span>
+                        <div id="checkoutBkashNum" class="font-mono font-black text-white text-xs mt-0.5">01700-000000</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-black/60 border border-amber-500/40">
+                        <span class="text-amber-400 font-bold">Nagad Send Money:</span>
+                        <div id="checkoutNagadNum" class="font-mono font-black text-white text-xs mt-0.5">01700-000000</div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">আপনার নাম / দোকানের নাম:</label>
+                    <input id="checkoutCustomerName" type="text" required placeholder="মোঃ করিম (করিম টেলিকম)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">প্রেরকের মোবাইল নম্বর:</label>
+                    <input id="checkoutSenderPhone" type="tel" required placeholder="017xxxxxxxx" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">bKash/Nagad TrxID:</label>
+                    <input id="checkoutTrxId" type="text" required placeholder="8NK29X..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white uppercase">
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-lg transition">
+                    অর্ডার সম্পন্ন করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 5. FILE REQUEST MODAL ==================== -->
+    <div id="requestModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-md w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <h3 class="text-sm font-black text-white">ফাইল রিকোয়েস্ট পাঠান (Request Firmware)</h3>
+                <button onclick="closeModal('requestModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+            <form onsubmit="submitFileRequest(event)" class="p-5 space-y-3">
+                <p class="text-xs text-slate-400">যে ফাইলটি পাচ্ছেন না তার ব্র্যান্ড ও মডেল লিখুন। আমাদের টিম দ্রুত ফাইল আপলোড করবে।</p>
+                <input id="reqModel" type="text" required placeholder="ফোন ব্র্যান্ড ও মডেল (যেমন: Symphony Z42)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                <input id="reqCpu" type="text" placeholder="চিপসেট (যদি জানা থাকে, যেমন: MT6761)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                <input id="reqPhone" type="tel" required placeholder="আপনার মোবাইল / হোয়াটসঅ্যাপ নম্বর" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                <textarea id="reqDesc" rows="2" placeholder="সমস্যার বিবরণ (Hang on logo, Dead recovery, FRP)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white"></textarea>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs">
+                    রিকোয়েস্ট পাঠান
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 6. MASTER ADMIN LOGIN MODAL ==================== -->
+    <div id="adminLoginModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl max-w-sm w-full border border-amber-500/40 overflow-hidden shadow-[0_0_50px_rgba(245,158,11,0.25)]">
+            <div class="p-5 border-b border-white/10 flex items-center justify-between bg-amber-500/10">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">👑</span>
+                    <h3 class="text-base font-black text-white">GSMRM.BD Admin Sign In</h3>
+                </div>
+                <button onclick="closeModal('adminLoginModal')" class="p-1 rounded-full bg-white/10 text-slate-300">✕</button>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="p-5 space-y-3.5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Admin Username:</label>
+                    <input id="adminLoginUser" type="text" required placeholder="admin" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Master Password:</label>
+                    <input id="adminLoginPass" type="password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white focus:outline-none focus:border-amber-400">
+                </div>
+                <div id="adminLoginError" class="hidden p-2 rounded-xl bg-rose-500/20 text-rose-300 text-xs font-bold text-center"></div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-lg transition">
+                    Unlock Master Control
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 7. MASTER ADMIN DASHBOARD MODAL (FULL SUITE) ==================== -->
+    <div id="adminDashboardModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-2xl flex flex-col overflow-hidden">
+        
+        <!-- Admin Top Navigation Bar -->
+        <header class="bg-slate-950/90 border-b border-white/10 px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-lg font-black text-slate-950 shadow-lg">👑</div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-sm sm:text-base font-black text-white tracking-tight">GSMRM.BD <span class="text-amber-400">Master Admin Control</span></h2>
+                        <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">৫-১০ GB UPLOADER READY</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 hidden sm:block">A to Z Complete Website & User Management</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="exportSiteData()" title="Backup site data" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 transition hidden sm:inline-flex items-center gap-1">
+                    <span>💾</span> ব্যাকআপ ডাউনলোড
+                </button>
+                <button onclick="closeAdminDashboard()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 transition">
+                    ভিজিটর মোড
+                </button>
+                <button onclick="logoutAdmin()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition">
+                    লগআউট
+                </button>
+            </div>
+        </header>
+
+        <!-- Admin Tab Buttons Bar -->
+        <nav class="bg-slate-900/80 border-b border-white/10 px-4 sm:px-6 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
+            <button id="adminTabBtn-overview" onclick="switchAdminTab('overview')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition whitespace-nowrap">
+                📊 ওভারভিউ ও একশন
+            </button>
+            <button id="adminTabBtn-users" onclick="switchAdminTab('users')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-cyan-300 hover:text-white transition whitespace-nowrap">
+                👥 ইউজার কন্ট্রোল A-Z <span id="adminUsersCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-cyan-500/30 text-cyan-200 text-[10px]">3</span>
+            </button>
+            <button id="adminTabBtn-files" onclick="switchAdminTab('files')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                📁 ফাইল ও ৫-১০ GB আপলোড <span id="adminFilesCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-white/10 text-white text-[10px]">6</span>
+            </button>
+            <button id="adminTabBtn-brands" onclick="switchAdminTab('brands')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                🏷️ ব্র্যান্ড তালিকা <span id="adminBrandsCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-white/10 text-white text-[10px]">12</span>
+            </button>
+            <button id="adminTabBtn-orders" onclick="switchAdminTab('orders')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                💎 ভিআইপি পেমেন্ট অর্ডার <span id="adminPendingOrdersBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-rose-500/30 text-rose-300 text-[10px]">0</span>
+            </button>
+            <button id="adminTabBtn-payments" onclick="switchAdminTab('payments')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                💳 বিকাশ/নগদ নম্বর সেটিংস
+            </button>
+            <button id="adminTabBtn-packages" onclick="switchAdminTab('packages')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                📦 ভিআইপি প্যাকেজ কনফিগ
+            </button>
+            <button id="adminTabBtn-settings" onclick="switchAdminTab('settings')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
+                ⚙️ পাসওয়ার্ড ও রিসেট
+            </button>
+        </nav>
+
+        <!-- Admin Tab Body Container -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+            
+            <!-- ==================== TAB 1: OVERVIEW ==================== -->
+            <div id="adminTab-overview" class="space-y-6">
+                <!-- Stat Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <span class="text-xs text-slate-400 font-bold">মোট ফ্ল্যাশ ফাইল</span>
+                        <div id="adminFilesCountHeader" class="text-2xl font-black text-white mt-1">6</div>
+                        <span class="text-[10px] text-cyan-400">প্রতিটি ফাইলে ইউনিক পাসওয়ার্ড</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <span class="text-xs text-slate-400 font-bold">নিবন্ধিত টেকনিশিয়ান</span>
+                        <div id="adminOverviewUsersCount" class="text-2xl font-black text-cyan-400 mt-1">3</div>
+                        <span class="text-[10px] text-emerald-400">A to Z ইউজার ম্যানেজমেন্ট</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <span class="text-xs text-slate-400 font-bold">অপেক্ষারত পেমেন্ট অর্ডার</span>
+                        <div id="adminOrdersCount" class="text-2xl font-black text-amber-400 mt-1">0</div>
+                        <span class="text-[10px] text-amber-300">bKash / Nagad TrxID</span>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 border border-white/10">
+                        <span class="text-xs text-slate-400 font-bold">ফাইল রিকোয়েস্ট</span>
+                        <div id="adminRequestsCount" class="text-2xl font-black text-rose-400 mt-1">0</div>
+                        <span class="text-[10px] text-slate-400">কাস্টমার চাওয়া ফাইল</span>
+                    </div>
+                </div>
+
+                <!-- Big Quick Action Buttons -->
+                <div>
+                    <h3 class="text-xs font-black uppercase tracking-wider text-slate-400 mb-3">দ্রুত অ্যাকশন (Quick Actions)</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <button onclick="openFileEditorModal()" class="glass-card p-4 rounded-2xl text-left hover:border-cyan-400 transition group border border-white/10">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition">➕</div>
+                            <h4 class="font-bold text-sm text-white">৫-১০ GB ফাইল আপলোড</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">লোকাল লার্জ ফাইল ও ড্রাইভ লিঙ্ক</p>
+                        </button>
+                        <button onclick="switchAdminTab('users')" class="glass-card p-4 rounded-2xl text-left hover:border-cyan-400 transition group border border-white/10">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition">👥</div>
+                            <h4 class="font-bold text-sm text-white">ইউজার তালিকা ও ভিআইপি প্রদান</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">মেম্বার কন্ট্রোল ও কোটা চেঞ্জ</p>
+                        </button>
+                        <button onclick="switchAdminTab('payments')" class="glass-card p-4 rounded-2xl text-left hover:border-cyan-400 transition group border border-white/10">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition">💳</div>
+                            <h4 class="font-bold text-sm text-white">বিকাশ / নগদ নম্বর পরিবর্তন</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">পেমেন্ট নম্বর এডিট করুন</p>
+                        </button>
+                        <button onclick="clearAllFlashFiles()" class="glass-card p-4 rounded-2xl text-left hover:border-rose-500 transition group border border-rose-500/20 bg-rose-500/5">
+                            <div class="text-2xl mb-1 group-hover:scale-110 transition">🗑️</div>
+                            <h4 class="font-bold text-sm text-rose-300">সব ফাইল এক ক্লিকে রিমুভ</h4>
+                            <p class="text-xs text-rose-400 mt-0.5">Master Clear All Files</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Payment Notice & Current Contacts -->
+                <div class="glass-card p-5 rounded-2xl border border-white/10 space-y-2">
+                    <h4 class="text-xs font-black uppercase tracking-wider text-amber-300">বর্তমান লাইভ পেমেন্ট নম্বর:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="text-pink-400 font-bold">bKash Personal:</span>
+                            <div id="adminOverviewBkash" class="text-sm font-mono font-black text-white mt-1">01700-000000</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="text-amber-400 font-bold">Nagad Personal:</span>
+                            <div id="adminOverviewNagad" class="text-sm font-mono font-black text-white mt-1">01700-000000</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/40 border border-white/5">
+                            <span class="text-emerald-400 font-bold">WhatsApp Support:</span>
+                            <div id="adminOverviewWhatsapp" class="text-sm font-mono font-black text-white mt-1">+880 1700-000000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 2: A TO Z USER MANAGEMENT ==================== -->
+            <div id="adminTab-users" class="hidden space-y-5">
+                
+                <!-- Users Summary Stats -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div class="glass-card rounded-2xl p-3.5 border border-white/10">
+                        <span class="text-slate-400 font-bold">মোট নিবন্ধিত টেকনিশিয়ান</span>
+                        <div id="adminStatTotalUsers" class="text-xl font-black text-white mt-0.5">3</div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3.5 border border-white/10">
+                        <span class="text-slate-400 font-bold">👑 ভিআইপি সদস্য</span>
+                        <div id="adminStatVipUsers" class="text-xl font-black text-amber-400 mt-0.5">2</div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3.5 border border-white/10">
+                        <span class="text-slate-400 font-bold">🆓 ফ্রি সদস্য</span>
+                        <div id="adminStatFreeUsers" class="text-xl font-black text-cyan-400 mt-0.5">1</div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-3.5 border border-white/10">
+                        <span class="text-slate-400 font-bold">🚫 ব্লকড একাউন্ট</span>
+                        <div id="adminStatBlockedUsers" class="text-xl font-black text-rose-400 mt-0.5">0</div>
+                    </div>
+                </div>
+
+                <!-- User Management Toolbar -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white/5 p-3 rounded-2xl border border-white/10">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <input id="adminUserSearchInput" oninput="renderAdminUsersTable()" type="text" placeholder="ইউজার বা মোবাইল দিয়ে খুঁজুন..." class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 w-full sm:w-64">
+                        <select id="adminUserFilterPlan" onchange="renderAdminUsersTable()" class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-slate-200 font-bold focus:outline-none">
+                            <option value="all">সকল ইউজার</option>
+                            <option value="vip">শুধুমাত্র VIP</option>
+                            <option value="free">শুধুমাত্র Free</option>
+                            <option value="blocked">শুধুমাত্র Blocked</option>
+                        </select>
+                    </div>
+                    <button onclick="openAdminAddUserModal()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs shadow-lg transition flex items-center justify-center gap-1.5">
+                        <span>➕</span>
+                        <span>নতুন ইউজার তৈরি করুন</span>
+                    </button>
+                </div>
+
+                <!-- Users Data Table -->
+                <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/90 text-slate-400 uppercase font-black tracking-wider text-[10px] border-b border-white/10">
+                                <tr>
+                                    <th class="p-3.5">টেকনিশিয়ান ও শপ</th>
+                                    <th class="p-3.5">মোবাইল নম্বর</th>
+                                    <th class="p-3.5">প্ল্যান ও মেয়াদ</th>
+                                    <th class="p-3.5">দৈনিক কোটা</th>
+                                    <th class="p-3.5">স্ট্যাটাস</th>
+                                    <th class="p-3.5 text-right">A to Z কন্ট্রোল একশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ==================== TAB 3: FILES & 5-10 GB PASSWORDS ==================== -->
+            <div id="adminTab-files" class="space-y-4">
+                <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h4 class="font-bold text-sm text-cyan-300 flex items-center gap-1.5">
+                            <span>⚡</span> ৫-১০ GB লার্জ ফাইল আপলোড সিস্টেম (No Size Limit)
+                        </h4>
+                        <p class="text-xs text-slate-300 mt-1">
+                            যেকোনো বড় (.zip / .rar / .tar.md5 / .pac) ফাইল লোকালভাবে সিলেক্ট করুন। সাইজ ও নাম স্বয়ংক্রিয়ভাবে ডিটেক্ট হবে এবং গুগল ড্রাইভ / মেগা লিঙ্কের সাথে যুক্ত হয়ে যাবে।
+                        </p>
+                    </div>
+                    <button onclick="openFileEditorModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs shrink-0 shadow-lg transition">
+                        ➕ নতুন ফাইল আপলোড করুন
+                    </button>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <input id="adminFileSearch" oninput="renderAdminFilesTable()" type="text" placeholder="ফাইল সার্চ করুন..." class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none w-full sm:w-56">
+                        <select id="adminFileBrandFilter" onchange="renderAdminFilesTable()" class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-slate-200">
+                            <option value="all">সকল ব্র্যান্ড</option>
+                        </select>
+                        <select id="adminFileAccessFilter" onchange="renderAdminFilesTable()" class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-slate-200">
+                            <option value="all">সব টাইপ</option>
+                            <option value="FREE">FREE</option>
+                            <option value="VIP">VIP</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="clearAllFlashFiles()" class="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition flex items-center gap-1">
+                            <span>🗑️</span> সব ফাইল মুছুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-900/90 text-slate-400 uppercase font-black tracking-wider text-[10px] border-b border-white/10">
+                                <tr>
+                                    <th class="p-3.5">ফাইলের নাম</th>
+                                    <th class="p-3.5">ব্র্যান্ড ও ক্যাটাগরি</th>
+                                    <th class="p-3.5">চিপসেট</th>
+                                    <th class="p-3.5">সাইজ (GB/MB)</th>
+                                    <th class="p-3.5">ইউনিক জিপ পাসওয়ার্ড</th>
+                                    <th class="p-3.5">এক্সেস</th>
+                                    <th class="p-3.5 text-right">একশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminFilesTableBody" class="divide-y divide-white/5"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 4: BRANDS ==================== -->
+            <div id="adminTab-brands" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-black text-white">ব্র্যান্ড ম্যানেজমেন্ট ও রিয়েল ফাইল কাউন্ট</h3>
+                        <p class="text-xs text-slate-400">প্রতিটি ব্র্যান্ডে কতটি ফাইল রয়েছে তা রিয়েল-টাইমে গণনা হয়</p>
+                    </div>
+                    <button onclick="openBrandEditorModal()" class="px-3.5 py-1.5 rounded-xl bg-cyan-500 text-slate-950 text-xs font-black">
+                        ➕ নতুন ব্র্যান্ড
+                    </button>
+                </div>
+                <div id="adminBrandsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+            </div>
+
+            <!-- ==================== TAB 5: ORDERS & REQUESTS ==================== -->
+            <div id="adminTab-orders" class="hidden space-y-6">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-black text-amber-300">💎 ভিআইপি পেমেন্ট অর্ডারসমূহ</h4>
+                        <button onclick="clearAllOrders()" class="text-xs text-rose-400 hover:underline">সব অর্ডার মুছুন</button>
+                    </div>
+                    <div id="adminOrdersList" class="space-y-2 text-xs"></div>
+                </div>
+
+                <div class="pt-4 border-t border-white/10">
+                    <h4 class="text-sm font-black text-cyan-300 mb-3">📩 টেকনিশিয়ান ফাইল রিকোয়েস্ট</h4>
+                    <div id="adminRequestsList" class="space-y-2 text-xs"></div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 6: PAYMENT NUMBERS ==================== -->
+            <div id="adminTab-payments" class="hidden space-y-4 max-w-xl">
+                <h3 class="text-sm font-black text-white">বিকাশ ও নগদ পেমেন্ট গেটওয়ে সেটিংস</h3>
+                <p class="text-xs text-slate-400">এখানে নম্বর পরিবর্তন করলে সাথে সাথে পুরো ওয়েবসাইটে পরিবর্তন হবে।</p>
+                <form onsubmit="saveAdminPayments(event)" class="space-y-3 glass-card p-5 rounded-2xl border border-white/10">
+                    <div>
+                        <label class="block text-xs font-bold text-pink-400 mb-1">bKash Personal Number:</label>
+                        <input id="adminPayBkash" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-1">Nagad Personal Number:</label>
+                        <input id="adminPayNagad" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-purple-400 mb-1">Rocket Personal Number:</label>
+                        <input id="adminPayRocket" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-400 mb-1">WhatsApp Direct Support (e.g. 88017...):</label>
+                        <input id="adminPayWhatsapp" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">WhatsApp Display Text:</label>
+                        <input id="adminPayWhatsappDisplay" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-cyan-400 mb-1">Telegram Support Link:</label>
+                        <input id="adminPayTelegram" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-yellow-400 mb-1">Binance Pay ID / USDT:</label>
+                        <input id="adminPayBinance" type="text" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs">
+                        পেমেন্ট সেটিংস সেভ করুন
+                    </button>
+                </form>
+            </div>
+
+            <!-- ==================== TAB 7: PACKAGES ==================== -->
+            <div id="adminTab-packages" class="hidden space-y-4">
+                <h3 class="text-sm font-black text-white">ভিআইপি প্যাকেজ প্রাইসিং কনফিগারেশন</h3>
+                <div id="adminPackagesList" class="space-y-3"></div>
+            </div>
+
+            <!-- ==================== TAB 8: SETTINGS & BACKUP ==================== -->
+            <div id="adminTab-settings" class="hidden space-y-5 max-w-xl">
+                <div class="glass-card p-5 rounded-2xl border border-white/10 space-y-3">
+                    <h3 class="text-sm font-black text-white">এডমিন লগইন তথ্য পরিবর্তন</h3>
+                    <form onsubmit="saveAdminCredentials(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Admin Username:</label>
+                            <input id="adminSetUser" type="text" required class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">New Master Password:</label>
+                            <input id="adminSetPass" type="password" required class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        </div>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs">
+                            এডমিন ক্রেডেনশিয়াল আপডেট করুন
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Backup & Reset -->
+                <div class="glass-card p-5 rounded-2xl border border-white/10 space-y-3">
+                    <h3 class="text-sm font-black text-white">সাইট ডাটা ব্যাকআপ ও রিস্টোর</h3>
+                    <div class="flex items-center gap-3">
+                        <button onclick="exportSiteData()" class="flex-1 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition">
+                            💾 এক্সপোর্ট ব্যাকআপ (JSON)
+                        </button>
+                        <label class="flex-1 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-center text-xs font-bold cursor-pointer border border-cyan-500/30 transition">
+                            📂 ব্যাকআপ রিস্টোর
+                            <input type="file" accept=".json" onchange="importSiteData(event)" class="hidden">
+                        </label>
+                    </div>
+                    <button onclick="resetSiteDefaults()" class="w-full py-2 rounded-xl bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30 hover:bg-rose-500/30 transition">
+                        ⚠️ রিসেট টু ফ্যাক্টরি ডিফল্ট (Reset All Data)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ==================== 8. ADMIN USER EDITOR MODAL ==================== -->
+    <div id="adminUserEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-md w-full border border-cyan-500/40 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-cyan-500/10">
+                <h3 id="adminUserModalTitle" class="text-sm font-black text-white">নতুন টেকনিশিয়ান যোগ করুন</h3>
+                <button onclick="closeModal('adminUserEditorModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+            <form onsubmit="saveAdminUser(event)" class="p-5 space-y-3">
+                <input type="hidden" id="adminUserEditId" value="">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">টেকনিশিয়ান নাম:</label>
+                    <input id="adminUserNameInput" type="text" required placeholder="যেমন: মোঃ করিম" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">দোকানের নাম (Shop):</label>
+                    <input id="adminUserShopInput" type="text" required placeholder="যেমন: করিম টেলিকম" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">মোবাইল নম্বর (Phone / ID):</label>
+                    <input id="adminUserPhoneInput" type="tel" required placeholder="017xxxxxxxx" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">পাসওয়ার্ড (Password):</label>
+                    <input id="adminUserPassInput" type="text" required placeholder="পাসওয়ার্ড লিখুন" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white font-mono">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">মেম্বারশিপ প্ল্যান:</label>
+                        <select id="adminUserPlanSelect" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                            <option value="Free">Free Member</option>
+                            <option value="VIP Bronze">VIP Bronze (1 Month)</option>
+                            <option value="VIP Silver">VIP Silver (3 Months)</option>
+                            <option value="VIP Platinum" selected>VIP Platinum (1 Year)</option>
+                            <option value="VIP Master">VIP Master (Unlimited)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">দৈনিক কোটা (Quota):</label>
+                        <select id="adminUserQuotaSelect" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                            <option value="5">৫টি / দিন (Free)</option>
+                            <option value="15">১৫টি / দিন</option>
+                            <option value="50">৫০টি / দিন</option>
+                            <option value="999" selected>♾️ আনলিমিটেড</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">মেয়াদ শেষ হওয়ার তারিখ (Expiry Date):</label>
+                    <input id="adminUserExpiryInput" type="date" value="2027-12-31" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs">
+                    ইউজার সংরক্ষণ করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 9. ADMIN MAKE VIP QUICK MODAL ==================== -->
+    <div id="adminMakeVipModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-sm w-full border border-amber-500/40 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-amber-500/10">
+                <h3 class="text-sm font-black text-amber-300">👑 ইউজারকে ভিআইপি প্রদান করুন</h3>
+                <button onclick="closeModal('adminMakeVipModal')" class="p-1 rounded-full bg-white/10 text-slate-300">✕</button>
+            </div>
+            <form onsubmit="handleConfirmMakeVip(event)" class="p-5 space-y-3">
+                <input type="hidden" id="makeVipTargetUserId" value="">
+                <p id="makeVipTargetUserInfo" class="text-xs text-slate-300"></p>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">ভিআইপি প্ল্যান নির্বাচন:</label>
+                    <select id="makeVipPlanSelect" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        <option value="VIP Bronze (1 Month)">VIP Bronze - ১ মাস মেয়াদের</option>
+                        <option value="VIP Silver (3 Months)">VIP Silver - ৩ মাস মেয়াদের</option>
+                        <option value="VIP Platinum (1 Year)" selected>VIP Platinum - ১ বছর মেয়াদের</option>
+                        <option value="VIP Master (Lifetime)">VIP Master - আজীবন আনলিমিটেড</option>
+                        <option value="REVOKE_FREE">⚠️ সাধারণ ফ্রি মেম্বার করুন (Revoke VIP)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs">
+                    কনফার্ম করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 10. ADMIN FILE EDITOR MODAL (5-10 GB LARGE FILE SUPPORT) ==================== -->
+    <div id="fileEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card rounded-3xl max-w-lg w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
+            <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">📁</span>
+                    <h3 id="fileEditorTitle" class="text-sm font-black text-white">৫-১০ GB ফাইল আপলোড ও এডিটর</h3>
+                </div>
+                <button onclick="closeModal('fileEditorModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
+            </div>
+            <form onsubmit="saveFlashFile(event)" class="p-5 space-y-3.5 max-h-[75vh] overflow-y-auto">
+                <input type="hidden" id="editFileId" value="">
+
+                <!-- 5GB - 10GB Local File Picker with Meta Detection -->
+                <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-black text-cyan-300">📦 সরাসরি ৫-১০ GB ফাইল সিলেক্ট করুন:</label>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 font-bold">5GB - 10GB OK</span>
+                    </div>
+                    <input id="zipFilePicker" type="file" accept=".zip,.rar,.7z,.tar,.md5,.pac,.bin" onchange="handleZipFileSelect(event)"
+                           class="w-full text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-cyan-500 file:text-slate-950 hover:file:bg-cyan-400 cursor-pointer">
+                    <p class="text-[10px] text-slate-400">লোকাল ফাইল সিলেক্ট করলে ফাইলের নাম, সাইজ (GB/MB) এবং ইউনিক আনজিপ পাসওয়ার্ড স্বয়ংক্রিয়ভাবে ডিটেক্ট হবে।</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">ফাইলের পূর্ণ নাম (.zip সহ):</label>
+                    <input id="editFileName" type="text" required placeholder="Symphony_L46_HW6_MT6261_Tested.zip" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+
+                <!-- Unique ZIP Password Generator -->
+                <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-black text-amber-300">🔑 এই ফাইলের ইউনিক আনজিপ পাসওয়ার্ড:</label>
+                        <button type="button" onclick="generateRandomZipPassword()" class="text-[10px] text-cyan-400 hover:underline font-bold">নতুন পাসওয়ার্ড জেনারেট</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input id="editFileZipPassword" type="text" required placeholder="GSMRM-XXXX-PASS" class="flex-1 px-3 py-2 rounded-xl bg-black/60 border border-amber-500/40 text-xs font-mono font-bold text-amber-200">
+                        <button type="button" onclick="copyZipPasswordFromInput()" class="px-3 py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-black">কপি</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">ব্র্যান্ড:</label>
+                        <select id="editFileBrand" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">ক্যাটাগরি:</label>
+                        <select id="editFileCategory" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                            <option value="Button Phone">Button Phone (বাটন)</option>
+                            <option value="Stock ROM">Stock ROM</option>
+                            <option value="FRP / MDM">FRP / MDM</option>
+                            <option value="EMMC Dump">EMMC Dump</option>
+                            <option value="Root">Root / Boot</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">চিপসেট:</label>
+                        <select id="editFileCpu" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                            <option value="MediaTek">MediaTek</option>
+                            <option value="SPD">SPD/Unisoc</option>
+                            <option value="Qualcomm">Qualcomm</option>
+                            <option value="Exynos">Exynos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">ফাইলের সাইজ (GB/MB):</label>
+                        <input id="editFileSize" type="text" required placeholder="6.45 GB" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">এক্সেস লেভেল:</label>
+                        <select id="editFileAccess" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                            <option value="FREE">FREE</option>
+                            <option value="VIP">VIP</option>
+                            <option value="FEATURED">FEATURED</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">গুগল ড্রাইভ / মেগা / ডিরেক্ট ক্লাউড ডাউনলোড লিংক:</label>
+                    <input id="editFileDownloadUrl" type="url" required placeholder="https://drive.google.com/file/d/..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">ফাইলের বিবরণ:</label>
+                    <textarea id="editFileDesc" rows="2" placeholder="100% Tested flash file..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">CM2 / Box Read Log (ঐচ্ছিক):</label>
+                    <textarea id="editFileReadLog" rows="2" placeholder="Phone found! Sync Ok..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white font-mono"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs shadow-lg transition">
+                    ফাইল সেভ করুন (Save Large File)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 11. ADMIN BRAND EDITOR MODAL ==================== -->
+    <div id="brandEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card rounded-3xl max-w-sm w-full border border-white/20 p-5 space-y-3">
+            <h3 class="text-sm font-black text-white">নতুন ব্র্যান্ড যোগ করুন</h3>
+            <form onsubmit="saveBrand(event)" class="space-y-3">
+                <input id="brandEditName" type="text" required placeholder="ব্র্যান্ডের নাম (e.g. Symphony)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                <select id="brandEditGroup" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    <option value="bd">বাংলাদেশি বাটন (BD)</option>
+                    <option value="global">গ্লোবাল স্মার্টফোন (Global)</option>
+                </select>
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs">
+                    ব্র্যান্ড সেভ করুন
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT CORE ENGINE ==================== -->
+    <script>
+/**
+ * ============================================================================
+ * GSMRM.BD - MASTER 3D MOBILE FIRMWARE & ROM PORTAL CORE ENGINE
+ * Authentic Vector SVG Logos, Dynamic Real-Time File Counters,
+ * Sweet Female Welcome Voice, 5GB-10GB Large File Uploader & Full Mobile Auto-Fit
+ * ============================================================================
+ */
+
+// ==================== 1. SWEET FEMALE WELCOME VOICE ENGINE ====================
+function playWelcomeVoice(manualTrigger = false) {
+    if (!('speechSynthesis' in window)) return;
+    
+    // Play only once per session unless user manually clicks the Voice button
+    if (!manualTrigger && sessionStorage.getItem("gsmrm_voice_played") === "true") return;
+
+    try {
+        const synth = window.speechSynthesis;
+        synth.cancel(); // Stop any pending speech
+
+        const utter = new SpeechSynthesisUtterance("Welcome to G S M R M dot B D");
+        utter.rate = 0.95;
+        utter.pitch = 1.25; // Sweet clear female pitch
+        utter.lang = "en-US";
+
+        // Find best female voice
+        const voices = synth.getVoices();
+        const femaleVoice = voices.find(v => 
+            v.lang.startsWith("en") && 
+            (v.name.includes("Female") || v.name.includes("Zira") || v.name.includes("Samantha") || 
+             v.name.includes("Google US English") || v.name.includes("Victoria") || v.name.includes("Karen") || v.name.includes("Natural"))
+        ) || voices.find(v => v.lang.startsWith("en"));
+
+        if (femaleVoice) utter.voice = femaleVoice;
+
+        synth.speak(utter);
+        sessionStorage.setItem("gsmrm_voice_played", "true");
+    } catch(e) {}
+}
+
+// Auto welcome voice on first interaction to comply with browser autoplay policy
+window.addEventListener("load", () => {
+    // Try speaking immediately
+    setTimeout(() => { playWelcomeVoice(false); }, 800);
+
+    // Fallback: On first user touch or click
+    const onFirstUserAction = () => {
+        playWelcomeVoice(false);
+        document.removeEventListener("click", onFirstUserAction);
+        document.removeEventListener("touchstart", onFirstUserAction);
+    };
+    document.addEventListener("click", onFirstUserAction, { once: true });
+    document.addEventListener("touchstart", onFirstUserAction, { once: true });
+});
+
+// ==================== 2. WEB AUDIO API SOUND FX ENGINE ====================
+const SoundFX = {
+    enabled: localStorage.getItem("gsmrm_sound") !== "false",
+    ctx: null,
+    soundIndex: 0,
+    init() {
+        if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === "suspended") {
+            this.ctx.resume();
+        }
+    },
+    playClick() {
+        if (!this.enabled) return;
+        try {
+            this.init();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            const tones = [
+                () => { // Crisp cyber blip
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(880, now);
+                    osc.frequency.exponentialRampToValueAtTime(280, now + 0.05);
+                    gain.gain.setValueAtTime(0.09, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now); osc.stop(now + 0.05);
+                },
+                () => { // Tech pop
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(1150, now);
+                    osc.frequency.exponentialRampToValueAtTime(550, now + 0.06);
+                    gain.gain.setValueAtTime(0.11, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now); osc.stop(now + 0.06);
+                },
+                () => { // Tactile punch
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(420, now);
+                    osc.frequency.exponentialRampToValueAtTime(130, now + 0.07);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+                    osc.start(now); osc.stop(now + 0.07);
+                },
+                () => { // Digital laser
+                    osc.type = "sawtooth";
+                    osc.frequency.setValueAtTime(1500, now);
+                    osc.frequency.exponentialRampToValueAtTime(350, now + 0.04);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                    osc.start(now); osc.stop(now + 0.04);
+                },
+                () => { // Digital double chime
+                    osc.type = "sine";
+                    osc.frequency.setValueAtTime(920, now);
+                    osc.frequency.exponentialRampToValueAtTime(1380, now + 0.03);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now); osc.stop(now + 0.06);
+                }
+            ];
+
+            tones[this.soundIndex % tones.length]();
+            this.soundIndex++;
+        } catch(e) {}
+    },
+    playSuccess() {
+        if (!this.enabled) return;
+        try {
+            this.init();
+            if (!this.ctx) return;
+            const now = this.ctx.currentTime;
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+                gain.gain.setValueAtTime(0.08, now + idx * 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.12);
+                osc.start(now + idx * 0.05);
+                osc.stop(now + idx * 0.05 + 0.12);
+            });
+        } catch(e) {}
+    },
+    toggle() {
+        this.enabled = !this.enabled;
+        localStorage.setItem("gsmrm_sound", this.enabled ? "true" : "false");
+        const btn = document.getElementById("soundToggleBtn");
+        if (btn) {
+            btn.innerHTML = this.enabled ? "🔊" : "🔇";
+            btn.title = this.enabled ? "সাউন্ড চালু আছে" : "সাউন্ড বন্ধ আছে";
+        }
+    }
+};
+
+// Auto sound trigger on interactive element clicks
+document.addEventListener("click", (e) => {
+    const target = e.target.closest("button, a, input[type='button'], input[type='submit'], select");
+    if (target && target.id !== "soundToggleBtn") {
+        SoundFX.playClick();
+    }
+}, true);
+
+// ==================== 3. AMBIENT 3D WEBGL BACKGROUND ENGINE (NON-BLOCKING) ====================
+let bgScene, bgCamera, bgRenderer, bgCoreGroup, bgParticles;
+let mouseX = 0, mouseY = 0;
+
+function init3DAmbient() {
+    const canvas = document.getElementById("bg3dCanvas");
+    if (!canvas || typeof THREE === "undefined") return;
+
+    bgScene = new THREE.Scene();
+    bgCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    bgCamera.position.z = 7;
+
+    bgRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    bgRenderer.setSize(window.innerWidth, window.innerHeight);
+    bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    bgScene.add(ambient);
+
+    const cyanLight = new THREE.PointLight(0x00f2fe, 3.5, 30);
+    cyanLight.position.set(5, 5, 5);
+    bgScene.add(cyanLight);
+
+    const emeraldLight = new THREE.PointLight(0x10b981, 2.5, 30);
+    emeraldLight.position.set(-5, -5, 3);
+    bgScene.add(emeraldLight);
+
+    bgCoreGroup = new THREE.Group();
+
+    // Orbital Cyber Rings
+    const ringGeo1 = new THREE.TorusGeometry(3.2, 0.015, 16, 120);
+    const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x00f2fe, transparent: true, opacity: 0.35 });
+    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ring1.rotation.x = Math.PI / 3;
+    bgCoreGroup.add(ring1);
+
+    const ringGeo2 = new THREE.TorusGeometry(3.6, 0.012, 16, 120);
+    const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.3 });
+    const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ring2.rotation.y = Math.PI / 4;
+    bgCoreGroup.add(ring2);
+
+    // Floating 3D Octahedron Core
+    const coreGeo = new THREE.OctahedronGeometry(0.9, 2);
+    const coreMat = new THREE.MeshStandardMaterial({
+        color: 0x00f2fe,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4
+    });
+    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+    bgCoreGroup.add(coreMesh);
+    bgScene.add(bgCoreGroup);
+
+    // Starry Particles Field
+    const pCount = 140;
+    const pPos = new Float32Array(pCount * 3);
+    for (let i = 0; i < pCount * 3; i += 3) {
+        pPos[i] = (Math.random() - 0.5) * 22;
+        pPos[i + 1] = (Math.random() - 0.5) * 22;
+        pPos[i + 2] = (Math.random() - 0.5) * 16;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+    const pMat = new THREE.PointsMaterial({
+        size: 0.05,
+        color: 0x00f2fe,
+        transparent: true,
+        opacity: 0.5
+    });
+    bgParticles = new THREE.Points(pGeo, pMat);
+    bgScene.add(bgParticles);
+
+    window.addEventListener("resize", () => {
+        if (!bgRenderer || !bgCamera) return;
+        bgCamera.aspect = window.innerWidth / window.innerHeight;
+        bgCamera.updateProjectionMatrix();
+        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    animate3DAmbient();
+}
+
+function animate3DAmbient() {
+    requestAnimationFrame(animate3DAmbient);
+    const t = Date.now() * 0.0008;
+    if (bgCoreGroup) {
+        bgCoreGroup.rotation.y = t * 0.4 + mouseX * 0.2;
+        bgCoreGroup.rotation.x = t * 0.25 - mouseY * 0.2;
+    }
+    if (bgParticles) {
+        bgParticles.rotation.y = -t * 0.08;
+    }
+    if (bgRenderer && bgScene && bgCamera) {
+        bgRenderer.render(bgScene, bgCamera);
+    }
+}
+
+// ==================== 4. OFFICIAL VECTOR SVG BRAND LOGOS ====================
+function getBrandLogoSvg(brandName) {
+    const b = (brandName || "").trim().toLowerCase();
+    switch (b) {
+        case "symphony":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#E11D48"/><path d="M50 20C34 20 28 32 28 42c0 18 24 16 24 26 0 5-4 8-10 8-8 0-13-5-14-11l-9 2c2 10 10 17 23 17 14 0 21-8 21-17 0-19-24-17-24-27 0-6 5-9 11-9 7 0 11 4 12 9l9-2c-2-9-9-15-21-15z" fill="white"/><circle cx="68" cy="35" r="5" fill="#FDE047"/></svg>`;
+        case "walton":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#0284C7"/><path d="M22 28l12 44h10l8-28 8 28h10l12-44h-11l-6 30-8-30h-9l-8 30-6-30H22z" fill="white"/></svg>`;
+        case "5star":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#D97706"/><path d="M50 16l9.5 19.2 21.2 3.1-15.3 15 3.6 21.1L50 64.4 31 74.4l3.6-21.1-15.3-15 21.2-3.1L50 16z" fill="#FEF08A"/><circle cx="50" cy="50" r="8" fill="#B45309"/></svg>`;
+        case "itel":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#DC2626"/><circle cx="36" cy="36" r="6" fill="white"/><path d="M31 46h10v28H31zm18 8h9v5h-9v15h-8V54h-5v-6h5v-9c0-6 4-10 11-10h7v6h-5c-4 0-5 2-5 5v2h8l-1 6zm18-8h18v6h-11v5h9v6h-9v5h12v6H67V46z" fill="white"/></svg>`;
+        case "tecno":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#2563EB"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-size="20" fill="white" text-anchor="middle" letter-spacing="1">TECNO</text><path d="M25 70h50v3H25z" fill="#93C5FD"/></svg>`;
+        case "infinix":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#059669"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-size="16" fill="white" text-anchor="middle" letter-spacing="1.5">INFINIX</text><circle cx="50" cy="28" r="6" fill="#A7F3D0"/></svg>`;
+        case "samsung":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#1D4ED8"/><ellipse cx="50" cy="50" rx="42" ry="24" stroke="white" stroke-width="4"/><text x="50" y="56" font-family="Arial, sans-serif" font-weight="900" font-size="13" fill="white" text-anchor="middle" letter-spacing="1">SAMSUNG</text></svg>`;
+        case "xiaomi":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#EA580C"/><path d="M32 32h10v36H32V32zm16 0h20v22h-10v14H48V32zm10 8v8h10v-8H58z" fill="white"/></svg>`;
+        case "oppo":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#047857"/><ellipse cx="38" cy="50" rx="14" ry="18" stroke="white" stroke-width="6"/><ellipse cx="62" cy="50" rx="14" ry="18" stroke="white" stroke-width="6"/></svg>`;
+        case "vivo":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#0284C7"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-style="italic" font-size="24" fill="white" text-anchor="middle">vivo</text></svg>`;
+        case "realme":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#F59E0B"/><text x="50" y="66" font-family="Arial, sans-serif" font-weight="900" font-size="44" fill="#1E293B" text-anchor="middle">R</text></svg>`;
+        case "apple":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#334155"/><path d="M50 36c4-5 9-6 13-6 1 5-2 10-5 13-3 4-8 5-11 5-1-5 2-9 3-12zm16 23c-1 8-5 16-10 21-4 4-8 5-13 5-5 0-8-2-12-2-4 0-8 2-13 2-6-1-11-8-15-16-5-10-5-22 2-27 4-4 9-6 15-6 5 0 9 3 12 3 4 0 7-3 13-3 5 0 10 2 13 6-12 6-10 20 0 25z" fill="white"/></svg>`;
+        default:
+            return `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs">${(brandName || 'RM').slice(0, 2).toUpperCase()}</div>`;
+    }
+}
+
+// ==================== 5. MASTER DATA & PERSISTENCE ====================
+const DEFAULT_BRANDS = [
+    { name: "Symphony", group: "bd" },
+    { name: "Walton", group: "bd" },
+    { name: "5Star", group: "bd" },
+    { name: "Itel", group: "bd" },
+    { name: "Tecno", group: "bd" },
+    { name: "Infinix", group: "bd" },
+    { name: "Samsung", group: "global" },
+    { name: "Xiaomi", group: "global" },
+    { name: "Oppo", group: "global" },
+    { name: "Vivo", group: "global" },
+    { name: "Realme", group: "global" },
+    { name: "Apple", group: "global" }
+];
+
+const DEFAULT_FLASH_FILES = [
+    {
+        id: 201,
+        name: "Symphony_L46_HW6_MT6261_100%_Tested_Button_Flash_File.zip",
+        brand: "Symphony", category: "Button Phone", cpu: "MediaTek", chipsetDetail: "MTK MT6261",
+        size: "4.2 MB", date: "2026-11-20", downloads: 14320, access: "FREE",
+        zipPassword: "GSMRM-L46-FREE", password: "No Password",
+        desc: "100% CM2 Read Tested flash file for Symphony L46 (HW6). Fixes dead phone recovery, hang on logo, white LCD, and security code reset.",
+        readLog: "Phone found! [ 3 ] Sync Ok\\nBB_CPU_ID : 6261 | [MediaTek] MT6261_S0000\\nFileVersion : SYMPHONY_L46_HW6_V08_BD\\nStatus: 100% Tested by GSMRM.BD",
+        downloadUrl: "https://drive.google.com/"
+    },
+    {
+        id: 202,
+        name: "5Star_BD21_Pro_MT6261_Dead_Recovery_Tested_ROM.zip",
+        brand: "5Star", category: "Button Phone", cpu: "MediaTek", chipsetDetail: "MTK MT6261",
+        size: "3.8 MB", date: "2026-11-20", downloads: 9840, access: "VIP",
+        zipPassword: "GSMRM-5STAR-9482", password: "Paid Password",
+        desc: "Official tested BIN firmware for 5Star BD21 Pro button phone. Solves auto restart, IMEI null, keypad lock, and emergency call issue.",
+        readLog: "Boot Info : BB_CPU_ID : 6261 [MediaTek]\\nPCB_Info : X_M988A_240X320_WCJX_D2266_MA_PCB01\\nTool Used : InfinityBox CM2MTK\\nStatus: Verified Working 100%",
+        downloadUrl: "https://drive.google.com/"
+    },
+    {
+        id: 203,
+        name: "Walton_Olvio_L30_SC6531E_PAC_Firmware_100%_OK.zip",
+        brand: "Walton", category: "Button Phone", cpu: "SPD", chipsetDetail: "SPD SC6531E",
+        size: "5.1 MB", date: "2026-11-19", downloads: 7650, access: "FREE",
+        zipPassword: "GSMRM-OLVIO-FREE", password: "No Password",
+        desc: "Tested SPD SC6531E PAC flash file for Walton Olvio L30. Flash with SPD Research Download Tool or CM2SCR.",
+        readLog: "CPU : SC6531E [Spreadtrum/Unisoc]\\nFlash IC : GD25LQ32 [4MB NOR]\\nSW Ver : WALTON_OLVIO_L30_V1.4_BD",
+        downloadUrl: "https://drive.google.com/"
+    },
+    {
+        id: 204,
+        name: "A145RXXS4AWJ1_DFT_Pro_Root_Android14_U4.zip",
+        brand: "Samsung", category: "Root", cpu: "Exynos", chipsetDetail: "Exynos / Binary U4",
+        size: "48.5 MB", date: "2026-11-19", downloads: 5420, access: "FEATURED",
+        zipPassword: "GSMRM-A14-ROOT-810", password: "No Password",
+        desc: "Tested Root file for Samsung Galaxy A14 (SM-A145R) Binary U4. Flash via Odin AP slot after OEM & Bootloader Unlock.",
+        readLog: "Model : SM-A145R | Binary : U4 (BIT 4)\\nAndroid : 14 | Method : Odin 3.14.4 AP Slot\\nStatus : Wi-Fi & Touch Working 100%",
+        downloadUrl: "https://drive.google.com/"
+    },
+    {
+        id: 205,
+        name: "Infinix_Smart_8_X6525B_FRP_DM_Verity_Auto_Reboot_Fix.zip",
+        brand: "Infinix", category: "FRP / MDM", cpu: "SPD", chipsetDetail: "Unisoc T606",
+        size: "64.0 MB", date: "2026-11-19", downloads: 11290, access: "VIP",
+        zipPassword: "GSMRM-INF-X6525B-PASS", password: "Paid Password",
+        desc: "100% Tested fix for Infinix Smart 8 (X6525B) DM-Verity Corruption & Auto Reboot after FRP Reset.",
+        readLog: "Device : Infinix Smart 8 (X6525B)\\nChipset : Unisoc Tiger T606 (SPD)\\nTested On : UnlockTool & Pandora Box",
+        downloadUrl: "https://drive.google.com/"
+    },
+    {
+        id: 206,
+        name: "Redmi_Note_12_4G_Tapas_HyperOS_Fastboot_Global.zip",
+        brand: "Xiaomi", category: "Stock ROM", cpu: "Qualcomm", chipsetDetail: "Snapdragon 685",
+        size: "5.45 GB", date: "2026-11-18", downloads: 18450, access: "FREE",
+        zipPassword: "GSMRM-TAPAS-HYPEROS", password: "No Password",
+        desc: "Official Global Fastboot ROM for Redmi Note 12 4G (tapas). Flash via Mi Flash Tool or EDL Mode.",
+        readLog: "Codename : tapas | Region : Global (MI)\\nCPU : Qualcomm Snapdragon 685\\nVerified MD5 Checksum : OK",
+        downloadUrl: "https://drive.google.com/"
+    }
+];
+
+const DEFAULT_USERS = [
+    {
+        id: "USR-001",
+        name: "করিম টেলিকম (মোঃ করিম)",
+        phone: "01711000000",
+        shop: "করিম টেলিকম, স্টেডিয়াম মার্কেট",
+        password: "123",
+        role: "user",
+        plan: "VIP Platinum",
+        isVip: true,
+        expiryDate: "2027-12-31",
+        dailyQuota: 999,
+        downloadsToday: 2,
+        lastDownloadDate: "2026-11-20",
+        status: "active",
+        createdAt: "2026-01-10",
+        downloadHistory: [
+            { id: 201, name: "Symphony_L46_HW6_MT6261_100%_Tested_Button_Flash_File.zip", zipPassword: "GSMRM-L46-FREE", date: "2026-11-20 11:30 AM" },
+            { id: 202, name: "5Star_BD21_Pro_MT6261_Dead_Recovery_Tested_ROM.zip", zipPassword: "GSMRM-5STAR-9482", date: "2026-11-20 02:15 PM" }
+        ],
+        bookmarks: [201, 203]
+    },
+    {
+        id: "USR-002",
+        name: "রহিম মোবাইল কেয়ার",
+        phone: "01822000000",
+        shop: "রহিম মোবাইল সার্ভিসিং সেন্টার",
+        password: "123",
+        role: "user",
+        plan: "Free",
+        isVip: false,
+        expiryDate: "N/A",
+        dailyQuota: 5,
+        downloadsToday: 1,
+        lastDownloadDate: "2026-11-20",
+        status: "active",
+        createdAt: "2026-02-15",
+        downloadHistory: [
+            { id: 201, name: "Symphony_L46_HW6_MT6261_100%_Tested_Button_Flash_File.zip", zipPassword: "GSMRM-L46-FREE", date: "2026-11-20 09:10 AM" }
+        ],
+        bookmarks: [201]
+    },
+    {
+        id: "USR-003",
+        name: "আলমগীর ফ্লাশ পয়েন্ট",
+        phone: "01933000000",
+        shop: "আলমগীর সফটওয়্যার সলিউশন",
+        password: "123",
+        role: "user",
+        plan: "VIP Gold",
+        isVip: true,
+        expiryDate: "2027-06-30",
+        dailyQuota: 50,
+        downloadsToday: 5,
+        lastDownloadDate: "2026-11-20",
+        status: "active",
+        createdAt: "2026-03-01",
+        downloadHistory: [
+            { id: 206, name: "Redmi_Note_12_4G_Tapas_HyperOS_Fastboot_Global.zip", zipPassword: "GSMRM-TAPAS-HYPEROS", date: "2026-11-19 04:40 PM" }
+        ],
+        bookmarks: [206]
+    }
+];
+
+const DEFAULT_PACKAGES = [
+    { name: "Free Starter", badge: "No Password Files", priceBDT: "FREE", priceUSD: "FREE", period: "Lifetime", bandwidth: "5 GB / 5 Files Daily", usage: "All Free Files & Drivers", ipLimit: "Unlimited IPs", popular: false },
+    { name: "Daily Express", badge: "Includes Featured", priceBDT: "৳150", priceUSD: "$1.50", period: "24 Hours", bandwidth: "20 GB / 5 Files", usage: "Free + Featured Files", ipLimit: "2 Devices", popular: false },
+    { name: "Monthly Bronze", badge: "No Password Files", priceBDT: "৳600", priceUSD: "$5.99", period: "1 Month", bandwidth: "100 GB / 40 Files", usage: "All Standard + Button Files", ipLimit: "5 IPs / Month", popular: false },
+    { name: "3-Month Silver", badge: "Includes Paid Pass", priceBDT: "৳1,500", priceUSD: "$14.99", period: "3 Months", bandwidth: "300 GB / 180 Files", usage: "All + Paid Password Files", ipLimit: "10 IPs / Month", popular: false },
+    { name: "Yearly Platinum VIP", badge: "Full VIP + Password Access", priceBDT: "৳3,500", priceUSD: "$34.99", period: "1 Year", bandwidth: "1000 GB / 1200 Files", usage: "All VIP, Dump & Pass Files", ipLimit: "25 IPs / Month", popular: true },
+    { name: "Ultra Shop Master", badge: "Priority Support + VIP", priceBDT: "৳6,000", priceUSD: "$59.00", period: "1 Year", bandwidth: "Unlimited / 2500 Files", usage: "All Files + Priority Request", ipLimit: "Unlimited IPs", popular: false }
+];
+
+const DEFAULT_PAYMENTS = {
+    bkash: "01700-000000",
+    nagad: "01700-000000",
+    rocket: "01700-000000",
+    binance: "123456789",
+    whatsapp: "8801700000000",
+    whatsappDisplay: "+880 1700-000000",
+    telegram: "https://t.me/"
+};
+
+const DEFAULT_SETTINGS = {
+    adminUser: "admin",
+    adminPass: "admin786",
+    siteNotice: "GSMRM.BD • 100% Tested Firmware & Servicing Files for BD Technicians"
+};
+
+const FREE_TOOLS = [
+    { name: "MTK + Qualcomm All-in-One USB Driver v3.2", size: "18.4 MB", tag: "USB Driver", downloads: "89K+" },
+    { name: "SPD / Unisoc Official USB Driver (Win 10/11)", size: "12.1 MB", tag: "USB Driver", downloads: "54K+" },
+    { name: "Odin3 v3.14.4 Patched (All Samsung Flasher)", size: "4.8 MB", tag: "Flash Tool", downloads: "191K+" },
+    { name: "Android Utility Pro Tool (Latest Free)", size: "96.5 MB", tag: "GSM Utility", downloads: "112K+" }
+];
+
+// Reactive LocalStorage State
+let BRANDS = JSON.parse(localStorage.getItem("gsm_admin_brands")) || DEFAULT_BRANDS;
+let FLASH_FILES = JSON.parse(localStorage.getItem("gsm_admin_files")) || DEFAULT_FLASH_FILES;
+let PACKAGES = JSON.parse(localStorage.getItem("gsm_admin_packages")) || DEFAULT_PACKAGES;
+let PAYMENT_SETTINGS = JSON.parse(localStorage.getItem("gsm_admin_payments")) || DEFAULT_PAYMENTS;
+let ADMIN_SETTINGS = JSON.parse(localStorage.getItem("gsm_admin_settings")) || DEFAULT_SETTINGS;
+let CUSTOMER_ORDERS = JSON.parse(localStorage.getItem("gsm_customer_orders")) || [];
+let CUSTOMER_REQUESTS = JSON.parse(localStorage.getItem("gsm_customer_requests")) || [];
+let USERS = JSON.parse(localStorage.getItem("gsmrm_users")) || DEFAULT_USERS;
+let CURRENT_USER = JSON.parse(localStorage.getItem("gsmrm_current_user")) || null;
+let isAdminLoggedIn = sessionStorage.getItem("gsm_admin_logged") === "true";
+
+// Filter & UI State
+let state = {
+    brand: "all",
+    category: "all",
+    access: "all",
+    cpu: "all",
+    sort: "newest",
+    search: "",
+    currency: localStorage.getItem("gsm_currency") || "BDT",
+    lang: localStorage.getItem("gsm_lang") || "bn",
+    activeModalFile: null
+};
+
+// ==================== 6. APP INITIALIZATION ====================
+window.onload = function () {
+    init3DAmbient();
+    renderBrands();
+    renderFiles();
+    renderTools();
+    renderPackages();
+    renderTickers();
+    updateDynamicCounters();
+    applyPaymentSettings();
+    updateUserUI();
+
+    // Check Sound state
+    const soundBtn = document.getElementById("soundToggleBtn");
+    if (soundBtn) {
+        soundBtn.innerHTML = SoundFX.enabled ? "🔊" : "🔇";
+    }
+
+    // Keyboard Shortcut: Ctrl + Shift + A to open Admin Login
+    window.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && (e.key === "A" || e.key === "a")) {
+            e.preventDefault();
+            if (isAdminLoggedIn) {
+                openAdminDashboard();
+            } else {
+                openAdminLogin();
+            }
+        }
+    });
+
+    // Hash check for #admin
+    if (window.location.hash === "#admin") {
+        if (isAdminLoggedIn) openAdminDashboard();
+        else openAdminLogin();
+    }
+};
+
+// ==================== 7. DYNAMIC 0-BASED COUNTER SYSTEM ====================
+function updateDynamicCounters() {
+    // Total Files
+    const totalFiles = FLASH_FILES.length;
+    const buttonFiles = FLASH_FILES.filter(f => f.category === "Button Phone").length;
+    const stockFiles = FLASH_FILES.filter(f => f.category === "Stock ROM").length;
+    const frpFiles = FLASH_FILES.filter(f => f.category === "FRP / MDM").length;
+    const emmcFiles = FLASH_FILES.filter(f => f.category === "EMMC Dump").length;
+
+    const elTotal = document.getElementById("statTotalRomCount");
+    const elButton = document.getElementById("statButtonRomCount");
+    if (elTotal) elTotal.textContent = totalFiles;
+    if (elButton) elButton.textContent = buttonFiles;
+
+    const bBtn = document.getElementById("catBadgeButtonPhone");
+    const bStk = document.getElementById("catBadgeStockRom");
+    const bFrp = document.getElementById("catBadgeFrp");
+    const bEmmc = document.getElementById("catBadgeEmmc");
+
+    if (bBtn) bBtn.textContent = `${buttonFiles} টি ফাইল`;
+    if (bStk) bStk.textContent = `${stockFiles} টি ফাইল`;
+    if (bFrp) bFrp.textContent = `${frpFiles} টি ফাইল`;
+    if (bEmmc) bEmmc.textContent = `${emmcFiles} টি ফাইল`;
+}
+
+// ==================== 8. USER AUTH & TECHNICIAN DASHBOARD ====================
+function updateUserUI() {
+    const navUserArea = document.getElementById("navUserArea");
+    if (!navUserArea) return;
+
+    if (!CURRENT_USER) {
+        navUserArea.innerHTML = `
+            <button onclick="openAuthModal()" class="px-2.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-[11px] sm:text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1 transition whitespace-nowrap">
+                <span>👤</span>
+                <span class="hidden sm:inline">টেকনিশিয়ান লগইন</span>
+                <span class="sm:hidden">লগইন</span>
+            </button>
+        `;
+    } else {
+        const isVip = CURRENT_USER.isVip;
+        const badgeColor = isVip ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40";
+        navUserArea.innerHTML = `
+            <button onclick="openUserDashboardModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition">
+                <span class="w-2 h-2 rounded-full ${isVip ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse shrink-0"></span>
+                <span class="max-w-[90px] sm:max-w-[130px] truncate">${CURRENT_USER.name}</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded-full border ${badgeColor}">${isVip ? '👑 VIP' : 'FREE'}</span>
+            </button>
+        `;
+    }
+}
+
+function openAuthModal() {
+    switchAuthTab('login');
+    document.getElementById("authModal").classList.remove("hidden");
+}
+
+function switchAuthTab(tab) {
+    const btnLogin = document.getElementById("authTabBtn-login");
+    const btnSignup = document.getElementById("authTabBtn-signup");
+    const viewLogin = document.getElementById("authView-login");
+    const viewSignup = document.getElementById("authView-signup");
+
+    if (tab === "login") {
+        btnLogin.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-cyan-500 text-slate-950 transition";
+        btnSignup.className = "px-3.5 py-1.5 rounded-xl text-xs font-black text-slate-300 hover:text-white transition";
+        viewLogin.classList.remove("hidden");
+        viewSignup.classList.add("hidden");
+    } else {
+        btnSignup.className = "px-3.5 py-1.5 rounded-xl text-xs font-black bg-emerald-500 text-slate-950 transition";
+        btnLogin.className = "px-3.5 py-1.5 rounded-xl text-xs font-black text-slate-300 hover:text-white transition";
+        viewSignup.classList.remove("hidden");
+        viewLogin.classList.add("hidden");
+    }
+}
+
+function handleUserLogin(e) {
+    e.preventDefault();
+    const phone = document.getElementById("loginPhoneInput").value.trim();
+    const pass = document.getElementById("loginPassInput").value.trim();
+    const errorMsg = document.getElementById("loginErrorMsg");
+
+    const user = USERS.find(u => (u.phone === phone || u.id === phone) && u.password === pass);
+
+    if (!user) {
+        errorMsg.textContent = "ভুল মোবাইল নম্বর বা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য দিন।";
+        errorMsg.classList.remove("hidden");
+        return;
+    }
+
+    if (user.status === "blocked") {
+        errorMsg.textContent = "আপনার একাউন্টটি সাময়িকভাবে স্থগিত করা হয়েছে। এডমিনের সাথে যোগাযোগ করুন।";
+        errorMsg.classList.remove("hidden");
+        return;
+    }
+
+    errorMsg.classList.add("hidden");
+    CURRENT_USER = user;
+    localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+    closeModal("authModal");
+    updateUserUI();
+    SoundFX.playSuccess();
+    openUserDashboardModal();
+}
+
+function demoLogin(type) {
+    if (type === "vip") {
+        CURRENT_USER = USERS.find(u => u.isVip) || USERS[0];
+    } else {
+        CURRENT_USER = USERS.find(u => !u.isVip) || USERS[1];
+    }
+    localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+    closeModal("authModal");
+    updateUserUI();
+    SoundFX.playSuccess();
+    openUserDashboardModal();
+}
+
+function handleUserSignup(e) {
+    e.preventDefault();
+    const name = document.getElementById("regNameInput").value.trim();
+    const shop = document.getElementById("regShopInput").value.trim();
+    const phone = document.getElementById("regPhoneInput").value.trim();
+    const pass = document.getElementById("regPassInput").value.trim();
+    const errorMsg = document.getElementById("signupErrorMsg");
+
+    if (USERS.some(u => u.phone === phone)) {
+        errorMsg.textContent = "এই মোবাইল নম্বর দিয়ে ইতোমধ্যে একাউন্ট খোলা আছে! অনুগ্রহ করে লগইন করুন।";
+        errorMsg.classList.remove("hidden");
+        return;
+    }
+
+    const newUser = {
+        id: "USR-" + (USERS.length + 101),
+        name: name,
+        shop: shop,
+        phone: phone,
+        password: pass,
+        role: "user",
+        plan: "Free",
+        isVip: false,
+        expiryDate: "N/A",
+        dailyQuota: 5,
+        downloadsToday: 0,
+        lastDownloadDate: new Date().toISOString().split("T")[0],
+        status: "active",
+        createdAt: new Date().toISOString().split("T")[0],
+        downloadHistory: [],
+        bookmarks: []
+    };
+
+    USERS.unshift(newUser);
+    localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+    CURRENT_USER = newUser;
+    localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+
+    errorMsg.classList.add("hidden");
+    closeModal("authModal");
+    updateUserUI();
+    SoundFX.playSuccess();
+    alert("অভিনন্দন! আপনার টেকনিশিয়ান একাউন্ট সফলভাবে তৈরি হয়েছে।");
+    openUserDashboardModal();
+}
+
+function openUserDashboardModal() {
+    if (!CURRENT_USER) {
+        openAuthModal();
+        return;
+    }
+
+    const updated = USERS.find(u => u.id === CURRENT_USER.id);
+    if (updated) {
+        CURRENT_USER = updated;
+        localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+    }
+
+    document.getElementById("userProfileName").textContent = CURRENT_USER.name;
+    document.getElementById("userProfileShop").textContent = `${CURRENT_USER.shop} • ${CURRENT_USER.phone}`;
+    
+    const badge = document.getElementById("userProfileBadge");
+    if (CURRENT_USER.isVip) {
+        badge.textContent = `👑 ${CURRENT_USER.plan}`;
+        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40";
+        document.getElementById("userQuotaText").textContent = "♾️ আনলিমিটেড ভিআইপি ডাউনলোড সুবিধা চালু আছে";
+        document.getElementById("userUpgradeActionContainer").innerHTML = `
+            <span class="text-xs px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/30">
+                ✓ ভিআইপি এক্টিভ
+            </span>
+        `;
+    } else {
+        badge.textContent = "🆓 ফ্রি মেম্বার (Free)";
+        badge.className = "text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-extrabold border border-cyan-500/40";
+        const remaining = Math.max(0, CURRENT_USER.dailyQuota - CURRENT_USER.downloadsToday);
+        document.getElementById("userQuotaText").textContent = `${remaining} / ${CURRENT_USER.dailyQuota} টি ডাউনলোড বাকি`;
+        document.getElementById("userUpgradeActionContainer").innerHTML = `
+            <button onclick="switchUserTab('upgrade')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs shadow-lg transition">
+                👑 আনলিমিটেড ভিআইপি নিন
+            </button>
+        `;
+    }
+
+    document.getElementById("userMetaId").textContent = CURRENT_USER.id;
+    document.getElementById("userMetaExpiry").textContent = CURRENT_USER.isVip ? CURRENT_USER.expiryDate : "ফ্রি একাউন্ট";
+    document.getElementById("userMetaStatus").textContent = CURRENT_USER.status === "active" ? "🟢 সচল (Active)" : "🔴 স্থগিত (Blocked)";
+    document.getElementById("userMetaDownloads").textContent = `${(CURRENT_USER.downloadHistory || []).length} টি ফাইল`;
+
+    document.getElementById("userUpgradeBkash").textContent = PAYMENT_SETTINGS.bkash;
+    document.getElementById("userUpgradeNagad").textContent = PAYMENT_SETTINGS.nagad;
+
+    renderUserDownloads();
+    renderUserBookmarks();
+    switchUserTab('overview');
+    document.getElementById("userDashboardModal").classList.remove("hidden");
+}
+
+function switchUserTab(tab) {
+    const tabs = ['overview', 'history', 'bookmarks', 'upgrade', 'request'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`userTabBtn-${t}`);
+        const panel = document.getElementById(`userPanel-${t}`);
+        if (t === tab) {
+            if (btn) btn.className = "px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-black transition whitespace-nowrap";
+            if (panel) panel.classList.remove("hidden");
+        } else {
+            if (btn) btn.className = "px-3 py-1.5 rounded-xl text-slate-300 hover:text-white font-bold transition whitespace-nowrap";
+            if (panel) panel.classList.add("hidden");
+        }
+    });
+}
+
+function renderUserDownloads() {
+    const container = document.getElementById("userDownloadsList");
+    if (!container || !CURRENT_USER) return;
+
+    const list = CURRENT_USER.downloadHistory || [];
+    if (list.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-slate-400">এখনো কোনো ফাইল ডাউনলোড করেননি।</div>`;
+        return;
+    }
+
+    container.innerHTML = list.map(item => `
+        <div class="p-3 rounded-xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+                <h5 class="font-bold text-white">${item.name}</h5>
+                <span class="text-[10px] text-slate-400">ডাউনলোড সময়: ${item.date}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-mono font-bold text-xs">
+                    🔑 ${item.zipPassword || 'No Pass'}
+                </span>
+                <button onclick="copyText('${item.zipPassword}', 'পাসওয়ার্ড')" class="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-bold transition">কপি</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function renderUserBookmarks() {
+    const container = document.getElementById("userBookmarksList");
+    if (!container || !CURRENT_USER) return;
+
+    const bIds = CURRENT_USER.bookmarks || [];
+    const files = FLASH_FILES.filter(f => bIds.includes(f.id));
+
+    if (files.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-slate-400">কোনো বুকমার্ক ফাইল নেই।</div>`;
+        return;
+    }
+
+    container.innerHTML = files.map(f => `
+        <div class="p-3 rounded-xl bg-black/40 border border-white/10 flex items-center justify-between gap-2">
+            <div>
+                <h5 class="font-bold text-white">${f.name}</h5>
+                <span class="text-[10px] text-cyan-400">${f.brand} • ${f.cpu} • ${f.size}</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="closeModal('userDashboardModal'); openFileModal(${f.id})" class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs">ডাউনলোড</button>
+                <button onclick="toggleUserBookmark(${f.id})" class="text-rose-400 hover:text-rose-300 text-xs">✕</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function toggleUserBookmark(fileId) {
+    if (!CURRENT_USER) return;
+    CURRENT_USER.bookmarks = CURRENT_USER.bookmarks || [];
+    const idx = CURRENT_USER.bookmarks.indexOf(fileId);
+    if (idx > -1) {
+        CURRENT_USER.bookmarks.splice(idx, 1);
+    } else {
+        CURRENT_USER.bookmarks.push(fileId);
+    }
+    saveCurrentUserData();
+    renderUserBookmarks();
+}
+
+function clearUserHistory() {
+    if (!CURRENT_USER) return;
+    CURRENT_USER.downloadHistory = [];
+    saveCurrentUserData();
+    renderUserDownloads();
+}
+
+function promptUserChangePass() {
+    if (!CURRENT_USER) return;
+    const newPass = prompt("আপনার নতুন পাসওয়ার্ড লিখুন:", CURRENT_USER.password);
+    if (newPass && newPass.trim().length >= 3) {
+        CURRENT_USER.password = newPass.trim();
+        saveCurrentUserData();
+        alert("পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!");
+    }
+}
+
+function handleUserLogout() {
+    CURRENT_USER = null;
+    localStorage.removeItem("gsmrm_current_user");
+    closeModal("userDashboardModal");
+    updateUserUI();
+    SoundFX.playClick();
+}
+
+function handleUserVipOrder(e) {
+    e.preventDefault();
+    if (!CURRENT_USER) return;
+
+    const pkg = document.getElementById("userOrderPkgSelect").value;
+    const phone = document.getElementById("userOrderSenderPhone").value.trim();
+    const trx = document.getElementById("userOrderTrxId").value.trim();
+
+    CUSTOMER_ORDERS.unshift({
+        id: "ORD-" + Date.now().toString().slice(-5),
+        userName: CURRENT_USER.name,
+        userPhone: CURRENT_USER.phone,
+        userId: CURRENT_USER.id,
+        package: pkg,
+        senderPhone: phone,
+        trxId: trx,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+    SoundFX.playSuccess();
+    alert("ধন্যবাদ! আপনার ভিআইপি অর্ডার সাবমিট হয়েছে। এডমিন ভেরিফাই করে দ্রুত একাউন্ট VIP করে দেবে।");
+    switchUserTab('overview');
+}
+
+function handleUserFileRequest(e) {
+    e.preventDefault();
+    if (!CURRENT_USER) return;
+
+    const brand = document.getElementById("userReqBrandInput").value.trim();
+    const cpu = document.getElementById("userReqCpuInput").value.trim();
+    const desc = document.getElementById("userReqDescInput").value.trim();
+
+    CUSTOMER_REQUESTS.unshift({
+        id: "REQ-" + Date.now().toString().slice(-4),
+        userName: CURRENT_USER.name,
+        userPhone: CURRENT_USER.phone,
+        brand: brand,
+        cpu: cpu,
+        desc: desc,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS));
+    SoundFX.playSuccess();
+    alert("আপনার ফাইল রিকোয়েস্ট গ্রহণ করা হয়েছে। এডমিন প্যানেলে জমা হয়েছে।");
+    switchUserTab('overview');
+}
+
+function saveCurrentUserData() {
+    if (!CURRENT_USER) return;
+    const idx = USERS.findIndex(u => u.id === CURRENT_USER.id);
+    if (idx > -1) {
+        USERS[idx] = CURRENT_USER;
+        localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+    }
+    localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+}
+
+// ==================== 9. VISITOR RENDERING FUNCTIONS ====================
+function renderTickers() {
+    const recent = document.getElementById("recentTicker");
+    const top = document.getElementById("topTicker");
+
+    if (recent) {
+        recent.innerHTML = FLASH_FILES.slice(0, 5).map(f => `
+            <button onclick="openFileModal(${f.id})" class="inline-flex items-center gap-1.5 hover:text-cyan-300 transition">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                <span>${f.name.split('_')[0]} ${f.name.split('_')[1] || ''}</span>
+                <span class="text-[10px] text-slate-400 font-mono">(${f.size})</span>
+            </button>
+        `).join('<span class="text-slate-600">•</span>');
+    }
+
+    if (top) {
+        const sorted = [...FLASH_FILES].sort((a,b) => b.downloads - a.downloads);
+        top.innerHTML = sorted.slice(0, 5).map(f => `
+            <button onclick="openFileModal(${f.id})" class="inline-flex items-center gap-1.5 hover:text-amber-300 transition">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span>${f.name.split('_')[0]} ${f.name.split('_')[1] || ''}</span>
+                <span class="text-[10px] text-amber-400 font-mono">(${f.downloads.toLocaleString()} DL)</span>
+            </button>
+        `).join('<span class="text-slate-600">•</span>');
+    }
+}
+
+function renderBrands() {
+    const grid = document.getElementById("brandsGrid");
+    if (!grid) return;
+
+    grid.innerHTML = BRANDS.map(b => {
+        // Real-time count of files under this brand
+        const count = FLASH_FILES.filter(f => f.brand.toLowerCase() === b.name.toLowerCase()).length;
+        const logo = getBrandLogoSvg(b.name);
+
+        return `
+            <div onclick="selectBrand('${b.name}')" class="glass-card p-3 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.03] transition flex items-center gap-2.5 sm:gap-3 group">
+                <div class="shrink-0 group-hover:scale-105 transition">
+                    ${logo}
+                </div>
+                <div class="overflow-hidden">
+                    <h4 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition truncate">${b.name}</h4>
+                    <p class="text-[10px] text-slate-400 mt-0.5">${count} টি ফাইল</p>
+                </div>
+            </div>
+        `;
+    }).join("");
+
+    const filter = document.getElementById("adminFileBrandFilter");
+    if (filter) {
+        filter.innerHTML = `<option value="all">সকল ব্র্যান্ড</option>` + BRANDS.map(b => `<option value="${b.name}">${b.name}</option>`).join("");
+    }
+    updateDynamicCounters();
+}
+
+function renderFiles() {
+    const grid = document.getElementById("filesGrid");
+    const empty = document.getElementById("filesEmpty");
+    if (!grid) return;
+
+    let list = [...FLASH_FILES];
+
+    if (state.brand !== "all") {
+        list = list.filter(f => f.brand.toLowerCase() === state.brand.toLowerCase());
+    }
+    if (state.category !== "all") {
+        list = list.filter(f => f.category.toLowerCase() === state.category.toLowerCase());
+    }
+    if (state.access !== "all") {
+        list = list.filter(f => f.access === state.access);
+    }
+    if (state.cpu !== "all") {
+        list = list.filter(f => f.cpu.toLowerCase() === state.cpu.toLowerCase());
+    }
+    if (state.search.trim()) {
+        const q = state.search.toLowerCase();
+        list = list.filter(f => 
+            f.name.toLowerCase().includes(q) ||
+            f.brand.toLowerCase().includes(q) ||
+            (f.chipsetDetail && f.chipsetDetail.toLowerCase().includes(q))
+        );
+    }
+
+    if (state.sort === "popular") list.sort((a,b) => b.downloads - a.downloads);
+    else if (state.sort === "name") list.sort((a,b) => a.name.localeCompare(b.name));
+    else list.sort((a,b) => b.id - a.id);
+
+    if (list.length === 0) {
+        grid.innerHTML = "";
+        if (empty) empty.classList.remove("hidden");
+        return;
+    }
+
+    if (empty) empty.classList.add("hidden");
+
+    grid.innerHTML = list.map(f => {
+        const isVip = f.access === "VIP";
+        const isFree = f.access === "FREE";
+        const badgeClass = isVip ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : (isFree ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40");
+        const accessLabel = isVip ? "👑 VIP ONLY" : (isFree ? "🔓 FREE" : "⚡ FEATURED");
+
+        return `
+            <div class="glass-card rounded-2xl p-3.5 sm:p-4 border border-white/10 hover:border-cyan-400/60 transition flex flex-col justify-between group">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-[9px] px-2 py-0.5 rounded-full font-black border ${badgeClass}">${accessLabel}</span>
+                        <span class="text-[10px] text-slate-400 font-bold">${f.brand}</span>
+                    </div>
+
+                    <h4 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition break-words line-clamp-2">${f.name}</h4>
+
+                    <div class="flex flex-wrap items-center gap-1.5 mt-2.5 text-[10px] text-slate-300">
+                        <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 font-mono">CPU: ${f.cpu}</span>
+                        <span class="px-2 py-0.5 rounded-md bg-white/5 border border-white/10">📦 ${f.size}</span>
+                        <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-bold">✓ 100% CM2 OK</span>
+                    </div>
+
+                    <div class="mt-2.5 p-2 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between text-[11px]">
+                        <span class="text-slate-400">আনজিপ পাসওয়ার্ড:</span>
+                        <span class="font-mono font-bold text-amber-300">${f.zipPassword || 'No Password'}</span>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-white/10 mt-3 flex items-center gap-2">
+                    <button onclick="openFileModal(${f.id})" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-1">
+                        <span>📥</span> ডাউনলোড ও পাসওয়ার্ড
+                    </button>
+                    <button onclick="toggleUserBookmark(${f.id})" title="Save file" class="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 border border-white/10 transition">
+                        ⭐
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function renderTools() {
+    const grid = document.getElementById("toolsGrid");
+    if (!grid) return;
+
+    grid.innerHTML = FREE_TOOLS.map(t => `
+        <div class="glass-card rounded-2xl p-4 border border-white/10 hover:border-cyan-400/50 transition">
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-black border border-purple-500/30">${t.tag}</span>
+            <h4 class="font-bold text-xs sm:text-sm text-white mt-2">${t.name}</h4>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2">
+                <span>সাইজ: <strong>${t.size}</strong></span>
+                <span>ডাউনলোড: <strong>${t.downloads}</strong></span>
+            </div>
+            <a href="https://drive.google.com/" target="_blank" class="block w-full text-center py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition mt-3">
+                📥 ফ্রি ডাউনলোড
+            </a>
+        </div>
+    `).join("");
+}
+
+function renderPackages() {
+    const grid = document.getElementById("packagesGrid");
+    if (!grid) return;
+
+    grid.innerHTML = PACKAGES.map(p => {
+        const isPop = p.popular;
+        return `
+            <div class="glass-card rounded-3xl p-5 sm:p-6 border ${isPop ? 'border-amber-400/80 shadow-[0_0_30px_rgba(245,158,11,0.2)]' : 'border-white/10'} relative flex flex-col justify-between">
+                ${isPop ? '<span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-[10px] font-black uppercase tracking-wider">সবচেয়ে জনপ্রিয়</span>' : ''}
+                <div>
+                    <h3 class="text-base sm:text-lg font-black text-white">${p.name}</h3>
+                    <span class="text-xs text-amber-300 font-bold">${p.badge}</span>
+                    <div class="text-2xl sm:text-3xl font-black text-white mt-3">
+                        ${state.currency === "BDT" ? p.priceBDT : p.priceUSD}
+                        <span class="text-xs font-semibold text-slate-400">/ ${p.period}</span>
+                    </div>
+
+                    <ul class="space-y-2 text-xs text-slate-300 mt-5 pt-4 border-t border-white/10">
+                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.bandwidth}</li>
+                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.usage}</li>
+                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.ipLimit}</li>
+                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ৫-১০ GB হাই-স্পিড গুগল ড্রাইভ</li>
+                    </ul>
+                </div>
+
+                <div class="pt-6">
+                    <button onclick="openCheckoutModal('${p.name}', '${p.priceBDT}', '${p.period}')" class="w-full py-3 rounded-2xl ${isPop ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950' : 'bg-white/10 hover:bg-white/20 text-white'} font-black text-xs shadow-lg transition">
+                        বিকাশ / নগদে কিনুন
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+// ==================== 10. VISITOR FILE MODAL WITH DOWNLOAD ENFORCEMENT ====================
+function openFileModal(fileId) {
+    const file = FLASH_FILES.find(f => f.id === fileId);
+    if (!file) return;
+
+    state.activeModalFile = file;
+
+    document.getElementById("modalFileName").textContent = file.name;
+    document.getElementById("modalFileBrand").textContent = file.brand;
+    document.getElementById("modalFileCpu").textContent = file.cpu;
+    document.getElementById("modalFileSize").textContent = file.size;
+    document.getElementById("modalFileDownloads").textContent = (file.downloads || 0).toLocaleString();
+    document.getElementById("modalFileBadge").textContent = file.access;
+    document.getElementById("modalFilePasswordVal").value = file.zipPassword || "GSMRM-FREE-ROM";
+    document.getElementById("modalFileDesc").textContent = file.desc || "100% Tested verified flash file.";
+    document.getElementById("modalReadLog").textContent = file.readLog || "Log: Tested Working 100%";
+
+    document.getElementById("fileModal").classList.remove("hidden");
+}
+
+function executeFileDownload() {
+    if (!state.activeModalFile) return;
+    const file = state.activeModalFile;
+
+    if (!CURRENT_USER) {
+        if (file.access === "VIP") {
+            alert("এই ফাইলটি শুধুমাত্র VIP টেকনিশিয়ানদের জন্য! অনুগ্রহ করে VIP মেম্বারশিপ নিন বা একাউন্টে লগইন করুন।");
+            closeModal("fileModal");
+            openAuthModal();
+            return;
+        }
+    } else {
+        if (file.access === "VIP" && !CURRENT_USER.isVip) {
+            alert("এই ফাইলটি VIP মেম্বারদের জন্য সংরক্ষিত। অনুগ্রহ করে আপনার একাউন্টটি VIP আপগ্রেড করুন।");
+            closeModal("fileModal");
+            openUserDashboardModal();
+            switchUserTab("upgrade");
+            return;
+        }
+
+        if (!CURRENT_USER.isVip) {
+            if (CURRENT_USER.downloadsToday >= CURRENT_USER.dailyQuota) {
+                alert(`আপনার আজকের ফ্রি ডাউনলোড কোটা (${CURRENT_USER.dailyQuota}টি) শেষ হয়েছে! আনলিমিটেড ডাউনলোড করতে VIP আপগ্রেড করুন।`);
+                closeModal("fileModal");
+                openUserDashboardModal();
+                switchUserTab("upgrade");
+                return;
+            }
+            CURRENT_USER.downloadsToday++;
+        }
+
+        CURRENT_USER.downloadHistory = CURRENT_USER.downloadHistory || [];
+        CURRENT_USER.downloadHistory.unshift({
+            id: file.id,
+            name: file.name,
+            zipPassword: file.zipPassword,
+            date: new Date().toLocaleString()
+        });
+        saveCurrentUserData();
+    }
+
+    file.downloads = (file.downloads || 0) + 1;
+    localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+    renderTickers();
+
+    SoundFX.playSuccess();
+    window.open(file.downloadUrl || "https://drive.google.com/", "_blank");
+}
+
+// ==================== 11. FILTER CONTROLLERS ====================
+function selectBrand(brandName) {
+    state.brand = brandName;
+    renderFiles();
+    location.href = "#files";
+}
+
+function selectCategory(catName) {
+    state.category = catName;
+    renderFiles();
+    location.href = "#files";
+}
+
+function filterByAccess(acc) {
+    state.access = acc;
+    ['all', 'FREE', 'VIP', 'FEATURED'].forEach(k => {
+        const btn = document.getElementById(`accessPill-${k}`);
+        if (btn) {
+            if (k === acc) btn.className = "px-2.5 sm:px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-black transition text-xs";
+            else btn.className = "px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs";
+        }
+    });
+    renderFiles();
+}
+
+function handleCpuFilter(cpu) {
+    state.cpu = cpu;
+    renderFiles();
+}
+
+function handleSort(sort) {
+    state.sort = sort;
+    renderFiles();
+}
+
+function quickSearch(term) {
+    state.search = term;
+    const input = document.getElementById("fileSearchInput");
+    if (input) input.value = term;
+    renderFiles();
+    location.href = "#files";
+}
+
+function handleHeroSearch(e) {
+    e.preventDefault();
+    const q = document.getElementById("heroSearchInput").value.trim();
+    const cat = document.getElementById("heroCategorySelect").value;
+    state.search = q;
+    state.category = cat;
+    const input = document.getElementById("fileSearchInput");
+    if (input) input.value = q;
+    renderFiles();
+    location.href = "#files";
+}
+
+function resetFilters() {
+    state.brand = "all";
+    state.category = "all";
+    state.access = "all";
+    state.cpu = "all";
+    state.search = "";
+    const input = document.getElementById("fileSearchInput");
+    if (input) input.value = "";
+    filterByAccess('all');
+}
+
+function setBrandGroup(group) {
+    ['all', 'bd', 'global'].forEach(g => {
+        const btn = document.getElementById(`brandTab-${g}`);
+        if (btn) {
+            if (g === group) btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-cyan-500 text-slate-950 transition";
+            else btn.className = "px-3 py-1 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition";
+        }
+    });
+
+    if (group === "all") {
+        BRANDS = JSON.parse(localStorage.getItem("gsm_admin_brands")) || DEFAULT_BRANDS;
+    } else {
+        const all = JSON.parse(localStorage.getItem("gsm_admin_brands")) || DEFAULT_BRANDS;
+        BRANDS = all.filter(b => b.group === group);
+    }
+    renderBrands();
+}
+
+// ==================== 12. CHECKOUT & REQUESTS ====================
+function openCheckoutModal(name, price, period) {
+    document.getElementById("checkoutPkgTitle").textContent = name;
+    document.getElementById("checkoutPkgPrice").textContent = `${price} / ${period}`;
+    document.getElementById("checkoutBkashNum").textContent = PAYMENT_SETTINGS.bkash;
+    document.getElementById("checkoutNagadNum").textContent = PAYMENT_SETTINGS.nagad;
+    document.getElementById("checkoutModal").classList.remove("hidden");
+}
+
+function submitPackageOrder(e) {
+    e.preventDefault();
+    const name = document.getElementById("checkoutCustomerName").value.trim();
+    const phone = document.getElementById("checkoutSenderPhone").value.trim();
+    const trx = document.getElementById("checkoutTrxId").value.trim();
+    const pkg = document.getElementById("checkoutPkgTitle").textContent;
+
+    CUSTOMER_ORDERS.unshift({
+        id: "ORD-" + Date.now().toString().slice(-5),
+        userName: name,
+        userPhone: phone,
+        package: pkg,
+        senderPhone: phone,
+        trxId: trx,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+    closeModal("checkoutModal");
+    SoundFX.playSuccess();
+    alert("আপনার অর্ডার সফলভাবে গৃহীত হয়েছে! এডমিন দ্রুত ভেরিফাই করে একাউন্ট সচল করে দেবে।");
+}
+
+function openRequestModal() {
+    document.getElementById("requestModal").classList.remove("hidden");
+}
+
+function submitFileRequest(e) {
+    e.preventDefault();
+    const model = document.getElementById("reqModel").value.trim();
+    const cpu = document.getElementById("reqCpu").value.trim();
+    const phone = document.getElementById("reqPhone").value.trim();
+    const desc = document.getElementById("reqDesc").value.trim();
+
+    CUSTOMER_REQUESTS.unshift({
+        id: "REQ-" + Date.now().toString().slice(-4),
+        userName: phone,
+        userPhone: phone,
+        brand: model,
+        cpu: cpu,
+        desc: desc,
+        status: "Pending",
+        date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("gsm_customer_requests", JSON.stringify(CUSTOMER_REQUESTS));
+    closeModal("requestModal");
+    SoundFX.playSuccess();
+    alert("আপনার ফাইল রিকোয়েস্ট সফলভাবে জমা হয়েছে। আমাদের টেকনিশিয়ান টিম দ্রুত এটি আপলোড করবে।");
+}
+
+// ==================== 13. SECRET ADMIN HANDLERS ====================
+let secretClickCount = 0;
+let secretClickTimer = null;
+
+function handleSecretAdminClick() {
+    secretClickCount++;
+    clearTimeout(secretClickTimer);
+    secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 1200);
+
+    if (secretClickCount >= 3) {
+        secretClickCount = 0;
+        if (isAdminLoggedIn) openAdminDashboard();
+        else openAdminLogin();
+    }
+}
+
+function openAdminLogin() {
+    document.getElementById("adminLoginError").classList.add("hidden");
+    document.getElementById("adminLoginModal").classList.remove("hidden");
+}
+
+function handleAdminLogin(e) {
+    e.preventDefault();
+    const u = document.getElementById("adminLoginUser").value.trim();
+    const p = document.getElementById("adminLoginPass").value.trim();
+    const err = document.getElementById("adminLoginError");
+
+    if (u === ADMIN_SETTINGS.adminUser && p === ADMIN_SETTINGS.adminPass) {
+        isAdminLoggedIn = true;
+        sessionStorage.setItem("gsm_admin_logged", "true");
+        closeModal("adminLoginModal");
+        SoundFX.playSuccess();
+        openAdminDashboard();
+    } else {
+        err.textContent = "ভুল এডমিন ইউজারনেম বা মাস্টার পাসওয়ার্ড!";
+        err.classList.remove("hidden");
+    }
+}
+
+function openAdminDashboard() {
+    refreshAllAdminViews();
+    switchAdminTab("overview");
+    document.getElementById("adminDashboardModal").classList.remove("hidden");
+}
+
+function closeAdminDashboard() {
+    document.getElementById("adminDashboardModal").classList.add("hidden");
+}
+
+function logoutAdmin() {
+    isAdminLoggedIn = false;
+    sessionStorage.removeItem("gsm_admin_logged");
+    closeAdminDashboard();
+    alert("এডমিন প্যানেল থেকে সফলভাবে লগআউট হয়েছেন।");
+}
+
+function switchAdminTab(tabName) {
+    const tabs = ['overview', 'users', 'files', 'brands', 'orders', 'payments', 'packages', 'settings'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`adminTabBtn-${t}`);
+        const panel = document.getElementById(`adminTab-${t}`);
+        if (t === tabName) {
+            if (btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition whitespace-nowrap";
+            if (panel) panel.classList.remove("hidden");
+        } else {
+            if (btn) btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap";
+            if (panel) panel.classList.add("hidden");
+        }
+    });
+
+    if (tabName === "users") renderAdminUsersTable();
+    else if (tabName === "files") renderAdminFilesTable();
+    else if (tabName === "brands") renderAdminBrands();
+    else if (tabName === "orders") renderAdminOrders();
+    else if (tabName === "payments") renderAdminPayments();
+    else if (tabName === "packages") renderAdminPackages();
+    else if (tabName === "settings") renderAdminSettings();
+}
+
+function refreshAllAdminViews() {
+    document.getElementById("adminFilesCountHeader").textContent = FLASH_FILES.length;
+    document.getElementById("adminFilesCountBadge").textContent = FLASH_FILES.length;
+    document.getElementById("adminOverviewUsersCount").textContent = USERS.length;
+    document.getElementById("adminUsersCountBadge").textContent = USERS.length;
+    document.getElementById("adminOrdersCount").textContent = CUSTOMER_ORDERS.length;
+    document.getElementById("adminPendingOrdersBadge").textContent = CUSTOMER_ORDERS.filter(o => o.status === "Pending").length;
+    document.getElementById("adminRequestsCount").textContent = CUSTOMER_REQUESTS.length;
+    document.getElementById("adminBrandsCountBadge").textContent = BRANDS.length;
+
+    document.getElementById("adminOverviewBkash").textContent = PAYMENT_SETTINGS.bkash;
+    document.getElementById("adminOverviewNagad").textContent = PAYMENT_SETTINGS.nagad;
+    document.getElementById("adminOverviewWhatsapp").textContent = PAYMENT_SETTINGS.whatsappDisplay;
+}
+
+// ==================== 14. ADMIN: A TO Z USER MANAGEMENT ====================
+function renderAdminUsersTable() {
+    const tbody = document.getElementById("adminUsersTableBody");
+    if (!tbody) return;
+
+    const q = (document.getElementById("adminUserSearchInput")?.value || "").toLowerCase();
+    const planFilter = document.getElementById("adminUserFilterPlan")?.value || "all";
+
+    document.getElementById("adminStatTotalUsers").textContent = USERS.length;
+    document.getElementById("adminStatVipUsers").textContent = USERS.filter(u => u.isVip).length;
+    document.getElementById("adminStatFreeUsers").textContent = USERS.filter(u => !u.isVip).length;
+    document.getElementById("adminStatBlockedUsers").textContent = USERS.filter(u => u.status === "blocked").length;
+
+    let list = [...USERS];
+
+    if (planFilter === "vip") list = list.filter(u => u.isVip);
+    else if (planFilter === "free") list = list.filter(u => !u.isVip);
+    else if (planFilter === "blocked") list = list.filter(u => u.status === "blocked");
+
+    if (q) {
+        list = list.filter(u => 
+            u.name.toLowerCase().includes(q) ||
+            u.phone.toLowerCase().includes(q) ||
+            (u.shop && u.shop.toLowerCase().includes(q))
+        );
+    }
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">কোনো টেকনিশিয়ান পাওয়া যায়নি।</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = list.map(u => {
+        const isVip = u.isVip;
+        const isBlocked = u.status === "blocked";
+
+        return `
+            <tr class="hover:bg-white/5 transition">
+                <td class="p-3.5">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl ${isVip ? 'bg-amber-500/20 text-amber-300' : 'bg-cyan-500/20 text-cyan-300'} flex items-center justify-center font-black text-xs">
+                            ${isVip ? '👑' : '👤'}
+                        </div>
+                        <div>
+                            <div class="font-bold text-white">${u.name}</div>
+                            <div class="text-[10px] text-slate-400">${u.shop || 'Shop'} • ID: ${u.id}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-3.5 font-mono text-white">${u.phone}</td>
+                <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${isVip ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-slate-700 text-slate-300'}">
+                        ${u.plan}
+                    </span>
+                    <div class="text-[10px] text-slate-400 mt-0.5">মেয়াদ: ${u.expiryDate}</div>
+                </td>
+                <td class="p-3.5">
+                    <span class="font-bold text-white">${u.dailyQuota >= 999 ? '♾️ আনলিমিটেড' : u.dailyQuota + ' / দিন'}</span>
+                    <div class="text-[10px] text-slate-400">ডাউনলোড: ${u.downloadsToday || 0} টি</div>
+                </td>
+                <td class="p-3.5">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isBlocked ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}">
+                        ${isBlocked ? '🔴 ব্লকড' : '🟢 সচল'}
+                    </span>
+                </td>
+                <td class="p-3.5 text-right space-x-1">
+                    <button onclick="openMakeVipModal('${u.id}')" title="Make VIP / Change Plan" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-[11px] font-bold transition">
+                        👑 ভিআইপি
+                    </button>
+                    <button onclick="adminChangeUserQuota('${u.id}')" title="Change Daily Limit" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 text-[11px] font-bold transition">
+                        ⚡ কোটা
+                    </button>
+                    <button onclick="adminChangeUserPassword('${u.id}')" title="View / Reset Password" class="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-[11px] font-bold transition">
+                        🔑
+                    </button>
+                    <button onclick="adminToggleBlockUser('${u.id}')" title="${isBlocked ? 'Unblock User' : 'Block User'}" class="px-2 py-1 rounded-lg ${isBlocked ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} text-[11px] font-bold transition">
+                        ${isBlocked ? 'আনব্লক' : 'ব্লক'}
+                    </button>
+                    <button onclick="adminDeleteUser('${u.id}')" title="Delete User" class="px-2 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 text-[11px] font-bold transition">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join("");
+}
+
+function openAdminAddUserModal(userId = null) {
+    const title = document.getElementById("adminUserModalTitle");
+    const editId = document.getElementById("adminUserEditId");
+
+    if (userId) {
+        const u = USERS.find(x => x.id === userId);
+        if (!u) return;
+        title.textContent = "টেকনিশিয়ান তথ্য এডিট করুন";
+        editId.value = u.id;
+        document.getElementById("adminUserNameInput").value = u.name;
+        document.getElementById("adminUserShopInput").value = u.shop || "";
+        document.getElementById("adminUserPhoneInput").value = u.phone;
+        document.getElementById("adminUserPassInput").value = u.password;
+        document.getElementById("adminUserPlanSelect").value = u.plan;
+        document.getElementById("adminUserQuotaSelect").value = u.dailyQuota;
+        document.getElementById("adminUserExpiryInput").value = u.expiryDate !== "N/A" ? u.expiryDate : "2027-12-31";
+    } else {
+        title.textContent = "নতুন টেকনিশিয়ান যোগ করুন";
+        editId.value = "";
+        document.getElementById("adminUserNameInput").value = "";
+        document.getElementById("adminUserShopInput").value = "";
+        document.getElementById("adminUserPhoneInput").value = "";
+        document.getElementById("adminUserPassInput").value = "123456";
+        document.getElementById("adminUserPlanSelect").value = "VIP Platinum";
+        document.getElementById("adminUserQuotaSelect").value = "999";
+        document.getElementById("adminUserExpiryInput").value = "2027-12-31";
+    }
+
+    document.getElementById("adminUserEditorModal").classList.remove("hidden");
+}
+
+function saveAdminUser(e) {
+    e.preventDefault();
+    const editId = document.getElementById("adminUserEditId").value;
+    const name = document.getElementById("adminUserNameInput").value.trim();
+    const shop = document.getElementById("adminUserShopInput").value.trim();
+    const phone = document.getElementById("adminUserPhoneInput").value.trim();
+    const pass = document.getElementById("adminUserPassInput").value.trim();
+    const plan = document.getElementById("adminUserPlanSelect").value;
+    const quota = parseInt(document.getElementById("adminUserQuotaSelect").value, 10);
+    const expiry = document.getElementById("adminUserExpiryInput").value;
+    const isVip = plan.includes("VIP");
+
+    if (editId) {
+        const idx = USERS.findIndex(u => u.id === editId);
+        if (idx > -1) {
+            USERS[idx].name = name;
+            USERS[idx].shop = shop;
+            USERS[idx].phone = phone;
+            USERS[idx].password = pass;
+            USERS[idx].plan = plan;
+            USERS[idx].isVip = isVip;
+            USERS[idx].dailyQuota = quota;
+            USERS[idx].expiryDate = isVip ? expiry : "N/A";
+
+            if (CURRENT_USER && CURRENT_USER.id === editId) {
+                CURRENT_USER = USERS[idx];
+                localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+                updateUserUI();
+            }
+        }
+    } else {
+        const newUser = {
+            id: "USR-" + (USERS.length + 101),
+            name: name,
+            shop: shop,
+            phone: phone,
+            password: pass,
+            role: "user",
+            plan: plan,
+            isVip: isVip,
+            expiryDate: isVip ? expiry : "N/A",
+            dailyQuota: quota,
+            downloadsToday: 0,
+            lastDownloadDate: new Date().toISOString().split("T")[0],
+            status: "active",
+            createdAt: new Date().toISOString().split("T")[0],
+            downloadHistory: [],
+            bookmarks: []
+        };
+        USERS.unshift(newUser);
+    }
+
+    localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+    closeModal("adminUserEditorModal");
+    SoundFX.playSuccess();
+    renderAdminUsersTable();
+    refreshAllAdminViews();
+}
+
+function openMakeVipModal(userId) {
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    document.getElementById("makeVipTargetUserId").value = user.id;
+    document.getElementById("makeVipTargetUserInfo").textContent = `ইউজার: ${user.name} (${user.phone}) | বর্তমান প্ল্যান: ${user.plan}`;
+    document.getElementById("adminMakeVipModal").classList.remove("hidden");
+}
+
+function handleConfirmMakeVip(e) {
+    e.preventDefault();
+    const userId = document.getElementById("makeVipTargetUserId").value;
+    const planChoice = document.getElementById("makeVipPlanSelect").value;
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    if (planChoice === "REVOKE_FREE") {
+        user.plan = "Free";
+        user.isVip = false;
+        user.dailyQuota = 5;
+        user.expiryDate = "N/A";
+        alert(`${user.name}-এর VIP মেম্বারশিপ বাতিল করে সাধারণ ফ্রি একাউন্ট করা হয়েছে।`);
+    } else {
+        user.plan = planChoice;
+        user.isVip = true;
+        user.dailyQuota = 999;
+        user.expiryDate = "2027-12-31";
+        user.status = "active";
+        alert(`অভিনন্দন! ${user.name}-কে সফলভাবে ${planChoice} প্রদান করা হয়েছে।`);
+    }
+
+    if (CURRENT_USER && CURRENT_USER.id === userId) {
+        CURRENT_USER = user;
+        localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+        updateUserUI();
+    }
+
+    localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+    closeModal("adminMakeVipModal");
+    SoundFX.playSuccess();
+    renderAdminUsersTable();
+    refreshAllAdminViews();
+}
+
+function adminChangeUserQuota(userId) {
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    const val = prompt(`${user.name}-এর দৈনিক ডাউনলোড লিমিট সেট করুন (যেমন: 5, 10, 20 বা 999 আনলিমিটেড):`, user.dailyQuota);
+    if (val !== null && !isNaN(val)) {
+        user.dailyQuota = parseInt(val, 10);
+        if (CURRENT_USER && CURRENT_USER.id === userId) {
+            CURRENT_USER = user;
+            localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+            updateUserUI();
+        }
+        localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+        renderAdminUsersTable();
+        SoundFX.playSuccess();
+    }
+}
+
+function adminChangeUserPassword(userId) {
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    const newPass = prompt(`${user.name}-এর বর্তমান পাসওয়ার্ড: [ ${user.password} ]\\nনতুন পাসওয়ার্ড দিন:`, user.password);
+    if (newPass && newPass.trim()) {
+        user.password = newPass.trim();
+        if (CURRENT_USER && CURRENT_USER.id === userId) {
+            CURRENT_USER = user;
+            localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+        }
+        localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+        alert("পাসওয়ার্ড সফলভাবে আপডেট হয়েছে!");
+        renderAdminUsersTable();
+    }
+}
+
+function adminToggleBlockUser(userId) {
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    user.status = user.status === "blocked" ? "active" : "blocked";
+    if (CURRENT_USER && CURRENT_USER.id === userId) {
+        CURRENT_USER = user;
+        localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+        updateUserUI();
+    }
+    localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+    renderAdminUsersTable();
+    SoundFX.playClick();
+}
+
+function adminDeleteUser(userId) {
+    const user = USERS.find(u => u.id === userId);
+    if (!user) return;
+
+    if (confirm(`আপনি কি নিশ্চিত যে [ ${user.name} ] ইউজার একাউন্টটি স্থায়ীভাবে ডিলিট করতে চান?`)) {
+        USERS = USERS.filter(u => u.id !== userId);
+        localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+        if (CURRENT_USER && CURRENT_USER.id === userId) {
+            handleUserLogout();
+        }
+        renderAdminUsersTable();
+        refreshAllAdminViews();
+        SoundFX.playClick();
+    }
+}
+
+// ==================== 15. ADMIN: 5GB-10GB LARGE FILES CRUD + PASSWORDS ====================
+function renderAdminFilesTable() {
+    const tbody = document.getElementById("adminFilesTableBody");
+    if (!tbody) return;
+
+    const q = (document.getElementById("adminFileSearch")?.value || "").toLowerCase();
+    const brand = document.getElementById("adminFileBrandFilter")?.value || "all";
+    const access = document.getElementById("adminFileAccessFilter")?.value || "all";
+
+    let list = [...FLASH_FILES];
+
+    if (brand !== "all") list = list.filter(f => f.brand.toLowerCase() === brand.toLowerCase());
+    if (access !== "all") list = list.filter(f => f.access === access);
+    if (q) list = list.filter(f => f.name.toLowerCase().includes(q) || f.brand.toLowerCase().includes(q));
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">কোনো ফাইল পাওয়া যায়নি।</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = list.map(f => `
+        <tr class="hover:bg-white/5 transition">
+            <td class="p-3.5">
+                <div class="font-bold text-white max-w-xs truncate">${f.name}</div>
+                <div class="text-[10px] text-slate-400">ID: ${f.id} • ${f.date}</div>
+            </td>
+            <td class="p-3.5">
+                <span class="font-bold text-cyan-300">${f.brand}</span>
+                <div class="text-[10px] text-slate-400">${f.category}</div>
+            </td>
+            <td class="p-3.5 font-mono text-slate-300">${f.cpu}</td>
+            <td class="p-3.5 font-bold text-emerald-400">${f.size}</td>
+            <td class="p-3.5">
+                <span class="px-2 py-1 rounded-md bg-amber-500/10 text-amber-300 font-mono font-bold border border-amber-500/30">
+                    ${f.zipPassword || 'No Pass'}
+                </span>
+            </td>
+            <td class="p-3.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${f.access === 'VIP' ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
+                    ${f.access}
+                </span>
+            </td>
+            <td class="p-3.5 text-right space-x-1">
+                <button onclick="openFileEditorModal(${f.id})" class="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 text-xs font-bold hover:bg-cyan-500/30 transition">এডিট</button>
+                <button onclick="deleteFlashFile(${f.id})" class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs font-bold hover:bg-rose-500/30 transition">মুছুন</button>
+            </td>
+        </tr>
+    `).join("");
+}
+
+function generateRandomZipPassword() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    const pass = `GSMRM-${code}`;
+    const inp = document.getElementById("editFileZipPassword");
+    if (inp) inp.value = pass;
+    return pass;
+}
+
+function copyZipPasswordFromInput() {
+    const inp = document.getElementById("editFileZipPassword");
+    if (inp) copyText(inp.value, "ZIP পাসওয়ার্ড");
+}
+
+function handleZipFileSelect(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    let sizeStr = "";
+    const bytes = file.size;
+    if (bytes < 1024 * 1024) sizeStr = (bytes / 1024).toFixed(1) + " KB";
+    else if (bytes < 1024 * 1024 * 1024) sizeStr = (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    else sizeStr = (bytes / (1024 * 1024 * 1024)).toFixed(2) + " GB";
+
+    document.getElementById("editFileName").value = file.name;
+    document.getElementById("editFileSize").value = sizeStr;
+    generateRandomZipPassword();
+}
+
+function openFileEditorModal(fileId = null) {
+    const title = document.getElementById("fileEditorTitle");
+    const editId = document.getElementById("editFileId");
+    const brandSel = document.getElementById("editFileBrand");
+
+    brandSel.innerHTML = BRANDS.map(b => `<option value="${b.name}">${b.name}</option>`).join("");
+
+    if (fileId) {
+        const file = FLASH_FILES.find(f => f.id === fileId);
+        if (!file) return;
+        title.textContent = "ফাইল এডিট করুন (৫-১০ GB সাপোর্ট)";
+        editId.value = file.id;
+        document.getElementById("editFileName").value = file.name;
+        document.getElementById("editFileZipPassword").value = file.zipPassword || generateRandomZipPassword();
+        brandSel.value = file.brand;
+        document.getElementById("editFileCategory").value = file.category;
+        document.getElementById("editFileCpu").value = file.cpu;
+        document.getElementById("editFileSize").value = file.size;
+        document.getElementById("editFileAccess").value = file.access;
+        document.getElementById("editFileDownloadUrl").value = file.downloadUrl;
+        document.getElementById("editFileDesc").value = file.desc || "";
+        document.getElementById("editFileReadLog").value = file.readLog || "";
+    } else {
+        title.textContent = "নতুন ফাইল আপলোড করুন (৫-১০ GB সাপোর্ট)";
+        editId.value = "";
+        document.getElementById("editFileName").value = "";
+        generateRandomZipPassword();
+        document.getElementById("editFileSize").value = "";
+        document.getElementById("editFileDownloadUrl").value = "https://drive.google.com/";
+        document.getElementById("editFileDesc").value = "100% CM2 / Verified Tested firmware.";
+        document.getElementById("editFileReadLog").value = "Phone found! Sync Ok\\nStatus: 100% Tested OK";
+    }
+
+    document.getElementById("fileEditorModal").classList.remove("hidden");
+}
+
+function saveFlashFile(e) {
+    e.preventDefault();
+    const editId = document.getElementById("editFileId").value;
+    const name = document.getElementById("editFileName").value.trim();
+    const zipPass = document.getElementById("editFileZipPassword").value.trim();
+    const brand = document.getElementById("editFileBrand").value;
+    const category = document.getElementById("editFileCategory").value;
+    const cpu = document.getElementById("editFileCpu").value;
+    const size = document.getElementById("editFileSize").value.trim();
+    const access = document.getElementById("editFileAccess").value;
+    const downloadUrl = document.getElementById("editFileDownloadUrl").value.trim();
+    const desc = document.getElementById("editFileDesc").value.trim();
+    const readLog = document.getElementById("editFileReadLog").value.trim();
+
+    if (editId) {
+        const idx = FLASH_FILES.findIndex(f => f.id === parseInt(editId, 10));
+        if (idx > -1) {
+            FLASH_FILES[idx] = {
+                ...FLASH_FILES[idx],
+                name, zipPassword: zipPass, brand, category, cpu, size, access, downloadUrl, desc, readLog
+            };
+        }
+    } else {
+        const newFile = {
+            id: Date.now(),
+            name, zipPassword: zipPass, brand, category, cpu, size, access, downloadUrl, desc, readLog,
+            downloads: 0,
+            date: new Date().toISOString().split("T")[0]
+        };
+        FLASH_FILES.unshift(newFile);
+    }
+
+    localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+    closeModal("fileEditorModal");
+    SoundFX.playSuccess();
+    renderBrands();
+    renderFiles();
+    renderTickers();
+    renderAdminFilesTable();
+    refreshAllAdminViews();
+}
+
+function deleteFlashFile(fileId) {
+    if (confirm("আপনি কি নিশ্চিত যে এই ফাইলটি মুছে ফেলতে চান?")) {
+        FLASH_FILES = FLASH_FILES.filter(f => f.id !== fileId);
+        localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+        renderBrands();
+        renderFiles();
+        renderTickers();
+        renderAdminFilesTable();
+        refreshAllAdminViews();
+        SoundFX.playClick();
+    }
+}
+
+function clearAllFlashFiles() {
+    if (confirm("⚠️ সাবধান! আপনি কি এডমিন প্যানেল থেকে সমস্ত ফাইল একবারে মুছে ফেলতে চান?\\n\\nএটি করলে ওয়েবসাইটের সব ফ্ল্যাশ ফাইল খালি হয়ে যাবে এবং কাউন্ট ০ হয়ে যাবে!")) {
+        FLASH_FILES = [];
+        localStorage.setItem("gsm_admin_files", "[]");
+        renderBrands();
+        renderFiles();
+        renderTickers();
+        renderAdminFilesTable();
+        refreshAllAdminViews();
+        SoundFX.playClick();
+        alert("সকল ফ্ল্যাশ ফাইল সফলভাবে রিমুভ করা হয়েছে!");
+    }
+}
+
+// ==================== 16. ADMIN BRANDS ====================
+function renderAdminBrands() {
+    const grid = document.getElementById("adminBrandsGrid");
+    if (!grid) return;
+
+    grid.innerHTML = BRANDS.map(b => {
+        const count = FLASH_FILES.filter(f => f.brand.toLowerCase() === b.name.toLowerCase()).length;
+        return `
+            <div class="glass-card p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-white text-xs">${b.name}</h4>
+                    <span class="text-[10px] text-slate-400">${count} টি ফাইল</span>
+                </div>
+                <button onclick="deleteBrand('${b.name}')" class="text-rose-400 hover:text-rose-300 text-xs">✕</button>
+            </div>
+        `;
+    }).join("");
+}
+
+function openBrandEditorModal() {
+    document.getElementById("brandEditName").value = "";
+    document.getElementById("brandEditorModal").classList.remove("hidden");
+}
+
+function saveBrand(e) {
+    e.preventDefault();
+    const name = document.getElementById("brandEditName").value.trim();
+    const group = document.getElementById("brandEditGroup").value;
+
+    BRANDS.push({
+        name: name,
+        group: group
+    });
+
+    localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS));
+    closeModal("brandEditorModal");
+    SoundFX.playSuccess();
+    renderBrands();
+    renderAdminBrands();
+    refreshAllAdminViews();
+}
+
+function deleteBrand(name) {
+    if (confirm(`আপনি কি [ ${name} ] ব্র্যান্ডটি মুছে ফেলতে চান?`)) {
+        BRANDS = BRANDS.filter(b => b.name !== name);
+        localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS));
+        renderBrands();
+        renderAdminBrands();
+        refreshAllAdminViews();
+    }
+}
+
+// ==================== 17. ADMIN ORDERS & REQUESTS ====================
+function renderAdminOrders() {
+    const container = document.getElementById("adminOrdersList");
+    if (!container) return;
+
+    if (CUSTOMER_ORDERS.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-slate-400">কোনো অপেক্ষারত অর্ডার নেই।</div>`;
+        return;
+    }
+
+    container.innerHTML = CUSTOMER_ORDERS.map((o, idx) => `
+        <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-white">${o.userName}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full ${o.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'} font-bold">${o.status}</span>
+                </div>
+                <div class="text-[11px] text-slate-300 mt-1">প্যাকেজ: <strong>${o.package}</strong> • মোবাইল: <strong>${o.senderPhone}</strong></div>
+                <div class="text-[10px] text-amber-300 font-mono mt-0.5">TrxID: ${o.trxId} • ${o.date}</div>
+            </div>
+            <div class="flex items-center gap-2">
+                ${o.status === 'Pending' ? `
+                    <button onclick="approveOrder(${idx})" class="px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black">অনুমোদন (Approve VIP)</button>
+                ` : ''}
+                <button onclick="deleteOrder(${idx})" class="text-rose-400 hover:underline text-xs">মুছুন</button>
+            </div>
+        </div>
+    `).join("");
+}
+
+function approveOrder(idx) {
+    const o = CUSTOMER_ORDERS[idx];
+    if (!o) return;
+
+    o.status = "Approved";
+
+    const user = USERS.find(u => u.phone === o.senderPhone || u.phone === o.userPhone);
+    if (user) {
+        user.isVip = true;
+        user.plan = o.package.split('(')[0].trim() || "VIP Platinum";
+        user.dailyQuota = 999;
+        user.expiryDate = "2027-12-31";
+        localStorage.setItem("gsmrm_users", JSON.stringify(USERS));
+
+        if (CURRENT_USER && CURRENT_USER.id === user.id) {
+            CURRENT_USER = user;
+            localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
+            updateUserUI();
+        }
+    }
+
+    localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+    SoundFX.playSuccess();
+    alert(`অর্ডার অনুমোদিত হয়েছে এবং ${user ? user.name : 'ইউজার'}কে VIP সুবিধা প্রদান করা হয়েছে!`);
+    renderAdminOrders();
+    refreshAllAdminViews();
+}
+
+function deleteOrder(idx) {
+    CUSTOMER_ORDERS.splice(idx, 1);
+    localStorage.setItem("gsm_customer_orders", JSON.stringify(CUSTOMER_ORDERS));
+    renderAdminOrders();
+    refreshAllAdminViews();
+}
+
+function clearAllOrders() {
+    if (confirm("সব অর্ডার মুছে ফেলতে চান?")) {
+        CUSTOMER_ORDERS = [];
+        localStorage.setItem("gsm_customer_orders", "[]");
+        renderAdminOrders();
+        refreshAllAdminViews();
+    }
+}
+
+// ==================== 18. ADMIN PAYMENTS & SETTINGS ====================
+function renderAdminPayments() {
+    document.getElementById("adminPayBkash").value = PAYMENT_SETTINGS.bkash;
+    document.getElementById("adminPayNagad").value = PAYMENT_SETTINGS.nagad;
+    document.getElementById("adminPayRocket").value = PAYMENT_SETTINGS.rocket;
+    document.getElementById("adminPayWhatsapp").value = PAYMENT_SETTINGS.whatsapp;
+    document.getElementById("adminPayWhatsappDisplay").value = PAYMENT_SETTINGS.whatsappDisplay;
+    document.getElementById("adminPayTelegram").value = PAYMENT_SETTINGS.telegram;
+    document.getElementById("adminPayBinance").value = PAYMENT_SETTINGS.binance;
+}
+
+function saveAdminPayments(e) {
+    e.preventDefault();
+    PAYMENT_SETTINGS = {
+        bkash: document.getElementById("adminPayBkash").value.trim(),
+        nagad: document.getElementById("adminPayNagad").value.trim(),
+        rocket: document.getElementById("adminPayRocket").value.trim(),
+        whatsapp: document.getElementById("adminPayWhatsapp").value.trim(),
+        whatsappDisplay: document.getElementById("adminPayWhatsappDisplay").value.trim(),
+        telegram: document.getElementById("adminPayTelegram").value.trim(),
+        binance: document.getElementById("adminPayBinance").value.trim()
+    };
+    localStorage.setItem("gsm_admin_payments", JSON.stringify(PAYMENT_SETTINGS));
+    applyPaymentSettings();
+    SoundFX.playSuccess();
+    alert("পেমেন্ট নম্বরসমূহ সফলভাবে আপডেট করা হয়েছে!");
+    refreshAllAdminViews();
+}
+
+function applyPaymentSettings() {
+    const fWa = document.getElementById("footerWhatsappLink");
+    const fTg = document.getElementById("footerTelegramLink");
+    if (fWa) fWa.href = `https://wa.me/${PAYMENT_SETTINGS.whatsapp}`;
+    if (fTg) fTg.href = PAYMENT_SETTINGS.telegram;
+}
+
+function renderAdminPackages() {
+    const container = document.getElementById("adminPackagesList");
+    if (!container) return;
+
+    container.innerHTML = PACKAGES.map((p, idx) => `
+        <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between gap-3 text-xs">
+            <div>
+                <h4 class="font-bold text-white">${p.name}</h4>
+                <span class="text-slate-400">প্রাইস: ${p.priceBDT} • মেয়াদ: ${p.period}</span>
+            </div>
+            <button onclick="editPackagePrice(${idx})" class="px-3 py-1 rounded-xl bg-cyan-500/20 text-cyan-300 font-bold hover:bg-cyan-500/30 transition">প্রাইস চেঞ্জ</button>
+        </div>
+    `).join("");
+}
+
+function editPackagePrice(idx) {
+    const p = PACKAGES[idx];
+    const newPrice = prompt(`${p.name}-এর নতুন প্রাইস (BDT) দিন:`, p.priceBDT);
+    if (newPrice && newPrice.trim()) {
+        p.priceBDT = newPrice.trim();
+        localStorage.setItem("gsm_admin_packages", JSON.stringify(PACKAGES));
+        renderPackages();
+        renderAdminPackages();
+    }
+}
+
+function renderAdminSettings() {
+    document.getElementById("adminSetUser").value = ADMIN_SETTINGS.adminUser;
+    document.getElementById("adminSetPass").value = ADMIN_SETTINGS.adminPass;
+}
+
+function saveAdminCredentials(e) {
+    e.preventDefault();
+    const u = document.getElementById("adminSetUser").value.trim();
+    const p = document.getElementById("adminSetPass").value.trim();
+
+    ADMIN_SETTINGS.adminUser = u;
+    ADMIN_SETTINGS.adminPass = p;
+    localStorage.setItem("gsm_admin_settings", JSON.stringify(ADMIN_SETTINGS));
+    SoundFX.playSuccess();
+    alert("এডমিন লগইন তথ্য সফলভাবে পরিবর্তন হয়েছে!");
+}
+
+function exportSiteData() {
+    const fullBackup = {
+        brands: BRANDS,
+        files: FLASH_FILES,
+        packages: PACKAGES,
+        payments: PAYMENT_SETTINGS,
+        settings: ADMIN_SETTINGS,
+        orders: CUSTOMER_ORDERS,
+        requests: CUSTOMER_REQUESTS,
+        users: USERS,
+        exportDate: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(fullBackup, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `GSMRM_BD_FullBackup_${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    SoundFX.playSuccess();
+}
+
+function importSiteData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const data = JSON.parse(evt.target.result);
+            if (data.files) localStorage.setItem("gsm_admin_files", JSON.stringify(data.files));
+            if (data.brands) localStorage.setItem("gsm_admin_brands", JSON.stringify(data.brands));
+            if (data.packages) localStorage.setItem("gsm_admin_packages", JSON.stringify(data.packages));
+            if (data.payments) localStorage.setItem("gsm_admin_payments", JSON.stringify(data.payments));
+            if (data.settings) localStorage.setItem("gsm_admin_settings", JSON.stringify(data.settings));
+            if (data.users) localStorage.setItem("gsmrm_users", JSON.stringify(data.users));
+            alert("ব্যাকআপ সফলভাবে রিস্টোর হয়েছে! পেইজ রিলোড হচ্ছে...");
+            location.reload();
+        } catch(err) {
+            alert("অবৈধ ব্যাকআপ ফাইল!");
+        }
+    };
+    reader.readAsText(file);
+}
+
+function resetSiteDefaults() {
+    if (confirm("⚠️ আপনি কি ফ্যাক্টরি ডিফল্ট ডাটা রিস্টোর করতে চান? সব বর্তমান কাস্টম ডাটা মুছে যাবে!")) {
+        localStorage.clear();
+        alert("সাইট সফলভাবে ডিফল্ট অবস্থায় ফিরে গেছে। পেইজ রিলোড হচ্ছে...");
+        location.reload();
+    }
+}
+
+// ==================== 19. UTILITY FUNCTIONS ====================
+function toggleMobileMenu() {
+    const menu = document.getElementById("mobileMenu");
+    if (menu) menu.classList.toggle("hidden");
+}
+
+function toggleLanguage() {
+    state.lang = state.lang === "bn" ? "en" : "bn";
+    localStorage.setItem("gsm_lang", state.lang);
+    const btn = document.getElementById("langToggleBtn");
+    if (btn) btn.textContent = state.lang === "bn" ? "বাংলা" : "EN";
+}
+
+function closeModal(modalId) {
+    const m = document.getElementById(modalId);
+    if (m) m.classList.add("hidden");
+}
+
+function copyText(txt, label) {
+    if (!txt) return;
+    navigator.clipboard.writeText(txt).then(() => {
+        SoundFX.playSuccess();
+        alert(`${label || 'টেক্সট'} কপি করা হয়েছে: ${txt}`);
+    }).catch(() => {
+        prompt("কপি করতে নিচের টেক্সটটি সিলেক্ট করুন:", txt);
+    });
+}
+    </script>
+</body>
+</html>
+'''
+    return html
+
+def main():
+    content = build_portal_html()
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(content)
+    with open("dh.html", "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"Generated index.html & dh.html: {len(content)} characters each.")
+
+if __name__ == "__main__":
+    main()

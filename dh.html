@@ -2,7 +2,7 @@
 <html lang="bn" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>GSMRM.BD | Bangladesh's #1 Master 3D Mobile Firmware & ROM Hub</title>
     <meta name="description" content="GSMRM.BD - 100% CM2, UnlockTool & DFT Pro tested button phone flash files, Android official stock ROMs, FRP bypass, eMMC dump files and USB drivers for BD technicians.">
     <meta name="keywords" content="GSMRM.BD, GSMRM, Symphony flash file, Walton button phone rom, 5Star MT6261, FRP bypass, eMMC dump, bKash VIP ROM, BD mobile firmware">
@@ -21,6 +21,9 @@
                     fontFamily: {
                         sans: ['"Hind Siliguri"', 'Inter', 'sans-serif'],
                         mono: ['"JetBrains Mono"', 'monospace']
+                    },
+                    screens: {
+                        'xs': '360px',
                     },
                     colors: {
                         cyber: {
@@ -44,40 +47,35 @@
 
     <!-- Custom CSS Styles -->
     <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        body {
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
             background-color: #030712;
             color: #f1f5f9;
-            overflow-x: hidden;
             touch-action: pan-y;
         }
         /* Custom Cyber Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #060d1d; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid rgba(0, 242, 254, 0.2); }
         ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
 
-        /* Glassmorphism Classes */
+        /* Glassmorphism & UI Accents */
         .glass-card {
-            background: rgba(12, 25, 51, 0.65);
+            background: rgba(12, 25, 51, 0.72);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .glass-card:hover {
             border-color: rgba(0, 242, 254, 0.35);
         }
         .glass-header {
-            background: rgba(3, 7, 18, 0.85);
+            background: rgba(3, 7, 18, 0.88);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glow-cyan {
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
-        }
-        .glow-emerald {
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -88,22 +86,22 @@
     <!-- ==================== AMBIENT 3D WEBGL CANVAS (NON-BLOCKING) ==================== -->
     <canvas id="bg3dCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0;opacity:0.65;"></canvas>
 
-    <!-- ==================== TOP PROFESSIONAL NAVIGATION BAR ==================== -->
+    <!-- ==================== TOP PROFESSIONAL RESPONSIVE NAVIGATION BAR ==================== -->
     <header class="glass-header fixed top-0 left-0 right-0 z-40 px-3 sm:px-6 py-2.5 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
             
             <!-- Logo & Brand Badge -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <a href="#home" class="flex items-center gap-2 group">
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.4)] group-hover:scale-105 transition">
-                        <span class="text-base sm:text-lg font-black text-white">RM</span>
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,242,254,0.4)] group-hover:scale-105 transition shrink-0">
+                        <span class="text-xs sm:text-base font-black text-white">RM</span>
                     </div>
                     <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">GSMRM<span class="text-cyan-400">.BD</span></span>
-                            <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-black border border-cyan-500/30">3D MASTER</span>
+                        <div class="flex items-center gap-1">
+                            <span class="font-extrabold text-sm sm:text-lg tracking-tight text-white whitespace-nowrap">GSMRM<span class="text-cyan-400">.BD</span></span>
+                            <span class="text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-black border border-cyan-500/30 whitespace-nowrap">3D MASTER</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 hidden sm:block">BD Technician Firmware Hub</p>
+                        <p class="text-[9px] sm:text-[10px] text-slate-400 hidden sm:block">BD Technician Firmware Hub</p>
                     </div>
                 </a>
             </div>
@@ -120,27 +118,27 @@
             </nav>
 
             <!-- Right Controls & User Account Center -->
-            <div class="flex items-center gap-1.5 sm:gap-2.5">
+            <div class="flex items-center gap-1.5 sm:gap-2">
                 
+                <!-- Voice Welcome Trigger Button -->
+                <button onclick="playWelcomeVoice(true)" title="Welcome Voice" class="p-1.5 sm:p-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs transition flex items-center gap-1">
+                    <span>🎙️</span>
+                    <span class="hidden md:inline text-[10px] font-bold">Voice</span>
+                </button>
+
                 <!-- Click Sound Toggle -->
-                <button id="soundToggleBtn" onclick="SoundFX.toggle()" title="Toggle Click Sound" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs transition">
+                <button id="soundToggleBtn" onclick="SoundFX.toggle()" title="Toggle Click Sound" class="p-1.5 sm:p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs transition">
                     🔊
                 </button>
 
                 <!-- Language Toggle -->
-                <button id="langToggleBtn" onclick="toggleLanguage()" class="px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-300 transition">
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="px-2 sm:px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] sm:text-xs font-bold text-slate-300 transition">
                     বাংলা
-                </button>
-
-                <!-- Currency Toggle (Desktop) -->
-                <button id="currencyToggleBtn" onclick="toggleCurrency()" class="hidden sm:inline-flex px-2.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-xs font-bold text-emerald-300 transition">
-                    ৳ BDT
                 </button>
 
                 <!-- Technician User Account Button (Dynamic State) -->
                 <div id="navUserArea">
-                    <!-- Loaded dynamically by updateUserUI() -->
-                    <button onclick="openAuthModal()" class="px-3 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1.5 transition">
+                    <button onclick="openAuthModal()" class="px-2.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-[11px] sm:text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1 transition whitespace-nowrap">
                         <span>👤</span>
                         <span class="hidden sm:inline">টেকনিশিয়ান লগইন</span>
                         <span class="sm:hidden">লগইন</span>
@@ -148,7 +146,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white">
+                <button onclick="toggleMobileMenu()" class="lg:hidden p-1.5 sm:p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
 
@@ -158,18 +156,18 @@
         <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden lg:hidden border-t border-white/10 mt-2.5 pt-3 pb-2 space-y-2">
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <a href="#home" onclick="toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">🏠 হোম (Home)</a>
-                <a href="#categories" onclick="selectCategory('Button Phone'); toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">📱 বাটন ফোন ফাইল</a>
-                <a href="#categories" onclick="selectCategory('Stock ROM'); toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">⚡ অফিসিয়াল স্টক রম</a>
-                <a href="#categories" onclick="selectCategory('FRP / MDM'); toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">🔓 এফআরপি আনলক</a>
-                <a href="#categories" onclick="selectCategory('EMMC Dump'); toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">💾 ইএমএমসি ডাম্প</a>
-                <a href="#tools" onclick="toggleMobileMenu()" class="p-2 rounded-lg bg-white/5 text-slate-200">🛠️ ড্রাইভার ও টুলস</a>
+                <a href="#home" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🏠 হোম (Home)</a>
+                <a href="#categories" onclick="selectCategory('Button Phone'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">📱 বাটন ফোন ফাইল</a>
+                <a href="#categories" onclick="selectCategory('Stock ROM'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">⚡ অফিসিয়াল স্টক রম</a>
+                <a href="#categories" onclick="selectCategory('FRP / MDM'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🔓 এফআরপি আনলক</a>
+                <a href="#categories" onclick="selectCategory('EMMC Dump'); toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">💾 ইএমএমসি ডাম্প</a>
+                <a href="#tools" onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-white/5 text-slate-200">🛠️ ড্রাইভার ও টুলস</a>
             </div>
             <div class="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
-                <a href="#pricing" onclick="toggleMobileMenu()" class="flex-1 py-2 rounded-xl bg-amber-500/20 text-amber-300 text-center text-xs font-black border border-amber-500/30">
-                    💎 ভিআইপি প্যাকেজ কিনুন
+                <a href="#pricing" onclick="toggleMobileMenu()" class="flex-1 py-2.5 rounded-xl bg-amber-500/20 text-amber-300 text-center text-xs font-black border border-amber-500/30">
+                    💎 ভিআইপি প্যাকেজ
                 </a>
-                <button onclick="openRequestModal(); toggleMobileMenu()" class="flex-1 py-2 rounded-xl bg-cyan-500/20 text-cyan-300 text-center text-xs font-black border border-cyan-500/30">
+                <button onclick="openRequestModal(); toggleMobileMenu()" class="flex-1 py-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 text-center text-xs font-black border border-cyan-500/30">
                     📩 ফাইল রিকোয়েস্ট
                 </button>
             </div>
@@ -183,67 +181,66 @@
         <section id="home" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-8 pb-8">
             
             <!-- Verified Server Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold tracking-wide mb-4 shadow-[0_0_20px_rgba(0,242,254,0.25)]">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-bold tracking-wide mb-4 shadow-[0_0_20px_rgba(0,242,254,0.25)]">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span data-i18n="hero_badge">GSMRM.BD • বাংলাদেশের #১ মোবাইল ফার্মওয়্যার ও রম পোর্টাল • ১০০% টেস্টেড</span>
             </div>
 
             <!-- Main Heading -->
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight mb-4" data-i18n="hero_title">
+            <h1 class="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight mb-3 sm:mb-4" data-i18n="hero_title">
                 GSMRM<span class="text-cyan-400">.BD</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">3D Master ROM</span> Hub
             </h1>
 
-            <p class="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto mb-6 leading-relaxed" data-i18n="hero_subtitle">
-                সিম্ফনি, ওয়ালটন, ৫স্টার বাটন ফোনের টেস্টেড ফাইল (MT6261, SC6531E), স্যামসাং, শাওমি স্টক রম, এফআরপি বাইপাস, ইএমএমসি ডাম্প ও ইউএসবি ড্রাইভার — নিমেষেই ডাউনলোড করুন বিকাশ/নগদে।
+            <p class="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl mx-auto mb-5 sm:mb-6 leading-relaxed" data-i18n="hero_subtitle">
+                সিম্ফনি, ওয়ালটন, ৫স্টার বাটন ফোনের টেস্টেড ফাইল (MT6261, SC6531E), স্যামসাং, শাওমি অফিসিয়াল রম, এফআরপি বাইপাস ও ইএমএমসি ডাম্প — ৫GB থেকে ১০GB বড় ফাইল নিমেষেই ডাউনলোড করুন।
             </p>
 
             <!-- Master Instant Search Bar -->
             <form onsubmit="handleHeroSearch(event)" class="glass-card p-2 sm:p-3 rounded-2xl sm:rounded-3xl flex flex-col sm:flex-row gap-2 max-w-3xl mx-auto border border-white/20 focus-within:border-cyan-400/80 shadow-[0_15px_40px_rgba(0,0,0,0.6)] transition">
                 <div class="relative flex-1 flex items-center">
-                    <svg class="w-5 h-5 text-cyan-400 absolute left-4 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-cyan-400 absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    <input id="heroSearchInput" type="text" placeholder="মডেল বা ফাইলের নাম লিখুন (যেমন: Symphony L46, 5Star MT6261, Redmi Note 12, A145R)..."
-                           class="w-full pl-12 pr-4 py-3 rounded-xl sm:rounded-2xl bg-transparent text-white placeholder-slate-400 focus:outline-none text-xs sm:text-sm font-medium">
+                    <input id="heroSearchInput" type="text" placeholder="মডেল বা ফাইলের নাম লিখুন (যেমন: Symphony L46, 5Star MT6261, Redmi Note 12)..."
+                           class="w-full pl-11 pr-3 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-transparent text-white placeholder-slate-400 focus:outline-none text-xs sm:text-sm font-medium">
                 </div>
-                <select id="heroCategorySelect" class="sm:w-48 px-3 py-3 rounded-xl sm:rounded-2xl bg-slate-900 text-slate-200 text-xs font-bold focus:outline-none border border-white/10">
-                    <option value="all">সকল ক্যাটাগরি (All)</option>
-                    <option value="Button Phone">বাটন ফোন (Button Phone)</option>
+                <select id="heroCategorySelect" class="sm:w-44 px-3 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-slate-900 text-slate-200 text-xs font-bold focus:outline-none border border-white/10">
+                    <option value="all">সকল ক্যাটাগরি</option>
+                    <option value="Button Phone">বাটন ফোন (Button)</option>
                     <option value="Stock ROM">অফিসিয়াল স্টক রম</option>
-                    <option value="FRP / MDM">এফআরপি ও এমডিএম আনলক</option>
-                    <option value="EMMC Dump">ইএমএমসি ও ডাম্প ফাইল</option>
+                    <option value="FRP / MDM">এফআরপি ও এমডিএম</option>
+                    <option value="EMMC Dump">ইএমএমসি ও ডাম্প</option>
                     <option value="Root">রুট / বুট ফাইল</option>
                 </select>
-                <button type="submit" class="px-6 py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(0,242,254,0.4)] transition shrink-0 flex items-center justify-center gap-1.5">
+                <button type="submit" class="px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs sm:text-sm shadow-[0_0_20px_rgba(0,242,254,0.4)] transition shrink-0 flex items-center justify-center gap-1.5">
                     <span>🔍</span>
                     <span>ফাইল খুঁজুন</span>
                 </button>
             </form>
 
             <!-- Popular Search Chips -->
-            <div class="flex flex-wrap items-center justify-center gap-2 mt-4 text-xs">
-                <span class="text-slate-400 font-semibold">জনপ্রিয় মডেল:</span>
-                <button onclick="quickSearch('Symphony')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">Symphony L46</button>
-                <button onclick="quickSearch('5Star')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">5Star MT6261</button>
-                <button onclick="quickSearch('Walton')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">Walton Olvio</button>
-                <button onclick="quickSearch('SC6531E')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">SPD SC6531E</button>
-                <button onclick="quickSearch('FRP')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">FRP Bypass</button>
-                <button onclick="quickSearch('Redmi')" class="px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition">Redmi Note 12</button>
+            <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 mt-4 text-xs">
+                <span class="text-slate-400 font-semibold text-[11px] sm:text-xs">জনপ্রিয় মডেল:</span>
+                <button onclick="quickSearch('Symphony')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Symphony L46</button>
+                <button onclick="quickSearch('5Star')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">5Star MT6261</button>
+                <button onclick="quickSearch('Walton')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Walton Olvio</button>
+                <button onclick="quickSearch('SC6531E')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">SPD SC6531E</button>
+                <button onclick="quickSearch('Redmi')" class="px-2.5 sm:px-3 py-1 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 text-slate-300 transition text-[11px]">Redmi Note 12</button>
             </div>
 
-            <!-- Bento Stats -->
-            <div class="grid grid-cols-3 gap-2.5 sm:gap-4 mt-6 max-w-lg mx-auto">
-                <div class="glass-card rounded-2xl p-3 text-center border border-white/10">
-                    <div class="text-lg sm:text-2xl font-black text-white">১৮৫,০০০+</div>
-                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">টেস্টেড রম</div>
+            <!-- Bento Stats (Dynamic Real-Time Counts) -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 max-w-lg mx-auto">
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div id="statTotalRomCount" class="text-base sm:text-2xl font-black text-white">0</div>
+                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">টেস্টেড রম ফাইল</div>
                 </div>
-                <div class="glass-card rounded-2xl p-3 text-center border border-white/10">
-                    <div class="text-lg sm:text-2xl font-black text-cyan-400">২৫,০০০+</div>
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div id="statButtonRomCount" class="text-base sm:text-2xl font-black text-cyan-400">0</div>
                     <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">বাটন ফোন ফাইল</div>
                 </div>
-                <div class="glass-card rounded-2xl p-3 text-center border border-white/10">
-                    <div class="text-lg sm:text-2xl font-black text-emerald-400">bKash</div>
-                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">তাৎক্ষণিক ভিআইপি</div>
+                <div class="glass-card rounded-2xl p-2.5 sm:p-3 text-center border border-white/10">
+                    <div class="text-base sm:text-2xl font-black text-emerald-400">৫-১০ GB</div>
+                    <div class="text-[10px] sm:text-xs text-slate-400 font-semibold">লার্জ ফাইল সাপোর্ট</div>
                 </div>
             </div>
 
@@ -251,14 +248,14 @@
 
         <!-- ==================== LIVE TICKER BAR ==================== -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-            <div class="glass-card rounded-2xl p-3 space-y-2 border border-white/10">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <span class="shrink-0 px-2.5 py-0.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[11px] font-extrabold">🕒 নতুন ফাইল</span>
-                    <div class="overflow-x-auto no-scrollbar flex items-center gap-4 text-xs whitespace-nowrap text-slate-300" id="recentTicker"></div>
+            <div class="glass-card rounded-2xl p-2.5 sm:p-3 space-y-2 border border-white/10">
+                <div class="flex items-center gap-2.5 overflow-hidden">
+                    <span class="shrink-0 px-2 py-0.5 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[10px] sm:text-[11px] font-extrabold">🕒 নতুন ফাইল</span>
+                    <div class="overflow-x-auto no-scrollbar flex items-center gap-3 text-xs whitespace-nowrap text-slate-300" id="recentTicker"></div>
                 </div>
-                <div class="flex items-center gap-3 overflow-hidden border-t border-white/5 pt-2">
-                    <span class="shrink-0 px-2.5 py-0.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-extrabold">⚡ সেরা ডাউনলোড</span>
-                    <div class="overflow-x-auto no-scrollbar flex items-center gap-4 text-xs whitespace-nowrap text-slate-300" id="topTicker"></div>
+                <div class="flex items-center gap-2.5 overflow-hidden border-t border-white/5 pt-2">
+                    <span class="shrink-0 px-2 py-0.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] sm:text-[11px] font-extrabold">⚡ সেরা ডাউনলোড</span>
+                    <div class="overflow-x-auto no-scrollbar flex items-center gap-3 text-xs whitespace-nowrap text-slate-300" id="topTicker"></div>
                 </div>
             </div>
         </div>
@@ -267,89 +264,89 @@
         <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
                         <span>📂</span>
-                        <span>ক্যাটাগরি সমূহ (Where to find what)</span>
+                        <span>ক্যাটাগরি সমূহ (Firmware Categories)</span>
                     </h2>
-                    <p class="text-xs text-slate-400">আপনার প্রয়োজনীয় ফাইল এক ক্লিকে খুঁজুন</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">প্রয়োজনীয় ফাইল এক ক্লিকে সিলেক্ট করুন</p>
                 </div>
                 <button onclick="resetFilters()" class="text-xs text-cyan-400 hover:underline font-bold">সব ফাইল দেখুন →</button>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
                 
                 <!-- Category 1: Button Phone -->
-                <div onclick="selectCategory('Button Phone')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <div onclick="selectCategory('Button Phone')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         📱
                     </div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-cyan-300 transition">বাটন ফোন ফাইল</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Symphony, Walton, 5Star</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">২৫,০০০+ ফাইল</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">বাটন ফোন ফাইল</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Symphony, Walton, 5Star</p>
+                    <span id="catBadgeButtonPhone" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">০ টি ফাইল</span>
                 </div>
 
                 <!-- Category 2: Stock ROM -->
-                <div onclick="selectCategory('Stock ROM')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <div onclick="selectCategory('Stock ROM')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         ⚡
                     </div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-cyan-300 transition">অফিসিয়াল স্টক রম</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Samsung, Xiaomi, Vivo</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-extrabold">১০০% টেস্টেড</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">অফিসিয়াল স্টক রম</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Samsung, Xiaomi, Vivo</p>
+                    <span id="catBadgeStockRom" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-extrabold">০ টি ফাইল</span>
                 </div>
 
                 <!-- Category 3: FRP / MDM -->
-                <div onclick="selectCategory('FRP / MDM')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <div onclick="selectCategory('FRP / MDM')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-rose-500 to-red-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         🔓
                     </div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-cyan-300 transition">এফআরপি ও ক্লাউড</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Mi Cloud, MDM, Knox</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-extrabold">১ ক্লিকে আনলক</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">এফআরপি ও ক্লাউড</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Mi Cloud, MDM, Knox</p>
+                    <span id="catBadgeFrp" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-extrabold">০ টি ফাইল</span>
                 </div>
 
                 <!-- Category 4: EMMC Dump -->
-                <div onclick="selectCategory('EMMC Dump')" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <div onclick="selectCategory('EMMC Dump')" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         💾
                     </div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-cyan-300 transition">ইএমএমসি ডাম্প</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Dead Boot Repair File</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">CM2 & EasyJtag</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">ইএমএমসি ডাম্প</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Dead Boot Repair File</p>
+                    <span id="catBadgeEmmc" class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">০ টি ফাইল</span>
                 </div>
 
                 <!-- Category 5: Tools & Drivers -->
-                <a href="#tools" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <a href="#tools" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         🛠️
                     </div>
-                    <h3 class="font-bold text-sm text-white group-hover:text-cyan-300 transition">ইউএসবি ড্রাইভার</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">MTK, SPD, Qualcomm</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-extrabold">১০০% ফ্রি</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">ইউএসবি ড্রাইভার</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">MTK, SPD, Qualcomm</p>
+                    <span class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-extrabold">১০০% ফ্রি</span>
                 </a>
 
                 <!-- Category 6: VIP Membership -->
-                <a href="#pricing" class="glass-card p-4 rounded-2xl cursor-pointer hover:border-amber-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block border-amber-500/30">
-                    <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-2xl shadow-lg mb-2.5 group-hover:rotate-6 transition">
+                <a href="#pricing" class="glass-card p-3 sm:p-4 rounded-2xl cursor-pointer hover:border-amber-400 hover:scale-[1.02] transition group text-center relative overflow-hidden block border-amber-500/30">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 mx-auto rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-xl sm:text-2xl shadow-lg mb-2 group-hover:rotate-6 transition">
                         👑
                     </div>
-                    <h3 class="font-bold text-sm text-amber-300 group-hover:text-amber-200 transition">ভিআইপি মেম্বার</h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">আনলিমিটেড গুগল ড্রাইভ</p>
-                    <span class="inline-block mt-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">বিকাশ / নগদ</span>
+                    <h3 class="font-bold text-xs sm:text-sm text-amber-300 group-hover:text-amber-200 transition">ভিআইপি মেম্বার</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">আনলিমিটেড গুগল ড্রাইভ</p>
+                    <span class="inline-block mt-1.5 text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-extrabold">বিকাশ / নগদ</span>
                 </a>
 
             </div>
         </section>
 
-        <!-- ==================== BRANDS SECTION ==================== -->
+        <!-- ==================== BRANDS SECTION WITH REAL SVG LOGOS ==================== -->
         <section id="brands" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
                         <span>🏷️</span>
-                        <span>মোবাইল ব্র্যান্ড সমূহ (Select Brand)</span>
+                        <span>মোবাইল ব্র্যান্ড সমূহ (Company Logos & Real Counts)</span>
                     </h2>
-                    <p class="text-xs text-slate-400">ব্র্যান্ড নির্বাচন করে সহজেই আপনার মডেলের ফাইল দেখুন</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">এডমিনে যে ব্র্যান্ডে যত ফাইল যোগ করবেন, এখানে রিয়েল-টাইম সেই সংখ্যা দেখাবে</p>
                 </div>
                 <!-- Brand Filter Tabs -->
                 <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-xl p-1 self-start sm:self-auto">
@@ -359,22 +356,22 @@
                 </div>
             </div>
 
-            <!-- Brands Grid -->
-            <div id="brandsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3"></div>
+            <!-- Dynamic Brands Grid with Authentic Company Logos -->
+            <div id="brandsGrid" class="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 sm:gap-3"></div>
         </section>
 
         <!-- ==================== FLASH FILES SECTION ==================== -->
         <section id="files" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
             
             <!-- Section Header & Filter Toolbar -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 border border-white/10 mb-6">
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+            <div class="glass-card rounded-2xl p-3.5 sm:p-5 border border-white/10 mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4 mb-4">
                     <div>
-                        <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                        <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
                             <span>⚡</span>
                             <span>ফ্ল্যাশ ফাইল ও রম তালিকা (Tested Firmwares)</span>
                         </h2>
-                        <p class="text-xs text-slate-400">প্রতিটি ফাইল CM2, UnlockTool অথবা DFT Pro দিয়ে ১০০% টেস্ট করা</p>
+                        <p class="text-[11px] sm:text-xs text-slate-400">প্রতিটি ফাইল CM2, UnlockTool অথবা DFT Pro দিয়ে ১০০% টেস্ট করা</p>
                     </div>
 
                     <!-- Search within Files -->
@@ -390,25 +387,25 @@
                     
                     <!-- Access Filter Pills -->
                     <div class="flex flex-wrap items-center gap-1.5 text-xs font-bold">
-                        <button onclick="filterByAccess('all')" id="accessPill-all" class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 transition">সকল ফাইল</button>
-                        <button onclick="filterByAccess('FREE')" id="accessPill-FREE" class="px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition">ফ্রি ফাইল (FREE)</button>
-                        <button onclick="filterByAccess('VIP')" id="accessPill-VIP" class="px-3 py-1 rounded-lg bg-white/5 text-amber-300 hover:bg-white/10 transition">👑 ভিআইপি (VIP)</button>
-                        <button onclick="filterByAccess('FEATURED')" id="accessPill-FEATURED" class="px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition">ফিচার্ড (Featured)</button>
+                        <button onclick="filterByAccess('all')" id="accessPill-all" class="px-2.5 sm:px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 transition text-xs">সকল ফাইল</button>
+                        <button onclick="filterByAccess('FREE')" id="accessPill-FREE" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs">ফ্রি (FREE)</button>
+                        <button onclick="filterByAccess('VIP')" id="accessPill-VIP" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-amber-300 hover:bg-white/10 transition text-xs">👑 ভিআইপি (VIP)</button>
+                        <button onclick="filterByAccess('FEATURED')" id="accessPill-FEATURED" class="px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs">ফিচার্ড</button>
                     </div>
 
                     <!-- Dropdowns: CPU & Sort -->
                     <div class="flex items-center gap-2 text-xs">
-                        <select onchange="handleCpuFilter(this.value)" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none">
-                            <option value="all">সব চিপসেট (All CPU)</option>
+                        <select onchange="handleCpuFilter(this.value)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none text-xs">
+                            <option value="all">সব চিপসেট (CPU)</option>
                             <option value="MediaTek">MediaTek (MTK)</option>
                             <option value="SPD">Spreadtrum (SPD)</option>
                             <option value="Qualcomm">Qualcomm</option>
                             <option value="Exynos">Exynos</option>
                         </select>
-                        <select onchange="handleSort(this.value)" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none">
+                        <select onchange="handleSort(this.value)" class="px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-900 border border-white/15 text-slate-200 font-bold focus:outline-none text-xs">
                             <option value="newest">নতুন ফাইল (Newest)</option>
-                            <option value="popular">জনপ্রিয় (Most Downloaded)</option>
-                            <option value="name">নাম অনুসারে (A-Z)</option>
+                            <option value="popular">জনপ্রিয় (Popular)</option>
+                            <option value="name">নাম (A-Z)</option>
                         </select>
                         <button onclick="resetFilters()" title="Reset All Filters" class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/15 text-slate-300 transition">
                             🔄
@@ -419,10 +416,10 @@
             </div>
 
             <!-- Files Grid Container -->
-            <div id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            <div id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4"></div>
 
             <!-- Empty State -->
-            <div id="filesEmpty" class="hidden glass-card rounded-2xl p-10 text-center border border-white/10">
+            <div id="filesEmpty" class="hidden glass-card rounded-2xl p-8 sm:p-10 text-center border border-white/10">
                 <div class="text-4xl mb-3">🔍</div>
                 <h3 class="text-base font-bold text-white mb-1">কোনো ফাইল পাওয়া যায়নি!</h3>
                 <p class="text-xs text-slate-400 mb-4">অনুগ্রহ করে বানান চেক করুন অথবা আমাদের কাছে ফাইল রিকোয়েস্ট পাঠান।</p>
@@ -438,26 +435,26 @@
         <section id="tools" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <h2 class="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                    <h2 class="text-base sm:text-2xl font-black text-white flex items-center gap-2">
                         <span>🛠️</span>
                         <span>ফ্রি ড্রাইভার ও ফ্ল্যাশ টুলস (USB Drivers & Tools)</span>
                     </h2>
-                    <p class="text-xs text-slate-400">সকল টেকনিশিয়ানদের জন্য আনলিমিটেড হাই-স্পিড ফ্রি ডাউনলোড</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">সকল টেকনিশিয়ানদের জন্য আনলিমিটেড হাই-স্পিড ফ্রি ডাউনলোড</p>
                 </div>
             </div>
 
-            <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            <div id="toolsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4"></div>
         </section>
 
         <!-- ==================== VIP PRICING & MEMBERSHIP PLANS ==================== -->
         <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14">
             <div class="text-center max-w-2xl mx-auto mb-8">
                 <span class="text-xs font-black px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">👑 VIP MEMBERSHIP PACKAGES</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">ভিআইপি প্যাকেজ বেছে নিন</h2>
+                <h2 class="text-xl sm:text-3xl font-black text-white mt-2">ভিআইপি প্যাকেজ বেছে নিন</h2>
                 <p class="text-xs sm:text-sm text-slate-400 mt-1">বিকাশ ও নগদে টাকা পাঠিয়ে মুহূর্তেই আনলিমিটেড ডাউনলোড ও আনজিপ পাসওয়ার্ডের সুবিধা নিন</p>
             </div>
 
-            <div id="packagesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+            <div id="packagesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
         </section>
 
     </main>
@@ -922,7 +919,7 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h2 class="text-sm sm:text-base font-black text-white tracking-tight">GSMRM.BD <span class="text-amber-400">Master Admin Control</span></h2>
-                        <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">MASTER ACCESS</span>
+                        <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-extrabold">৫-১০ GB UPLOADER READY</span>
                     </div>
                     <p class="text-[11px] text-slate-400 hidden sm:block">A to Z Complete Website & User Management</p>
                 </div>
@@ -950,7 +947,7 @@
                 👥 ইউজার কন্ট্রোল A-Z <span id="adminUsersCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-cyan-500/30 text-cyan-200 text-[10px]">3</span>
             </button>
             <button id="adminTabBtn-files" onclick="switchAdminTab('files')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
-                📁 ফাইল ও জিপ পাসওয়ার্ড <span id="adminFilesCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-white/10 text-white text-[10px]">6</span>
+                📁 ফাইল ও ৫-১০ GB আপলোড <span id="adminFilesCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-white/10 text-white text-[10px]">6</span>
             </button>
             <button id="adminTabBtn-brands" onclick="switchAdminTab('brands')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white transition whitespace-nowrap">
                 🏷️ ব্র্যান্ড তালিকা <span id="adminBrandsCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full bg-white/10 text-white text-[10px]">12</span>
@@ -1004,8 +1001,8 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         <button onclick="openFileEditorModal()" class="glass-card p-4 rounded-2xl text-left hover:border-cyan-400 transition group border border-white/10">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition">➕</div>
-                            <h4 class="font-bold text-sm text-white">নতুন ফাইল আপলোড</h4>
-                            <p class="text-xs text-slate-400 mt-0.5">লোকাল ZIP সিলেক্ট ও অটো পাসওয়ার্ড</p>
+                            <h4 class="font-bold text-sm text-white">৫-১০ GB ফাইল আপলোড</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">লোকাল লার্জ ফাইল ও ড্রাইভ লিঙ্ক</p>
                         </button>
                         <button onclick="switchAdminTab('users')" class="glass-card p-4 rounded-2xl text-left hover:border-cyan-400 transition group border border-white/10">
                             <div class="text-2xl mb-1 group-hover:scale-110 transition">👥</div>
@@ -1106,8 +1103,22 @@
 
             </div>
 
-            <!-- ==================== TAB 3: FILES & PASSWORDS ==================== -->
-            <div id="adminTab-files" class="hidden space-y-4">
+            <!-- ==================== TAB 3: FILES & 5-10 GB PASSWORDS ==================== -->
+            <div id="adminTab-files" class="space-y-4">
+                <div class="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h4 class="font-bold text-sm text-cyan-300 flex items-center gap-1.5">
+                            <span>⚡</span> ৫-১০ GB লার্জ ফাইল আপলোড সিস্টেম (No Size Limit)
+                        </h4>
+                        <p class="text-xs text-slate-300 mt-1">
+                            যেকোনো বড় (.zip / .rar / .tar.md5 / .pac) ফাইল লোকালভাবে সিলেক্ট করুন। সাইজ ও নাম স্বয়ংক্রিয়ভাবে ডিটেক্ট হবে এবং গুগল ড্রাইভ / মেগা লিঙ্কের সাথে যুক্ত হয়ে যাবে।
+                        </p>
+                    </div>
+                    <button onclick="openFileEditorModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs shrink-0 shadow-lg transition">
+                        ➕ নতুন ফাইল আপলোড করুন
+                    </button>
+                </div>
+
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div class="flex items-center gap-2 w-full sm:w-auto">
                         <input id="adminFileSearch" oninput="renderAdminFilesTable()" type="text" placeholder="ফাইল সার্চ করুন..." class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none w-full sm:w-56">
@@ -1124,9 +1135,6 @@
                         <button onclick="clearAllFlashFiles()" class="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition flex items-center gap-1">
                             <span>🗑️</span> সব ফাইল মুছুন
                         </button>
-                        <button onclick="openFileEditorModal()" class="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-black transition flex items-center gap-1.5">
-                            <span>➕</span> নতুন ফাইল যোগ করুন
-                        </button>
                     </div>
                 </div>
 
@@ -1138,7 +1146,7 @@
                                     <th class="p-3.5">ফাইলের নাম</th>
                                     <th class="p-3.5">ব্র্যান্ড ও ক্যাটাগরি</th>
                                     <th class="p-3.5">চিপসেট</th>
-                                    <th class="p-3.5">সাইজ</th>
+                                    <th class="p-3.5">সাইজ (GB/MB)</th>
                                     <th class="p-3.5">ইউনিক জিপ পাসওয়ার্ড</th>
                                     <th class="p-3.5">এক্সেস</th>
                                     <th class="p-3.5 text-right">একশন</th>
@@ -1154,8 +1162,8 @@
             <div id="adminTab-brands" class="hidden space-y-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-sm font-black text-white">ব্র্যান্ড ম্যানেজমেন্ট</h3>
-                        <p class="text-xs text-slate-400">নতুন ব্র্যান্ড যোগ করুন অথবা বিদ্যমান ব্র্যান্ড এডিট করুন</p>
+                        <h3 class="text-sm font-black text-white">ব্র্যান্ড ম্যানেজমেন্ট ও রিয়েল ফাইল কাউন্ট</h3>
+                        <p class="text-xs text-slate-400">প্রতিটি ব্র্যান্ডে কতটি ফাইল রয়েছে তা রিয়েল-টাইমে গণনা হয়</p>
                     </div>
                     <button onclick="openBrandEditorModal()" class="px-3.5 py-1.5 rounded-xl bg-cyan-500 text-slate-950 text-xs font-black">
                         ➕ নতুন ব্র্যান্ড
@@ -1349,22 +1357,28 @@
         </div>
     </div>
 
-    <!-- ==================== 10. ADMIN FILE EDITOR MODAL ==================== -->
+    <!-- ==================== 10. ADMIN FILE EDITOR MODAL (5-10 GB LARGE FILE SUPPORT) ==================== -->
     <div id="fileEditorModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="glass-card rounded-3xl max-w-lg w-full border border-white/20 overflow-hidden shadow-2xl my-auto">
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
-                <h3 id="fileEditorTitle" class="text-sm font-black text-white">নতুন ফ্ল্যাশ ফাইল যোগ করুন</h3>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg">📁</span>
+                    <h3 id="fileEditorTitle" class="text-sm font-black text-white">৫-১০ GB ফাইল আপলোড ও এডিটর</h3>
+                </div>
                 <button onclick="closeModal('fileEditorModal')" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 transition">✕</button>
             </div>
             <form onsubmit="saveFlashFile(event)" class="p-5 space-y-3.5 max-h-[75vh] overflow-y-auto">
                 <input type="hidden" id="editFileId" value="">
 
-                <!-- Local ZIP File Picker -->
+                <!-- 5GB - 10GB Local File Picker with Meta Detection -->
                 <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 space-y-2">
-                    <label class="block text-xs font-black text-cyan-300">📦 সরাসরি .ZIP ফাইল সিলেক্ট করুন:</label>
-                    <input id="zipFilePicker" type="file" accept=".zip,.rar,.7z,.pac,.bin" onchange="handleZipFileSelect(event)"
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-black text-cyan-300">📦 সরাসরি ৫-১০ GB ফাইল সিলেক্ট করুন:</label>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-200 font-bold">5GB - 10GB OK</span>
+                    </div>
+                    <input id="zipFilePicker" type="file" accept=".zip,.rar,.7z,.tar,.md5,.pac,.bin" onchange="handleZipFileSelect(event)"
                            class="w-full text-xs text-slate-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-cyan-500 file:text-slate-950 hover:file:bg-cyan-400 cursor-pointer">
-                    <p class="text-[10px] text-slate-400">ফাইল সিলেক্ট করলে ফাইলের নাম, সাইজ এবং ইউনিক আনজিপ পাসওয়ার্ড স্বয়ংক্রিয়ভাবে তৈরি হবে।</p>
+                    <p class="text-[10px] text-slate-400">লোকাল ফাইল সিলেক্ট করলে ফাইলের নাম, সাইজ (GB/MB) এবং ইউনিক আনজিপ পাসওয়ার্ড স্বয়ংক্রিয়ভাবে ডিটেক্ট হবে।</p>
                 </div>
 
                 <div>
@@ -1412,8 +1426,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-1">ফাইলের সাইজ:</label>
-                        <input id="editFileSize" type="text" required placeholder="4.2 MB" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                        <label class="block text-xs font-bold text-slate-300 mb-1">ফাইলের সাইজ (GB/MB):</label>
+                        <input id="editFileSize" type="text" required placeholder="6.45 GB" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1">এক্সেস লেভেল:</label>
@@ -1426,8 +1440,8 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1">গুগল ড্রাইভ বা ডাউনলোড লিংক:</label>
-                    <input id="editFileDownloadUrl" type="url" required placeholder="https://drive.google.com/..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
+                    <label class="block text-xs font-bold text-slate-300 mb-1">গুগল ড্রাইভ / মেগা / ডিরেক্ট ক্লাউড ডাউনলোড লিংক:</label>
+                    <input id="editFileDownloadUrl" type="url" required placeholder="https://drive.google.com/file/d/..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
                 </div>
 
                 <div>
@@ -1440,8 +1454,8 @@
                     <textarea id="editFileReadLog" rows="2" placeholder="Phone found! Sync Ok..." class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white font-mono"></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-3 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs">
-                    ফাইল সেভ করুন
+                <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs shadow-lg transition">
+                    ফাইল সেভ করুন (Save Large File)
                 </button>
             </form>
         </div>
@@ -1453,7 +1467,6 @@
             <h3 class="text-sm font-black text-white">নতুন ব্র্যান্ড যোগ করুন</h3>
             <form onsubmit="saveBrand(event)" class="space-y-3">
                 <input id="brandEditName" type="text" required placeholder="ব্র্যান্ডের নাম (e.g. Symphony)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
-                <input id="brandEditCount" type="text" placeholder="ফাইল সংখ্যা (e.g. 5,000 Files)" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
                 <select id="brandEditGroup" class="w-full px-3 py-2 rounded-xl bg-black/60 border border-white/15 text-xs text-white">
                     <option value="bd">বাংলাদেশি বাটন (BD)</option>
                     <option value="global">গ্লোবাল স্মার্টফোন (Global)</option>
@@ -1470,11 +1483,58 @@
 /**
  * ============================================================================
  * GSMRM.BD - MASTER 3D MOBILE FIRMWARE & ROM PORTAL CORE ENGINE
- * Complete A-to-Z User Panel, Simplified Admin, Audio FX & WebGL 3D
+ * Authentic Vector SVG Logos, Dynamic Real-Time File Counters,
+ * Sweet Female Welcome Voice, 5GB-10GB Large File Uploader & Full Mobile Auto-Fit
  * ============================================================================
  */
 
-// ==================== 1. WEB AUDIO API SOUND FX ENGINE ====================
+// ==================== 1. SWEET FEMALE WELCOME VOICE ENGINE ====================
+function playWelcomeVoice(manualTrigger = false) {
+    if (!('speechSynthesis' in window)) return;
+    
+    // Play only once per session unless user manually clicks the Voice button
+    if (!manualTrigger && sessionStorage.getItem("gsmrm_voice_played") === "true") return;
+
+    try {
+        const synth = window.speechSynthesis;
+        synth.cancel(); // Stop any pending speech
+
+        const utter = new SpeechSynthesisUtterance("Welcome to G S M R M dot B D");
+        utter.rate = 0.95;
+        utter.pitch = 1.25; // Sweet clear female pitch
+        utter.lang = "en-US";
+
+        // Find best female voice
+        const voices = synth.getVoices();
+        const femaleVoice = voices.find(v => 
+            v.lang.startsWith("en") && 
+            (v.name.includes("Female") || v.name.includes("Zira") || v.name.includes("Samantha") || 
+             v.name.includes("Google US English") || v.name.includes("Victoria") || v.name.includes("Karen") || v.name.includes("Natural"))
+        ) || voices.find(v => v.lang.startsWith("en"));
+
+        if (femaleVoice) utter.voice = femaleVoice;
+
+        synth.speak(utter);
+        sessionStorage.setItem("gsmrm_voice_played", "true");
+    } catch(e) {}
+}
+
+// Auto welcome voice on first interaction to comply with browser autoplay policy
+window.addEventListener("load", () => {
+    // Try speaking immediately
+    setTimeout(() => { playWelcomeVoice(false); }, 800);
+
+    // Fallback: On first user touch or click
+    const onFirstUserAction = () => {
+        playWelcomeVoice(false);
+        document.removeEventListener("click", onFirstUserAction);
+        document.removeEventListener("touchstart", onFirstUserAction);
+    };
+    document.addEventListener("click", onFirstUserAction, { once: true });
+    document.addEventListener("touchstart", onFirstUserAction, { once: true });
+});
+
+// ==================== 2. WEB AUDIO API SOUND FX ENGINE ====================
 const SoundFX = {
     enabled: localStorage.getItem("gsmrm_sound") !== "false",
     ctx: null,
@@ -1583,7 +1643,7 @@ document.addEventListener("click", (e) => {
     }
 }, true);
 
-// ==================== 2. AMBIENT 3D WEBGL BACKGROUND ENGINE (NON-BLOCKING) ====================
+// ==================== 3. AMBIENT 3D WEBGL BACKGROUND ENGINE (NON-BLOCKING) ====================
 let bgScene, bgCamera, bgRenderer, bgCoreGroup, bgParticles;
 let mouseX = 0, mouseY = 0;
 
@@ -1686,20 +1746,53 @@ function animate3DAmbient() {
     }
 }
 
-// ==================== 3. MASTER DATA & PERSISTENCE ====================
+// ==================== 4. OFFICIAL VECTOR SVG BRAND LOGOS ====================
+function getBrandLogoSvg(brandName) {
+    const b = (brandName || "").trim().toLowerCase();
+    switch (b) {
+        case "symphony":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#E11D48"/><path d="M50 20C34 20 28 32 28 42c0 18 24 16 24 26 0 5-4 8-10 8-8 0-13-5-14-11l-9 2c2 10 10 17 23 17 14 0 21-8 21-17 0-19-24-17-24-27 0-6 5-9 11-9 7 0 11 4 12 9l9-2c-2-9-9-15-21-15z" fill="white"/><circle cx="68" cy="35" r="5" fill="#FDE047"/></svg>`;
+        case "walton":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#0284C7"/><path d="M22 28l12 44h10l8-28 8 28h10l12-44h-11l-6 30-8-30h-9l-8 30-6-30H22z" fill="white"/></svg>`;
+        case "5star":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#D97706"/><path d="M50 16l9.5 19.2 21.2 3.1-15.3 15 3.6 21.1L50 64.4 31 74.4l3.6-21.1-15.3-15 21.2-3.1L50 16z" fill="#FEF08A"/><circle cx="50" cy="50" r="8" fill="#B45309"/></svg>`;
+        case "itel":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#DC2626"/><circle cx="36" cy="36" r="6" fill="white"/><path d="M31 46h10v28H31zm18 8h9v5h-9v15h-8V54h-5v-6h5v-9c0-6 4-10 11-10h7v6h-5c-4 0-5 2-5 5v2h8l-1 6zm18-8h18v6h-11v5h9v6h-9v5h12v6H67V46z" fill="white"/></svg>`;
+        case "tecno":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#2563EB"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-size="20" fill="white" text-anchor="middle" letter-spacing="1">TECNO</text><path d="M25 70h50v3H25z" fill="#93C5FD"/></svg>`;
+        case "infinix":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#059669"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-size="16" fill="white" text-anchor="middle" letter-spacing="1.5">INFINIX</text><circle cx="50" cy="28" r="6" fill="#A7F3D0"/></svg>`;
+        case "samsung":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#1D4ED8"/><ellipse cx="50" cy="50" rx="42" ry="24" stroke="white" stroke-width="4"/><text x="50" y="56" font-family="Arial, sans-serif" font-weight="900" font-size="13" fill="white" text-anchor="middle" letter-spacing="1">SAMSUNG</text></svg>`;
+        case "xiaomi":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#EA580C"/><path d="M32 32h10v36H32V32zm16 0h20v22h-10v14H48V32zm10 8v8h10v-8H58z" fill="white"/></svg>`;
+        case "oppo":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#047857"/><ellipse cx="38" cy="50" rx="14" ry="18" stroke="white" stroke-width="6"/><ellipse cx="62" cy="50" rx="14" ry="18" stroke="white" stroke-width="6"/></svg>`;
+        case "vivo":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#0284C7"/><text x="50" y="58" font-family="Arial, sans-serif" font-weight="900" font-style="italic" font-size="24" fill="white" text-anchor="middle">vivo</text></svg>`;
+        case "realme":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#F59E0B"/><text x="50" y="66" font-family="Arial, sans-serif" font-weight="900" font-size="44" fill="#1E293B" text-anchor="middle">R</text></svg>`;
+        case "apple":
+            return `<svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0" fill="none"><rect width="100" height="100" rx="22" fill="#334155"/><path d="M50 36c4-5 9-6 13-6 1 5-2 10-5 13-3 4-8 5-11 5-1-5 2-9 3-12zm16 23c-1 8-5 16-10 21-4 4-8 5-13 5-5 0-8-2-12-2-4 0-8 2-13 2-6-1-11-8-15-16-5-10-5-22 2-27 4-4 9-6 15-6 5 0 9 3 12 3 4 0 7-3 13-3 5 0 10 2 13 6-12 6-10 20 0 25z" fill="white"/></svg>`;
+        default:
+            return `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-white text-xs">${(brandName || 'RM').slice(0, 2).toUpperCase()}</div>`;
+    }
+}
+
+// ==================== 5. MASTER DATA & PERSISTENCE ====================
 const DEFAULT_BRANDS = [
-    { name: "Symphony", group: "bd", count: "11,420 Files", color: "from-red-600 to-rose-700", icon: "Sy" },
-    { name: "Walton", group: "bd", count: "8,950 Files", color: "from-blue-600 to-cyan-500", icon: "W" },
-    { name: "5Star", group: "bd", count: "6,300 Files", color: "from-amber-500 to-orange-600", icon: "5★" },
-    { name: "Itel", group: "bd", count: "9,840 Files", color: "from-rose-500 to-red-600", icon: "it" },
-    { name: "Tecno", group: "bd", count: "8,600 Files", color: "from-indigo-500 to-blue-700", icon: "Tc" },
-    { name: "Infinix", group: "bd", count: "7,450 Files", color: "from-lime-500 to-emerald-600", icon: "Ix" },
-    { name: "Samsung", group: "global", count: "28,450 Files", color: "from-blue-600 to-blue-800", icon: "S" },
-    { name: "Xiaomi", group: "global", count: "19,210 Files", color: "from-orange-500 to-amber-600", icon: "Mi" },
-    { name: "Oppo", group: "global", count: "14,800 Files", color: "from-emerald-500 to-green-700", icon: "Op" },
-    { name: "Vivo", group: "global", count: "12,340 Files", color: "from-sky-500 to-blue-600", icon: "Vv" },
-    { name: "Realme", group: "global", count: "9,120 Files", color: "from-yellow-400 to-amber-500", icon: "Rm" },
-    { name: "Apple", group: "global", count: "5,900 Files", color: "from-slate-600 to-slate-800", icon: "iOS" }
+    { name: "Symphony", group: "bd" },
+    { name: "Walton", group: "bd" },
+    { name: "5Star", group: "bd" },
+    { name: "Itel", group: "bd" },
+    { name: "Tecno", group: "bd" },
+    { name: "Infinix", group: "bd" },
+    { name: "Samsung", group: "global" },
+    { name: "Xiaomi", group: "global" },
+    { name: "Oppo", group: "global" },
+    { name: "Vivo", group: "global" },
+    { name: "Realme", group: "global" },
+    { name: "Apple", group: "global" }
 ];
 
 const DEFAULT_FLASH_FILES = [
@@ -1886,7 +1979,7 @@ let state = {
     activeModalFile: null
 };
 
-// ==================== 4. APP INITIALIZATION ====================
+// ==================== 6. APP INITIALIZATION ====================
 window.onload = function () {
     init3DAmbient();
     renderBrands();
@@ -1894,6 +1987,7 @@ window.onload = function () {
     renderTools();
     renderPackages();
     renderTickers();
+    updateDynamicCounters();
     applyPaymentSettings();
     updateUserUI();
 
@@ -1922,14 +2016,39 @@ window.onload = function () {
     }
 };
 
-// ==================== 5. USER AUTH & TECHNICIAN DASHBOARD ====================
+// ==================== 7. DYNAMIC 0-BASED COUNTER SYSTEM ====================
+function updateDynamicCounters() {
+    // Total Files
+    const totalFiles = FLASH_FILES.length;
+    const buttonFiles = FLASH_FILES.filter(f => f.category === "Button Phone").length;
+    const stockFiles = FLASH_FILES.filter(f => f.category === "Stock ROM").length;
+    const frpFiles = FLASH_FILES.filter(f => f.category === "FRP / MDM").length;
+    const emmcFiles = FLASH_FILES.filter(f => f.category === "EMMC Dump").length;
+
+    const elTotal = document.getElementById("statTotalRomCount");
+    const elButton = document.getElementById("statButtonRomCount");
+    if (elTotal) elTotal.textContent = totalFiles;
+    if (elButton) elButton.textContent = buttonFiles;
+
+    const bBtn = document.getElementById("catBadgeButtonPhone");
+    const bStk = document.getElementById("catBadgeStockRom");
+    const bFrp = document.getElementById("catBadgeFrp");
+    const bEmmc = document.getElementById("catBadgeEmmc");
+
+    if (bBtn) bBtn.textContent = `${buttonFiles} টি ফাইল`;
+    if (bStk) bStk.textContent = `${stockFiles} টি ফাইল`;
+    if (bFrp) bFrp.textContent = `${frpFiles} টি ফাইল`;
+    if (bEmmc) bEmmc.textContent = `${emmcFiles} টি ফাইল`;
+}
+
+// ==================== 8. USER AUTH & TECHNICIAN DASHBOARD ====================
 function updateUserUI() {
     const navUserArea = document.getElementById("navUserArea");
     if (!navUserArea) return;
 
     if (!CURRENT_USER) {
         navUserArea.innerHTML = `
-            <button onclick="openAuthModal()" class="px-3 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1.5 transition">
+            <button onclick="openAuthModal()" class="px-2.5 sm:px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-[11px] sm:text-xs font-black shadow-[0_0_15px_rgba(0,242,254,0.3)] border border-cyan-400/40 flex items-center gap-1 transition whitespace-nowrap">
                 <span>👤</span>
                 <span class="hidden sm:inline">টেকনিশিয়ান লগইন</span>
                 <span class="sm:hidden">লগইন</span>
@@ -1939,9 +2058,9 @@ function updateUserUI() {
         const isVip = CURRENT_USER.isVip;
         const badgeColor = isVip ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40";
         navUserArea.innerHTML = `
-            <button onclick="openUserDashboardModal()" class="px-3 sm:px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-bold flex items-center gap-2 transition">
-                <span class="w-2 h-2 rounded-full ${isVip ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse"></span>
-                <span class="max-w-[100px] sm:max-w-[140px] truncate">${CURRENT_USER.name}</span>
+            <button onclick="openUserDashboardModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition">
+                <span class="w-2 h-2 rounded-full ${isVip ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse shrink-0"></span>
+                <span class="max-w-[90px] sm:max-w-[130px] truncate">${CURRENT_USER.name}</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded-full border ${badgeColor}">${isVip ? '👑 VIP' : 'FREE'}</span>
             </button>
         `;
@@ -2066,14 +2185,12 @@ function openUserDashboardModal() {
         return;
     }
 
-    // Refresh current user data from USERS list
     const updated = USERS.find(u => u.id === CURRENT_USER.id);
     if (updated) {
         CURRENT_USER = updated;
         localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
     }
 
-    // Populate profile elements
     document.getElementById("userProfileName").textContent = CURRENT_USER.name;
     document.getElementById("userProfileShop").textContent = `${CURRENT_USER.shop} • ${CURRENT_USER.phone}`;
     
@@ -2104,7 +2221,6 @@ function openUserDashboardModal() {
     document.getElementById("userMetaStatus").textContent = CURRENT_USER.status === "active" ? "🟢 সচল (Active)" : "🔴 স্থগিত (Blocked)";
     document.getElementById("userMetaDownloads").textContent = `${(CURRENT_USER.downloadHistory || []).length} টি ফাইল`;
 
-    // Populate payment numbers inside user upgrade tab
     document.getElementById("userUpgradeBkash").textContent = PAYMENT_SETTINGS.bkash;
     document.getElementById("userUpgradeNagad").textContent = PAYMENT_SETTINGS.nagad;
 
@@ -2280,7 +2396,7 @@ function saveCurrentUserData() {
     localStorage.setItem("gsmrm_current_user", JSON.stringify(CURRENT_USER));
 }
 
-// ==================== 6. VISITOR RENDERING FUNCTIONS ====================
+// ==================== 9. VISITOR RENDERING FUNCTIONS ====================
 function renderTickers() {
     const recent = document.getElementById("recentTicker");
     const top = document.getElementById("topTicker");
@@ -2311,23 +2427,29 @@ function renderBrands() {
     const grid = document.getElementById("brandsGrid");
     if (!grid) return;
 
-    grid.innerHTML = BRANDS.map(b => `
-        <div onclick="selectBrand('${b.name}')" class="glass-card p-3 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.03] transition flex items-center gap-3 group">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${b.color || 'from-blue-600 to-cyan-500'} flex items-center justify-center font-black text-white text-sm shadow-md group-hover:scale-105 transition">
-                ${b.icon || b.name.slice(0,2)}
-            </div>
-            <div>
-                <h4 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition">${b.name}</h4>
-                <p class="text-[10px] text-slate-400">${b.count || 'Tested Files'}</p>
-            </div>
-        </div>
-    `).join("");
+    grid.innerHTML = BRANDS.map(b => {
+        // Real-time count of files under this brand
+        const count = FLASH_FILES.filter(f => f.brand.toLowerCase() === b.name.toLowerCase()).length;
+        const logo = getBrandLogoSvg(b.name);
 
-    // Populate admin brand filter dropdown
+        return `
+            <div onclick="selectBrand('${b.name}')" class="glass-card p-3 rounded-2xl cursor-pointer hover:border-cyan-400 hover:scale-[1.03] transition flex items-center gap-2.5 sm:gap-3 group">
+                <div class="shrink-0 group-hover:scale-105 transition">
+                    ${logo}
+                </div>
+                <div class="overflow-hidden">
+                    <h4 class="font-extrabold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition truncate">${b.name}</h4>
+                    <p class="text-[10px] text-slate-400 mt-0.5">${count} টি ফাইল</p>
+                </div>
+            </div>
+        `;
+    }).join("");
+
     const filter = document.getElementById("adminFileBrandFilter");
     if (filter) {
         filter.innerHTML = `<option value="all">সকল ব্র্যান্ড</option>` + BRANDS.map(b => `<option value="${b.name}">${b.name}</option>`).join("");
     }
+    updateDynamicCounters();
 }
 
 function renderFiles() {
@@ -2377,7 +2499,7 @@ function renderFiles() {
         const accessLabel = isVip ? "👑 VIP ONLY" : (isFree ? "🔓 FREE" : "⚡ FEATURED");
 
         return `
-            <div class="glass-card rounded-2xl p-4 border border-white/10 hover:border-cyan-400/60 transition flex flex-col justify-between group">
+            <div class="glass-card rounded-2xl p-3.5 sm:p-4 border border-white/10 hover:border-cyan-400/60 transition flex flex-col justify-between group">
                 <div>
                     <div class="flex items-center justify-between gap-2 mb-2">
                         <span class="text-[9px] px-2 py-0.5 rounded-full font-black border ${badgeClass}">${accessLabel}</span>
@@ -2400,7 +2522,7 @@ function renderFiles() {
 
                 <div class="pt-3 border-t border-white/10 mt-3 flex items-center gap-2">
                     <button onclick="openFileModal(${f.id})" class="flex-1 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-1">
-                        <span>📥</span> ডাউনলোড ও বিবরণ
+                        <span>📥</span> ডাউনলোড ও পাসওয়ার্ড
                     </button>
                     <button onclick="toggleUserBookmark(${f.id})" title="Save file" class="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-300 border border-white/10 transition">
                         ⭐
@@ -2437,12 +2559,12 @@ function renderPackages() {
     grid.innerHTML = PACKAGES.map(p => {
         const isPop = p.popular;
         return `
-            <div class="glass-card rounded-3xl p-6 border ${isPop ? 'border-amber-400/80 shadow-[0_0_30px_rgba(245,158,11,0.2)]' : 'border-white/10'} relative flex flex-col justify-between">
+            <div class="glass-card rounded-3xl p-5 sm:p-6 border ${isPop ? 'border-amber-400/80 shadow-[0_0_30px_rgba(245,158,11,0.2)]' : 'border-white/10'} relative flex flex-col justify-between">
                 ${isPop ? '<span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-[10px] font-black uppercase tracking-wider">সবচেয়ে জনপ্রিয়</span>' : ''}
                 <div>
-                    <h3 class="text-lg font-black text-white">${p.name}</h3>
+                    <h3 class="text-base sm:text-lg font-black text-white">${p.name}</h3>
                     <span class="text-xs text-amber-300 font-bold">${p.badge}</span>
-                    <div class="text-3xl font-black text-white mt-3">
+                    <div class="text-2xl sm:text-3xl font-black text-white mt-3">
                         ${state.currency === "BDT" ? p.priceBDT : p.priceUSD}
                         <span class="text-xs font-semibold text-slate-400">/ ${p.period}</span>
                     </div>
@@ -2451,7 +2573,7 @@ function renderPackages() {
                         <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.bandwidth}</li>
                         <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.usage}</li>
                         <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ${p.ipLimit}</li>
-                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> হাই-স্পিড গুগল ড্রাইভ এক্সেস</li>
+                        <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> ৫-১০ GB হাই-স্পিড গুগল ড্রাইভ</li>
                     </ul>
                 </div>
 
@@ -2465,7 +2587,7 @@ function renderPackages() {
     }).join("");
 }
 
-// ==================== 7. VISITOR FILE MODAL WITH DOWNLOAD ENFORCEMENT ====================
+// ==================== 10. VISITOR FILE MODAL WITH DOWNLOAD ENFORCEMENT ====================
 function openFileModal(fileId) {
     const file = FLASH_FILES.find(f => f.id === fileId);
     if (!file) return;
@@ -2489,9 +2611,7 @@ function executeFileDownload() {
     if (!state.activeModalFile) return;
     const file = state.activeModalFile;
 
-    // Check user membership & quota
     if (!CURRENT_USER) {
-        // Allow visitor download or prompt login
         if (file.access === "VIP") {
             alert("এই ফাইলটি শুধুমাত্র VIP টেকনিশিয়ানদের জন্য! অনুগ্রহ করে VIP মেম্বারশিপ নিন বা একাউন্টে লগইন করুন।");
             closeModal("fileModal");
@@ -2499,7 +2619,6 @@ function executeFileDownload() {
             return;
         }
     } else {
-        // Logged-in user quota check
         if (file.access === "VIP" && !CURRENT_USER.isVip) {
             alert("এই ফাইলটি VIP মেম্বারদের জন্য সংরক্ষিত। অনুগ্রহ করে আপনার একাউন্টটি VIP আপগ্রেড করুন।");
             closeModal("fileModal");
@@ -2519,7 +2638,6 @@ function executeFileDownload() {
             CURRENT_USER.downloadsToday++;
         }
 
-        // Record into user download history
         CURRENT_USER.downloadHistory = CURRENT_USER.downloadHistory || [];
         CURRENT_USER.downloadHistory.unshift({
             id: file.id,
@@ -2538,7 +2656,7 @@ function executeFileDownload() {
     window.open(file.downloadUrl || "https://drive.google.com/", "_blank");
 }
 
-// ==================== 8. FILTER CONTROLLERS ====================
+// ==================== 11. FILTER CONTROLLERS ====================
 function selectBrand(brandName) {
     state.brand = brandName;
     renderFiles();
@@ -2556,8 +2674,8 @@ function filterByAccess(acc) {
     ['all', 'FREE', 'VIP', 'FEATURED'].forEach(k => {
         const btn = document.getElementById(`accessPill-${k}`);
         if (btn) {
-            if (k === acc) btn.className = "px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-black transition";
-            else btn.className = "px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition";
+            if (k === acc) btn.className = "px-2.5 sm:px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-black transition text-xs";
+            else btn.className = "px-2.5 sm:px-3 py-1 rounded-lg bg-white/5 text-slate-300 hover:bg-white/10 transition text-xs";
         }
     });
     renderFiles();
@@ -2622,7 +2740,7 @@ function setBrandGroup(group) {
     renderBrands();
 }
 
-// ==================== 9. CHECKOUT & REQUESTS ====================
+// ==================== 12. CHECKOUT & REQUESTS ====================
 function openCheckoutModal(name, price, period) {
     document.getElementById("checkoutPkgTitle").textContent = name;
     document.getElementById("checkoutPkgPrice").textContent = `${price} / ${period}`;
@@ -2683,7 +2801,7 @@ function submitFileRequest(e) {
     alert("আপনার ফাইল রিকোয়েস্ট সফলভাবে জমা হয়েছে। আমাদের টেকনিশিয়ান টিম দ্রুত এটি আপলোড করবে।");
 }
 
-// ==================== 10. SECRET ADMIN HANDLERS ====================
+// ==================== 13. SECRET ADMIN HANDLERS ====================
 let secretClickCount = 0;
 let secretClickTimer = null;
 
@@ -2777,7 +2895,7 @@ function refreshAllAdminViews() {
     document.getElementById("adminOverviewWhatsapp").textContent = PAYMENT_SETTINGS.whatsappDisplay;
 }
 
-// ==================== 11. ADMIN: A TO Z USER MANAGEMENT ====================
+// ==================== 14. ADMIN: A TO Z USER MANAGEMENT ====================
 function renderAdminUsersTable() {
     const tbody = document.getElementById("adminUsersTableBody");
     if (!tbody) return;
@@ -2785,7 +2903,6 @@ function renderAdminUsersTable() {
     const q = (document.getElementById("adminUserSearchInput")?.value || "").toLowerCase();
     const planFilter = document.getElementById("adminUserFilterPlan")?.value || "all";
 
-    // Summary counts
     document.getElementById("adminStatTotalUsers").textContent = USERS.length;
     document.getElementById("adminStatVipUsers").textContent = USERS.filter(u => u.isVip).length;
     document.getElementById("adminStatFreeUsers").textContent = USERS.filter(u => !u.isVip).length;
@@ -3065,7 +3182,7 @@ function adminDeleteUser(userId) {
     }
 }
 
-// ==================== 12. ADMIN: FLASH FILES CRUD + PASSWORDS ====================
+// ==================== 15. ADMIN: 5GB-10GB LARGE FILES CRUD + PASSWORDS ====================
 function renderAdminFilesTable() {
     const tbody = document.getElementById("adminFilesTableBody");
     if (!tbody) return;
@@ -3096,7 +3213,7 @@ function renderAdminFilesTable() {
                 <div class="text-[10px] text-slate-400">${f.category}</div>
             </td>
             <td class="p-3.5 font-mono text-slate-300">${f.cpu}</td>
-            <td class="p-3.5">${f.size}</td>
+            <td class="p-3.5 font-bold text-emerald-400">${f.size}</td>
             <td class="p-3.5">
                 <span class="px-2 py-1 rounded-md bg-amber-500/10 text-amber-300 font-mono font-bold border border-amber-500/30">
                     ${f.zipPassword || 'No Pass'}
@@ -3157,7 +3274,7 @@ function openFileEditorModal(fileId = null) {
     if (fileId) {
         const file = FLASH_FILES.find(f => f.id === fileId);
         if (!file) return;
-        title.textContent = "ফাইল এডিট করুন";
+        title.textContent = "ফাইল এডিট করুন (৫-১০ GB সাপোর্ট)";
         editId.value = file.id;
         document.getElementById("editFileName").value = file.name;
         document.getElementById("editFileZipPassword").value = file.zipPassword || generateRandomZipPassword();
@@ -3170,7 +3287,7 @@ function openFileEditorModal(fileId = null) {
         document.getElementById("editFileDesc").value = file.desc || "";
         document.getElementById("editFileReadLog").value = file.readLog || "";
     } else {
-        title.textContent = "নতুন ফাইল আপলোড করুন";
+        title.textContent = "নতুন ফাইল আপলোড করুন (৫-১০ GB সাপোর্ট)";
         editId.value = "";
         document.getElementById("editFileName").value = "";
         generateRandomZipPassword();
@@ -3218,6 +3335,7 @@ function saveFlashFile(e) {
     localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
     closeModal("fileEditorModal");
     SoundFX.playSuccess();
+    renderBrands();
     renderFiles();
     renderTickers();
     renderAdminFilesTable();
@@ -3228,6 +3346,7 @@ function deleteFlashFile(fileId) {
     if (confirm("আপনি কি নিশ্চিত যে এই ফাইলটি মুছে ফেলতে চান?")) {
         FLASH_FILES = FLASH_FILES.filter(f => f.id !== fileId);
         localStorage.setItem("gsm_admin_files", JSON.stringify(FLASH_FILES));
+        renderBrands();
         renderFiles();
         renderTickers();
         renderAdminFilesTable();
@@ -3237,9 +3356,10 @@ function deleteFlashFile(fileId) {
 }
 
 function clearAllFlashFiles() {
-    if (confirm("⚠️ সাবধান! আপনি কি এডমিন প্যানেল থেকে সমস্ত ফাইল একবারে মুছে ফেলতে চান?\n\nএটি করলে ওয়েবসাইটের সব ফ্ল্যাশ ফাইল খালি হয়ে যাবে!")) {
+    if (confirm("⚠️ সাবধান! আপনি কি এডমিন প্যানেল থেকে সমস্ত ফাইল একবারে মুছে ফেলতে চান?\n\nএটি করলে ওয়েবসাইটের সব ফ্ল্যাশ ফাইল খালি হয়ে যাবে এবং কাউন্ট ০ হয়ে যাবে!")) {
         FLASH_FILES = [];
         localStorage.setItem("gsm_admin_files", "[]");
+        renderBrands();
         renderFiles();
         renderTickers();
         renderAdminFilesTable();
@@ -3249,40 +3369,38 @@ function clearAllFlashFiles() {
     }
 }
 
-// ==================== 13. ADMIN BRANDS ====================
+// ==================== 16. ADMIN BRANDS ====================
 function renderAdminBrands() {
     const grid = document.getElementById("adminBrandsGrid");
     if (!grid) return;
 
-    grid.innerHTML = BRANDS.map(b => `
-        <div class="glass-card p-3 rounded-2xl border border-white/10 flex items-center justify-between">
-            <div>
-                <h4 class="font-bold text-white text-xs">${b.name}</h4>
-                <span class="text-[10px] text-slate-400">${b.count}</span>
+    grid.innerHTML = BRANDS.map(b => {
+        const count = FLASH_FILES.filter(f => f.brand.toLowerCase() === b.name.toLowerCase()).length;
+        return `
+            <div class="glass-card p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-white text-xs">${b.name}</h4>
+                    <span class="text-[10px] text-slate-400">${count} টি ফাইল</span>
+                </div>
+                <button onclick="deleteBrand('${b.name}')" class="text-rose-400 hover:text-rose-300 text-xs">✕</button>
             </div>
-            <button onclick="deleteBrand('${b.name}')" class="text-rose-400 hover:text-rose-300 text-xs">✕</button>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 }
 
 function openBrandEditorModal() {
     document.getElementById("brandEditName").value = "";
-    document.getElementById("brandEditCount").value = "5,000 Files";
     document.getElementById("brandEditorModal").classList.remove("hidden");
 }
 
 function saveBrand(e) {
     e.preventDefault();
     const name = document.getElementById("brandEditName").value.trim();
-    const count = document.getElementById("brandEditCount").value.trim();
     const group = document.getElementById("brandEditGroup").value;
 
     BRANDS.push({
         name: name,
-        group: group,
-        count: count,
-        color: "from-blue-600 to-cyan-500",
-        icon: name.slice(0, 2)
+        group: group
     });
 
     localStorage.setItem("gsm_admin_brands", JSON.stringify(BRANDS));
@@ -3303,7 +3421,7 @@ function deleteBrand(name) {
     }
 }
 
-// ==================== 14. ADMIN ORDERS & REQUESTS ====================
+// ==================== 17. ADMIN ORDERS & REQUESTS ====================
 function renderAdminOrders() {
     const container = document.getElementById("adminOrdersList");
     if (!container) return;
@@ -3339,7 +3457,6 @@ function approveOrder(idx) {
 
     o.status = "Approved";
 
-    // Find user by phone and upgrade to VIP
     const user = USERS.find(u => u.phone === o.senderPhone || u.phone === o.userPhone);
     if (user) {
         user.isVip = true;
@@ -3378,7 +3495,7 @@ function clearAllOrders() {
     }
 }
 
-// ==================== 15. ADMIN PAYMENTS & SETTINGS ====================
+// ==================== 18. ADMIN PAYMENTS & SETTINGS ====================
 function renderAdminPayments() {
     document.getElementById("adminPayBkash").value = PAYMENT_SETTINGS.bkash;
     document.getElementById("adminPayNagad").value = PAYMENT_SETTINGS.nagad;
@@ -3511,7 +3628,7 @@ function resetSiteDefaults() {
     }
 }
 
-// ==================== 16. UTILITY FUNCTIONS ====================
+// ==================== 19. UTILITY FUNCTIONS ====================
 function toggleMobileMenu() {
     const menu = document.getElementById("mobileMenu");
     if (menu) menu.classList.toggle("hidden");
@@ -3522,14 +3639,6 @@ function toggleLanguage() {
     localStorage.setItem("gsm_lang", state.lang);
     const btn = document.getElementById("langToggleBtn");
     if (btn) btn.textContent = state.lang === "bn" ? "বাংলা" : "EN";
-}
-
-function toggleCurrency() {
-    state.currency = state.currency === "BDT" ? "USD" : "BDT";
-    localStorage.setItem("gsm_currency", state.currency);
-    const btn = document.getElementById("currencyToggleBtn");
-    if (btn) btn.textContent = state.currency === "BDT" ? "৳ BDT" : "$ USD";
-    renderPackages();
 }
 
 function closeModal(modalId) {
